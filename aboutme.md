@@ -2,15 +2,18 @@
 layout: page
 title: About me
 subtitle: Why you'd want to go on a date with me
+img: /img/avatar.jpg
+cv: /files/cv.pdf
 ---
+![my photo]({{ page.img }}#avatar-about-page)
+<p style="text-align: center; margin: 0; font-style: italic">Winston: What do you need?</p>
+<p style="text-align: center; margin: 0; font-style: italic">John Wick: Data, lots of data</p>
+My name is Pham Tuan Cuong.
 
-My name is Inigo Montoya. I have the following qualities:
+There is not much to tell about myself.
 
-- I rock a great mustache
-- I'm extremely loyal to my family
+I studied **economics** at university, then self-studied **computer science**.
 
-What else do you need?
+The cool thing (I guess) is now I am trying to combine those things for Data Science.
 
-### my history
-
-To be honest, I'm having some trouble remembering right now, so why don't you just watch [my movie](http://en.wikipedia.org/wiki/The_Princess_Bride_%28film%29) and it will answer **all** your questions.
+[My CV]({{ page.cv }})

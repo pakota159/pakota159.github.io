@@ -1,9 +1,6 @@
 ---
 layout: post
-title: My first post
 subtitle: Hehe
-# gh-repo: pakota159/pakota159.github.io
-# gh-badge: [star, fork, follow]
 tags: [test]
 comments: true
 ---

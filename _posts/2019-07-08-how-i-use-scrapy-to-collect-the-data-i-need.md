@@ -163,3 +163,64 @@ class StacyDownloaderMiddleware(object):
 
         return response
 ```
+The code above still need to be improved like add more validator when I check
+the cookies in the database, at least add the `try except`. But for small, simple project
+I do not focus on this yet.
+
+### Remove all emoji or non-alphabet, non-vietnamese characters
+After we retrieve `post_content` from response html, we need briefly "clean" that
+data.
+
+Example I have retrieved a text:  
+`🏠🏠🏠 Cho thuê phòng tầng 2 thoáng mát ,sạch sẽ . Có chỗ đun nấu và sân phơi đồ thoáng 
+tầng 4 . Chung chủ nên an ninh tốt . 1,8 Tr/tháng, cọc 1 tháng . Ngõ :255 Nguyễn Khang-
+Cầu Giấy . Bạn nào qua tâm ib hoặc LH:0972413480`
+
+There are some things I noticed:
+- Emoji and special characters in the text
+- Uppercase and lowercase characters
+- Extra whitespace
+
+So how to `normalize` the text above?
+
+Using regex seems to be the fastest way to remove Emoji and unwanted characters
+
+The idea is replace all non-alphabet/vietnamese with empty string `re.sub(r"[^\w\s]+", "", text)`
+then replace double whitespace `\s\s+` with single white space.
+```python
+    def clean_text(text):
+        return re.sub(r"\s\s+", " ", re.sub(r"[^\w\s]+", "", text))
+```
+When run the code above with the text above, result will be:
+```python
+"Cho thuê phòng tầng 2 thoáng mát sạch sẽ Có chỗ đun nấu và sân phơi đồ 
+thoáng tầng 4 Chung chủ nên an ninh tốt 18 Trtháng cọc 1 tháng Ngõ 255 
+Nguyễn KhangCầu Giấy Bạn nào qua tâm ib hoặc LH0972413480"
+```
+Look pretty ... wrong. It's will be hard for us to detect the price `18 Trtháng` that
+actually is `1,8 Tr/tháng`
+
+Because there are few punctuations that should be remained in the text like `,`, `.`, `/`  
+therefore we need to define which ones ought to be kept.  
+The list of unicode characters could be found [here](https://unicode-table.com/en/#control-character)   
+And thanks for that, I can define which punctuations I should remain in the text and rewrite my code
+```python
+    def clean_text(text):
+        return re.sub(
+                r"\s\s+",
+                " ",
+                re.sub(
+                    r"[^\u002C-u002F\u0028-u0029\u003A-u003F\w\s]+", "", text
+                )
+            )
+```
+And the result is pretty good now
+```python
+"Cho thuê phòng tầng 2 thoáng mát ,sạch sẽ . 
+Có chỗ đun nấu và sân phơi đồ thoáng tầng 4 . 
+Chung chủ nên an ninh tốt . 1,8 Tr/tháng, cọc 1 tháng . 
+Ngõ :255 Nguyễn Khang-Cầu Giấy . Bạn nào qua tâm ib hoặc LH:0972413480"
+```
+We can do more to remove redundant semicolons but I feel ok with this text and ready to 
+save it to the data base.
+

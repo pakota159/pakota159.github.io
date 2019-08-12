@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8972ae2c-1132-4807-919c-ef7e9cebe43a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/_posts/2019-07-08-how-i-use-scrapy-to-collect-the-data-i-need.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2019-07-08-how-i-use-scrapy-to-collect-the-data-i-need.md" afterDir="false" />
-    </list>
+    <list default="true" id="8972ae2c-1132-4807-919c-ef7e9cebe43a" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,24 +27,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/_posts/2019-07-10-linear-algebra.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-            <state split_layout="SPLIT">
-              <first_editor relative-caret-position="170">
-                <caret line="10" selection-start-line="10" selection-end-line="10" />
-              </first_editor>
-              <second_editor />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/_posts/2019-07-08-how-i-use-scrapy-to-collect-the-data-i-need.md">
+        <entry file="file://$PROJECT_DIR$/_posts/2019-08-08-using-spotify-api-to-retrieve-data.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="702">
-                <caret line="221" selection-start-line="221" selection-end-line="221" />
+              <first_editor relative-caret-position="615">
+                <caret line="100" column="29" selection-start-line="100" selection-start-column="29" selection-end-line="100" selection-end-column="29" />
               </first_editor>
               <second_editor />
             </state>
@@ -92,6 +78,7 @@
         <option value="$PROJECT_DIR$/_layouts/post.html" />
         <option value="$PROJECT_DIR$/_includes/header.html" />
         <option value="$PROJECT_DIR$/_posts/2019-07-08-how-i-use-scrapy-to-collect-the-data-i-need.md" />
+        <option value="$PROJECT_DIR$/_posts/2019-08-08-using-spotify-api-to-retrieve-data.md" />
       </list>
     </option>
   </component>
@@ -118,6 +105,28 @@
               <item name="pakota159.github.io" type="b2602c69:ProjectViewProjectNode" />
               <item name="pakota159.github.io" type="462c0819:PsiDirectoryNode" />
               <item name="_posts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pakota159.github.io" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pakota159.github.io" type="462c0819:PsiDirectoryNode" />
+              <item name="files" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pakota159.github.io" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pakota159.github.io" type="462c0819:PsiDirectoryNode" />
+              <item name="img" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pakota159.github.io" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pakota159.github.io" type="462c0819:PsiDirectoryNode" />
+              <item name="img" type="462c0819:PsiDirectoryNode" />
+              <item name="scrape" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pakota159.github.io" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pakota159.github.io" type="462c0819:PsiDirectoryNode" />
+              <item name="img" type="462c0819:PsiDirectoryNode" />
+              <item name="spotify" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -158,18 +167,18 @@
       <workItem from="1564638603285" duration="2392000" />
       <workItem from="1564641683600" duration="8137000" />
       <workItem from="1564751512406" duration="19965000" />
-      <workItem from="1565061437677" duration="9638000" />
+      <workItem from="1565061437677" duration="23155000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="40132000" />
+    <option name="totallyTimeSpent" value="53649000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49875" visible="true" weight="0.0953125" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49875" visible="true" weight="0.24375" />
       <window_info id="Structure" order="1" sideWeight="0.50125" side_tool="true" weight="0.15390626" />
       <window_info id="Favorites" order="2" side_tool="true" weight="0.3296875" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -361,15 +370,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/_posts/2019-07-09-how-to-calculate-the-salary-based-on-data.md">
-      <provider editor-type-id="text-editor" />
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor />
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/_config.yml">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -442,12 +442,31 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/_posts/2019-07-09-how-to-calculate-the-salary-based-on-data.md">
+      <provider editor-type-id="text-editor" />
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor />
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/_posts/2019-07-08-how-i-use-scrapy-to-collect-the-data-i-need.md">
       <provider editor-type-id="text-editor" />
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="702">
-            <caret line="221" selection-start-line="221" selection-end-line="221" />
+          <first_editor relative-caret-position="782">
+            <caret line="46" selection-start-line="46" selection-end-line="46" selection-end-column="39" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_posts/2019-08-08-using-spotify-api-to-retrieve-data.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="615">
+            <caret line="100" column="29" selection-start-line="100" selection-start-column="29" selection-end-line="100" selection-end-column="29" />
           </first_editor>
           <second_editor />
         </state>

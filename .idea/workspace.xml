@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8972ae2c-1132-4807-919c-ef7e9cebe43a" name="Default Changelist" comment="" />
+    <list default="true" id="8972ae2c-1132-4807-919c-ef7e9cebe43a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_posts/2019-08-08-using-spotify-api-to-retrieve-data.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2019-08-08-using-spotify-api-to-retrieve-data.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/css/main.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/main.css" afterDir="false" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,8 +35,8 @@
         <entry file="file://$PROJECT_DIR$/_posts/2019-08-08-using-spotify-api-to-retrieve-data.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="615">
-                <caret line="100" column="29" selection-start-line="100" selection-start-column="29" selection-end-line="100" selection-end-column="29" />
+              <first_editor relative-caret-position="515">
+                <caret line="558" column="11" lean-forward="true" selection-start-line="558" selection-start-column="11" selection-end-line="558" selection-end-column="11" />
               </first_editor>
               <second_editor />
             </state>
@@ -47,6 +51,7 @@
       <find>hello_wor</find>
       <find>img</find>
       <find>#0085A1</find>
+      <find>to refresh</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -58,7 +63,6 @@
         <option value="$PROJECT_DIR$/_posts/2015-02-28-test-markdown.md" />
         <option value="$PROJECT_DIR$/_posts/2019-08-01-something-cool.md" />
         <option value="$PROJECT_DIR$/_site/aboutme/index.html" />
-        <option value="$PROJECT_DIR$/css/main.css" />
         <option value="$PROJECT_DIR$/index.html" />
         <option value="$PROJECT_DIR$/aboutme.md" />
         <option value="$PROJECT_DIR$/_posts/2019-07-03-my-summary-about-cs61a.md" />
@@ -78,6 +82,7 @@
         <option value="$PROJECT_DIR$/_layouts/post.html" />
         <option value="$PROJECT_DIR$/_includes/header.html" />
         <option value="$PROJECT_DIR$/_posts/2019-07-08-how-i-use-scrapy-to-collect-the-data-i-need.md" />
+        <option value="$PROJECT_DIR$/css/main.css" />
         <option value="$PROJECT_DIR$/_posts/2019-08-08-using-spotify-api-to-retrieve-data.md" />
       </list>
     </option>
@@ -105,6 +110,11 @@
               <item name="pakota159.github.io" type="b2602c69:ProjectViewProjectNode" />
               <item name="pakota159.github.io" type="462c0819:PsiDirectoryNode" />
               <item name="_posts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pakota159.github.io" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pakota159.github.io" type="462c0819:PsiDirectoryNode" />
+              <item name="css" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="pakota159.github.io" type="b2602c69:ProjectViewProjectNode" />
@@ -167,18 +177,18 @@
       <workItem from="1564638603285" duration="2392000" />
       <workItem from="1564641683600" duration="8137000" />
       <workItem from="1564751512406" duration="19965000" />
-      <workItem from="1565061437677" duration="23404000" />
+      <workItem from="1565061437677" duration="30043000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="53898000" />
+    <option name="totallyTimeSpent" value="60537000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49875" visible="true" weight="0.24375" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49875" visible="true" weight="0.146875" />
       <window_info id="Structure" order="1" sideWeight="0.50125" side_tool="true" weight="0.15390626" />
       <window_info id="Favorites" order="2" side_tool="true" weight="0.3296875" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -280,13 +290,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/_layouts/default.html">
       <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/css/main.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="690">
-          <caret line="797" selection-start-line="797" selection-end-line="797" />
-        </state>
-      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
@@ -462,11 +465,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/css/main.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="656">
+          <caret line="800" column="1" lean-forward="true" selection-start-line="800" selection-start-column="1" selection-end-line="800" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/_posts/2019-08-08-using-spotify-api-to-retrieve-data.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="615">
-            <caret line="100" column="29" selection-start-line="100" selection-start-column="29" selection-end-line="100" selection-end-column="29" />
+          <first_editor relative-caret-position="515">
+            <caret line="558" column="11" lean-forward="true" selection-start-line="558" selection-start-column="11" selection-end-line="558" selection-end-column="11" />
           </first_editor>
           <second_editor />
         </state>

@@ -7,30 +7,32 @@ spotify1: /img/spotify/spotify1.png
 spotify2: /img/spotify/spotify2.png
 spotify3: /img/spotify/spotify3.png
 spotify4: /img/spotify/spotify4.png
-spotify5: /img/spotify/spotify5.png
-spotify6: /img/spotify/spotify6.png
+spotify7: /img/spotify/spotify7.png
 ---
-Recently, I am working on a personal project related to analysis of music
-taste of people and it requires retrieving data from some music sites like
+Recently, I am working on a personal project related to analysing music
+taste of people and it requires retrieving data from some music sources like
 Spotify. And fortunely, it provides some quite useful APIs that I would like
 to share here.
 
+### Disclaimer
+___
+This is only a part of my project, with some demo codes without unit testing, error handling and other
+parts for a completed project.
+
 ### What I want
 ___
-Simply I need a list of **Playlists** from Spotify including meta data of each playlist.
+Basically, I need a list of **Playlists** from Spotify including meta data of each playlist like tracks
+from playlist.
 So, technically speaking:
 
 My input:
 - User authentication token (Spotify APIs *doesn't requires* it, but I do want to use
 because it give me *higher rate limits*)
-- Search key terms: ex **"Ed Sheeran"**
 
 And I expect an output like:
-- JSON data with **Playlist info**, including *metadata*
-- Retrieved data should come from search results of that user identity. Ex: result is
-list playlists belongs to **"Ed Sheeran"**
+- JSON data with **Playlist info**, including *metadata* as tracks in each playlist.
 
-Okay, I now know what my goals and it's time to get things done.
+Okay, I pictured my goals and it's time to get things done.
 
 ### Let's start
 ___
@@ -92,9 +94,9 @@ redirect to this after successfully login.
 
 ### Working with playlists
 ___
-Now it's the fun part. How can I retrieve data of playlists I need.
+Now it's the fun part. How can I retrieve data of playlists I need?
 
-After reading the [documents](https://developer.spotify.com/documentation/web-api/reference/playlists/)
+After reading the [documents](https://developer.spotify.com/documentation/web-api/reference/playlists/),
 I have a brief understand about what I can do with this api.
 
 There are 3 ways to get info about playlists:
@@ -103,15 +105,14 @@ There are 3 ways to get info about playlists:
 - Using API `/v1/browse/categories/{category_id}/playlists` to retrieve playlists from
 a specific **category**
 
-I want to use the third method, because playlists I want should be distinguished by *category*
+I want to use the third method, because the playlists I'm interested in should be distinguished by *category*
 instead of user, or query keywords.
 
 There are many categories in spotify, and each category contains many playlists, each playlist
-has many tracks too. But I don't want to get all playlists from each category, just 
-some most popular ones so I don't have to call too many apis.
+has many tracks too. But I don't want to get all playlists from each category, so I don't have to call too many apis.
 
 The expected output is something like this:  
-*For each category, I only need 5 most popular playlists*  
+*For each category, I retrieve 5 playlists*  
 *For each playlist, I want all tracks with its name, singer, and other data*
 ```json
 [
@@ -119,7 +120,7 @@ The expected output is something like this:
     "category": "A",
     "playlists": [
       {
-        "name": "Most popular playlist",
+        "name": "First playlist",
         "tracks": [
           {
             "track_name": "Song 1",
@@ -132,15 +133,18 @@ The expected output is something like this:
 ]
 ```
 
-To be able to retrieve data more convenient, I would like to save category, playlists,
+To be able to **manipulate data** conveniently, I would like to save category, playlists,
 and tracks in database.
 
 I'll use **mongodb** because it's the most familiar database to me.
 You can use any of [these](https://expressjs.com/en/guide/database-integration.html)
 
 First, copy the access token in the login page above and assign it to new
-variable in `app.js`. And define a route `get-category` to get all categories we want.
-
+variable in `app.js`. 
+```javascript
+var acc_token = '<your access token>'
+```
+Then install mongoose package
 ```bash
 npm install mongoose
 ```
@@ -157,23 +161,23 @@ mongoose.connect('mongodb://127.0.0.1/spotify', {useNewUrlParser: true});
 // Declare schema
 const Schema = mongoose.Schema;
 ```
-
-
 ### Design database
-We obviously care 3 objects here: category, playlist and track, so how to design our database
-to store and manipulate data easier.
+___
+We obviously care 3 objects here: category, playlist and track, but how to design our database
+to store and manipulate data effectively?
 
 There are 2 ways to design our model.  
-The first one is store all 3 objects above into 1 Schema. I can call it **Category_Detail** model
+The first one is store all 3 objects above into 1 Schema. I can call it **Category_Detail** model.
 The advantage is whenever I want to retrieve data from db, I only have to access one model,
-no need to use embbed fields, reference.  
+no need to use reference fields.  
+
 The disadvantage is, as I considered, bigger because I will need to store my playlists in
-each model as an *array* which will really hard to update after that, and with each playlist
+each *Category_Detail* as an *array* which makes thing hard to update, and with each playlist
 I need another array for tracks, so 2 nested arrays are too complicated for a model like this.
 
-So I decide to use the second way to design my model  
+Thus, I decide to use the second way to design my model  
 3 seperated models as following *category*, *playlist* and *track*. Playlist will contains
-1 reference field that refer to category, and track will contains 1 reference field refer to
+1 reference field that refers to category, and track will contains 1 reference field refers to
 playlist that it belongs to.
 
 ```javascript
@@ -195,8 +199,9 @@ const TrackSchema = new Schema({
 	track_name: String,
 	track_id: String,
 	artists: Array,
-	playlist_name: String,
-	playlist_id: String,
+	images: Array,
+	playlist_name: String,  // This field for convenient data analysis later
+	playlist_id: String,  // This field for convenient data analysis later
 });
 const Track = mongoose.model('Track', TrackSchema);
 ```
@@ -217,7 +222,7 @@ app.get('/get-category', (req, res) => {
 		},
 		json: true
 	};
-	request.get(options, function (error, response, body) {
+	request.get(options, (error, response, body) => {
 		res.send({
 			'data': body
 		})
@@ -231,9 +236,9 @@ I only need **category id** to query playlists for each category. So we should
 change the code a bit.
 ```javascript
 // Define a function that store category
-let save_category_to_db = function(data){
+var save_category_to_db = function(data){
 	Category.count({cat_id: data.id}, function (err, count){
-		if (count === 0){
+		if (count === 0){  // Only store category that's not existed in database yet
 			const cat = new Category();
 			cat.cat_id = data.id;
 			cat.cat_name = data.name;
@@ -291,12 +296,12 @@ and in db, we have our categories
 ___
 For each category, I want to call Api once to get list of playlists I want.
 The problem is nodejs is **asynchronous**, and after we make a request to query
-*toplists* category, nodejs processes will continue make request to query **vietnamese**
+**toplists** category, nodejs processes will continue make request to query **kpop**
 before previous request responses. To solve that problem, we need to make sure
-all the requests to all the categories *must* response completely before we response
+all the requests *must* response completely before we response
 to client.
 
-The logic flow above can be understood as below
+The logic flow can be understood as below
 ```bash
 Make request GET /https://api.spotify.com/v1/browse/categories/toplists/playlists
 to get all playlists of toplists
@@ -305,7 +310,7 @@ Make request GET /https://api.spotify.com/v1/browse/categories/kpop/playlists
 to get all playlists of kpop
 
 ...
-After all requests above response successfully, save those playlists to db
+After all requests above response successfully, save those playlists to db, then response to client
 ```
 
 To do all of these above, we'll use Promises or in this case *bluebird* package
@@ -313,13 +318,13 @@ To do all of these above, we'll use Promises or in this case *bluebird* package
 npm install bluebird
 npm install request-promise
 ```
-Change the code to use *bluebird* and *request-promise*
+Use *bluebird* and *request-promise*
 ```javascript
 var Bluebird = require('bluebird');
 var rp = require('request-promise');
 
-let save_playlist_to_db = function(data){
-	var cat_id = data.href.split('/')[6]  // Extract cat id from href in response
+var save_playlist_to_db = function(data){
+	var cat_id = data.href.split('/')[6];  // Extract cat id from href in response
 	Category.findOne({cat_id: cat_id}, function(err, doc){
 		if(doc){
 			data.items.forEach(val => {
@@ -368,7 +373,7 @@ app.get('/get-playlist', (req, res) => {
 })
 ```
 
-And we get result like below, with **name, id, track url** of all playlists
+And we get result like below, with **name, id, category** of all playlists
 ```json
 [
     { 
@@ -392,8 +397,6 @@ And we get result like below, with **name, id, track url** of all playlists
 ]
 ```
 
-The track url is neccessary if we want to know **list of tracks in each playlist**
-
 ### Get all tracks in each playlist
 ___
 Now we have playlists
@@ -401,19 +404,17 @@ Now we have playlists
 [
   {
     "id": "37i9dQZF1DXcBWIGoYBM5M",
-    "name": "Today's Top Hits",
-    "track": "https://api.spotify.com/v1/playlists/37i9dQZF1DXcBWIGoYBM5M/tracks"
+    "name": "Today's Top Hits"
   },
   {
     "id": "37i9dQZF1DX44t7uCdkV1A",
-    "name": "Viral Hits",
-    "track": "https://api.spotify.com/v1/playlists/37i9dQZF1DX44t7uCdkV1A/tracks"
+    "name": "Viral Hits"
   }
 ]
 ```
 
 And if we make request like `GET https://api.spotify.com/v1/playlists/37i9dQZF1DX44t7uCdkV1A/tracks` we
-will be able to retrieve list of songs/tracks in that playlist.
+will be able to retrieve list of tracks in that playlist.
 
 But once again, nodejs is asynchronous and there are too many playlists we need
 to get tracks, we'll get Apis **limit rate error**.
@@ -436,13 +437,14 @@ The function `get_tracks` will do something for us:
 - From each playlist, call api GET tracks from playlist
 
 ```javascript
-let get_tracks = function(cb){
+var get_tracks = function(cb){
 	Category.find({}, function(err, cats){
 		var promise_arr = [];
 		var query_promises = [];
 		cats.forEach(cat => {
 			query_promises.push(
-				Playlist.find({category: cat.id}, null, {limit: 3}).exec()
+				Playlist.find({category: cat.id}, null, {limit: 2}).exec()  // Only query 2 playlist
+				// for each category to avoid limit rate error
 			)
 		})
 		
@@ -477,7 +479,7 @@ let get_tracks = function(cb){
 			})
 			
 			// Because query and saving data took too much time, I response to client this msg
-			cb('query processing')
+			cb('Processing')
 		})
 	})
 }
@@ -485,10 +487,9 @@ let get_tracks = function(cb){
 
 After calling API completely, we save the response data to track database
 ```javascript
-let save_track_to_db = function(data){
+var save_track_to_db = function(data){
 	var playlist_id = data.href.split('/')[5]
 	Playlist.findOne({playlist_id: playlist_id}, function(err, pl){
-		console.log(data.items[0].track)
 		data.items.forEach(val => {
 			if(val && val.track){
 				Track.count({track_id: val.track.id, playlist: pl}, function(err, count){
@@ -498,10 +499,11 @@ let save_track_to_db = function(data){
 						track.track_name = val.track.name;
 						track.playlist = pl;
 						track.artists = val.track.artists;
+						track.images = val.track.album.images;
 						track.playlist_name = pl.playlist_name;
 						track.playlist_id = pl.playlist_id;
 						track.save()
-						console.log('Done save track ' + val.track.name)
+						console.log('Done save track ' + val.track.name)  // Log on terminal
 					}
 				})
 			}
@@ -511,56 +513,92 @@ let save_track_to_db = function(data){
 }
 ```
 
+While client receive a response like **Processing**, in the console terminal, we can see what
+the node server is doing
+
+![spotify7]({{ page.spotify7 }}#post_img)
+
 As a result now we have track database like this
 ```json
  [
-     {
-        "_id": "5d538fca355eb39108dc0ed1", 
+     { 
         "artists" : [
             {
                 "external_urls" : {
-                    "spotify" : "https://open.spotify.com/artist/0r63ReVRjxrS4ATbLrdcrL"
+                    "spotify" : "https://open.spotify.com/artist/7plUpXSFcSJUZSiZAoXqr1"
                 }, 
-                "href" : "https://api.spotify.com/v1/artists/0r63ReVRjxrS4ATbLrdcrL", 
-                "id" : "0r63ReVRjxrS4ATbLrdcrL", 
-                "name" : "Hoang Thuy Linh", 
+                "href" : "https://api.spotify.com/v1/artists/7plUpXSFcSJUZSiZAoXqr1", 
+                "id" : "7plUpXSFcSJUZSiZAoXqr1", 
+                "name" : "Ximena Sariñana", 
                 "type" : "artist", 
-                "uri" : "spotify:artist:0r63ReVRjxrS4ATbLrdcrL"
+                "uri" : "spotify:artist:7plUpXSFcSJUZSiZAoXqr1"
             }
         ], 
-        "track_id" : "4V1BqUA97pWQpPB3gxWwoQ", 
-        "track_name" : "De Mi Noi Cho Ma Nghe", 
-        "playlist_name" : "Viral 50 Việt Nam", 
-        "playlist_id" : "37i9dQZEVXbL1G1MbPav3j"
-    },
-    { 
-        "_id" : "5d538fca355eb39108dc0ed2", 
-        "artists" : [
+        "images" : [
             {
-                "external_urls" : {
-                    "spotify" : "https://open.spotify.com/artist/1K8kkeM8j0BL8sQ4aR7Vh6"
-                }, 
-                "href" : "https://api.spotify.com/v1/artists/1K8kkeM8j0BL8sQ4aR7Vh6", 
-                "id" : "1K8kkeM8j0BL8sQ4aR7Vh6", 
-                "name" : "HYOMIN", 
-                "type" : "artist", 
-                "uri" : "spotify:artist:1K8kkeM8j0BL8sQ4aR7Vh6"
+                "height" : 640, 
+                "url" : "https://i.scdn.co/image/07f28993ffc11c7382b754464e1f1443c4bc79ce", 
+                "width" : 640
             }, 
             {
-                "external_urls" : {
-                    "spotify" : "https://open.spotify.com/artist/3rjcQ5VIWCN4q7UFetzdeO"
-                }, 
-                "href" : "https://api.spotify.com/v1/artists/3rjcQ5VIWCN4q7UFetzdeO", 
-                "id" : "3rjcQ5VIWCN4q7UFetzdeO", 
-                "name" : "JustaTee", 
-                "type" : "artist", 
-                "uri" : "spotify:artist:3rjcQ5VIWCN4q7UFetzdeO"
+                "height" : 300, 
+                "url" : "https://i.scdn.co/image/9944f5b468191add68ce6b6dc406a96275fea294", 
+                "width" : 300
+            }, 
+            {
+                "height" : 64, 
+                "url" : "https://i.scdn.co/image/91608d3fd627308407f5fbdc73705cd5f98df438", 
+                "width" : 64
             }
         ], 
-        "track_id" : "1YX290GRxBTdJ7C0rJBzF0", 
-        "track_name" : "Cabinet", 
-        "playlist_name" : "Viral 50 Việt Nam", 
-        "playlist_id" : "37i9dQZEVXbL1G1MbPav3j"
+        "track_id" : "2vNDq5XAoF4Gl4hfY7aacS", 
+        "track_name" : "¿Qué Tiene?", 
+        "playlist_name" : "Viral Hits", 
+        "playlist_id" : "37i9dQZF1DX44t7uCdkV1A"
+    },
+    { 
+        "artists" : [
+            {
+                "external_urls" : {
+                    "spotify" : "https://open.spotify.com/artist/6y8XlgIV8BLlIg1tT1R10i"
+                }, 
+                "href" : "https://api.spotify.com/v1/artists/6y8XlgIV8BLlIg1tT1R10i", 
+                "id" : "6y8XlgIV8BLlIg1tT1R10i", 
+                "name" : "Old Dominion", 
+                "type" : "artist", 
+                "uri" : "spotify:artist:6y8XlgIV8BLlIg1tT1R10i"
+            }
+        ], 
+        "images" : [
+            {
+                "height" : 640, 
+                "url" : "https://i.scdn.co/image/f7bb9602ffa552a79e04ae047fa6d4cd973b6c6e", 
+                "width" : 640
+            }, 
+            {
+                "height" : 300, 
+                "url" : "https://i.scdn.co/image/cc2a45aee931af6218740d2bebf74c4bcd720b5e", 
+                "width" : 300
+            }, 
+            {
+                "height" : 64, 
+                "url" : "https://i.scdn.co/image/df2775a7d2ec9f5f319d28833c1b3d06ec6bb770", 
+                "width" : 64
+            }
+        ], 
+        "track_id" : "1kTugNMVMbaQep1srMua2q", 
+        "track_name" : "Bad At Love - Recorded at Sound Stage Studios Nashville", 
+        "playlist_name" : "Viral Hits", 
+        "playlist_id" : "37i9dQZF1DX44t7uCdkV1A"
     }
 ]
 ```
+### Conclusion
+___
+And we've done. I'm now able to retrieve thounsand of songs and playlists from Spotify.
+I could make a small background tasks run periodically to query new songs, new playlists if I want.
+After that, when I have enough data, I can conduct some analysis over it to learn new insights
+about music.
+
+Thank for reading, this is one of my first blogs so it should have many mistakes. Hope you guys enjoy it
+and give me some feedback (when I enable comment from this website, of course).

@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8972ae2c-1132-4807-919c-ef7e9cebe43a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2019-07-08-how-i-use-scrapy-to-collect-the-data-i-need.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2019-07-08-how-i-use-scrapy-to-collect-the-data-i-need.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2019-07-09-how-to-calculate-the-salary-based-on-data.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2019-07-09-how-to-calculate-the-salary-based-on-data.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2019-07-10-linear-algebra.md" beforeDir="false" />
-    </list>
+    <list default="true" id="8972ae2c-1132-4807-919c-ef7e9cebe43a" name="Default Changelist" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,7 +32,7 @@
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
               <first_editor relative-caret-position="209">
-                <caret line="201" lean-forward="true" selection-start-line="201" selection-end-line="201" />
+                <caret line="201" selection-start-line="201" selection-end-line="201" />
               </first_editor>
               <second_editor />
             </state>
@@ -193,12 +188,12 @@
       <workItem from="1564638603285" duration="2392000" />
       <workItem from="1564641683600" duration="8137000" />
       <workItem from="1564751512406" duration="19965000" />
-      <workItem from="1565061437677" duration="34527000" />
+      <workItem from="1565061437677" duration="34986000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="65021000" />
+    <option name="totallyTimeSpent" value="65480000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
@@ -483,7 +478,7 @@
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
           <first_editor relative-caret-position="209">
-            <caret line="201" lean-forward="true" selection-start-line="201" selection-end-line="201" />
+            <caret line="201" selection-start-line="201" selection-end-line="201" />
           </first_editor>
           <second_editor />
         </state>

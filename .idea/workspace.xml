@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="8972ae2c-1132-4807-919c-ef7e9cebe43a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/_posts/2019-08-15-how-I-self-study-computer-science-and-data-science.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2019-08-15-how-I-self-study-computer-science-and-data-science.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/note/bg.jpg" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -34,7 +35,7 @@
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
               <first_editor relative-caret-position="85">
-                <caret line="5" column="20" selection-start-line="5" selection-start-column="20" selection-end-line="5" selection-end-column="20" />
+                <caret line="5" column="24" selection-start-line="5" selection-start-column="24" selection-end-line="5" selection-end-column="24" />
               </first_editor>
               <second_editor />
             </state>
@@ -180,12 +181,12 @@
       <workItem from="1564638603285" duration="2392000" />
       <workItem from="1564641683600" duration="8137000" />
       <workItem from="1564751512406" duration="19965000" />
-      <workItem from="1565061437677" duration="45138000" />
+      <workItem from="1565061437677" duration="45314000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="75632000" />
+    <option name="totallyTimeSpent" value="75808000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
@@ -491,7 +492,7 @@
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
           <first_editor relative-caret-position="85">
-            <caret line="5" column="20" selection-start-line="5" selection-start-column="20" selection-end-line="5" selection-end-column="20" />
+            <caret line="5" column="24" selection-start-line="5" selection-start-column="24" selection-end-line="5" selection-end-column="24" />
           </first_editor>
           <second_editor />
         </state>

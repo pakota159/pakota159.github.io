@@ -3,7 +3,7 @@ layout: post
 subtitle: "The Lord of self-studying: The Fellowship of studying"
 tags: [cs, learning, data]
 comments: true
-bigimg: /img/note/bg.jpg
+bigimg: /img/note/bg.png
 note1: /img/note/note1.jpeg
 note2: /img/note/note2.jpeg
 ---

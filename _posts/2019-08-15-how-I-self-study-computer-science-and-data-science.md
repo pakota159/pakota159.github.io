@@ -52,16 +52,29 @@ the most.
 > **Bold courses** are must-taken or you should be familiar with the outcomes of those courses (so you don't have to re-take it).  
 Other courses are useful and good to learn.
 
+### Learning Path
+___
+
+For whom want to learn programming applied in non-cs area (like business, finance, health care, ...)
+this is learning path I think able to help you learn effectively.
+
+1. Read 2 starter books
+2. Do maths courses **Math_01** -> **Math_02** -> **Math_03** or make sure you understand all the conceps in each course.
+3. Do core courses in Computer Science: **1** -> **2** -> **3** -> **8** (in course 8 only need Lecture 1 to 8)
+4. Learn Python: **Py_2** -> **Py_5** (do all projects)
+5. Learn DS and Algorithm: **Al_01** -> **Al_02** -> **Al_05**
+6. Do real projects
+
 ### Mathematics
 ___
 The courses below should be taken in order.
 
-| Course | Link | What you expected to learn |
-| ------ |--- | --- |
-| **Single Variable Calculus** | <https://ocw.mit.edu/courses/mathematics/18-01sc-single-variable-calculus-fall-2010/> | Limit, Derivatives, Chain Rules, Approximation, Mean Value Theorem, Riemann Sums, The Fundamental Theorem of Calculus, Integrals and Application, L'Hospital's Rule, Infinite Series, Taylor's Series|
-| **Multivariable Calculus** | <https://ocw.mit.edu/courses/mathematics/18-02sc-multivariable-calculus-fall-2010/> | Vectors and operators on vectors, Determinants and Matrices (Basics), Partial Derivatives, Second Derivative Test, Total Differentials and the Chain Rule, Gradient, Lagrange Multipliers, Double Integrals, Vector Fields, Curl, Green's Theorem, Triple Integrals, Flux, Stokes' Theorem| 
-| **Math 54 Linear Algebra and Differential Equations** | <https://math.berkeley.edu/~apaulin/54_002(Spring2018).html> | Vectors Spaces and Linear transformations, subspaces, kernels, range, eigenvalues and eigenvectors, The Gram-Schmidt Process, Least-Squares Problems, Linear Systems of Differential Equations, Fourier Series |
-| Math 55 - Discrete Mathematics (useful for computer science. If you learn cs70 below, you don't really need this) | <https://math.berkeley.edu/~williams/55.html> | Propositional logic and equivalences, Sets and set operations, Functions, sequences, cardinality, Solving congruences, Mathematical induction, recursive, Counting, Permutations and combinations, Graphs and graph models, Graph isomorphism |
+|No.| Course | Link | What you expected to learn |
+|----- | ------ |--- | --- |
+|**Math_01**| **Single Variable Calculus** | <https://ocw.mit.edu/courses/mathematics/18-01sc-single-variable-calculus-fall-2010/> | Limit, Derivatives, Chain Rules, Approximation, Mean Value Theorem, Riemann Sums, The Fundamental Theorem of Calculus, Integrals and Application, L'Hospital's Rule, Infinite Series, Taylor's Series|
+|**Math_02**| **Multivariable Calculus** | <https://ocw.mit.edu/courses/mathematics/18-02sc-multivariable-calculus-fall-2010/> | Vectors and operators on vectors, Determinants and Matrices (Basics), Partial Derivatives, Second Derivative Test, Total Differentials and the Chain Rule, Gradient, Lagrange Multipliers, Double Integrals, Vector Fields, Curl, Green's Theorem, Triple Integrals, Flux, Stokes' Theorem| 
+|**Math_03**| **Math 54 Linear Algebra and Differential Equations** | <https://math.berkeley.edu/~apaulin/54_002(Spring2018).html> | Vectors Spaces and Linear transformations, subspaces, kernels, range, eigenvalues and eigenvectors, The Gram-Schmidt Process, Least-Squares Problems, Linear Systems of Differential Equations, Fourier Series |
+|**Math_04**| Math 55 - Discrete Mathematics (useful for computer science. If you learn cs70 below, you don't really need this) | <https://math.berkeley.edu/~williams/55.html> | Propositional logic and equivalences, Sets and set operations, Functions, sequences, cardinality, Solving congruences, Mathematical induction, recursive, Counting, Permutations and combinations, Graphs and graph models, Graph isomorphism |
 
 ### Computer Science
 ___
@@ -189,4 +202,41 @@ I have not learned this course, just read the syllabus and think this's practica
 - Software processes
 - MVC, Web development
 
+___
+#### Strengthen your knowledge
+
+I will consider 8 courses above are core courses that you should take all of those seriously.
+After that, you now have good understanding about computer science and ready to improve yourself
+even more.
+
+The first thing I want to dig into is **programming language**, I'm gonna cover few most popular ones
+like C, C++, Python.
+
+To practice coding, you should join some popular competitive coding sites like <https://codeforces.com>,
+<https://www.topcoder.com/> and practice there, quite helpful.
+
+|No.| Language | Books/Course | Link | What you expected to learn | Hard Level |
+| ----- | ------ |--- | --- | --- | --- |
+| C_1 | C | Dennis M. Ritchie - The C programming language | <https://www.amazon.com/Programming-Language-2nd-Brian-Kernighan/dp/0131103628> | Most popular C book out there, nothing much to talk, it's great, I learned basic concepts about C here. It's short and don't take much time to read | ★★☆☆☆ |
+| C_2 | C | Practical Programming in C | <https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-087-practical-programming-in-c-january-iap-2010/assignments/> | A course about C from MIT, not much teaching material but good practice problems with solutions | ★★★☆☆ |
+| C++_1 | C++ | Learn C++ | <https://www.learncpp.com/> | Great and detailed tutorial about C++ | ★★☆☆☆ |
+| C++_2| C++ | Accelerated C++ | <https://www.amazon.com/Accelerated-C-Practical-Programming-Example/dp/020170353X> | Practices and examples | ★★★☆☆ |
+| C++_3| C++ | The C++ Programming Language | <https://www.amazon.com/C-Programming-Language-4th/dp/0321563840/> | Detailed book from author of C++ itself, well-explained | ★★★☆☆ |
+| Py_1 | Python | Official Docs | <https://docs.python.org/3/tutorial/index.html> | This's where I've started learning Python, detailed, up-to-date | ★★★☆☆ |
+| Py_2 | Python | Learn python the hard way | <https://learnpythonthehardway.org/python3/> | Simple intro to python | ★☆☆☆☆ |
+| Py_3 | Python | Real Python | <https://realpython.com/> | Detailed examples for you to practice | ★★☆☆☆ |
+| Py_4 | Python | Full stack Python | <https://www.fullstackpython.com/> | Help you learn what need to build Python app | ★★★★☆ |
+| Py_5 | Python | Automate the Boring Stuff with Python | <https://automatetheboringstuff.com/> | Learn build Python cool stuff | ★★☆☆☆ |
+
+Secondly, we need to learn more about **data structure and algorithm**
+
+| No.| Books/Course | Link | What you expected to learn |
+| ----- | ------ |--- | --- |
+| Al_01 | Introduction to Algorithms | <https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-006-introduction-to-algorithms-fall-2011/> | Basic about algorithms from MIT |
+| Al_02 | Design and Analysis of Algorithms | <https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-046j-design-and-analysis-of-algorithms-spring-2015/index.htm> | Part 2 from the MIT series, more advanced algorithms: divide and conquer, dynamic programming, complexity and so on |
+| Al_03 | Advanced Algorithms | <https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-854j-advanced-algorithms-fall-2008/> | Part 3 from MIT series with advanced algorithms |
+| Al_04 | Data Structures and Algorithms - Richard Buckland | <https://www.youtube.com/playlist?list=PLE621E25B3BF8B9D1> | Basic data structures |
+| Al_05 | CS 186: Introduction to Database Systems | <http://www.infocobuild.com/education/audio-video-courses/computer-science/cs186-spring2015-berkeley.html> | Database management system, SQL and so on |
+
+### Data Science
 ___

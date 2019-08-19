@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8972ae2c-1132-4807-919c-ef7e9cebe43a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_posts/2019-08-15-how-I-self-study-computer-science-and-data-science.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2019-08-15-how-I-self-study-computer-science-and-data-science.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/img/note/bg.jpg" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -34,8 +34,8 @@
         <entry file="file://$PROJECT_DIR$/_posts/2019-08-15-how-I-self-study-computer-science-and-data-science.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="85">
-                <caret line="5" column="24" selection-start-line="5" selection-start-column="24" selection-end-line="5" selection-end-column="24" />
+              <first_editor relative-caret-position="278">
+                <caret line="65" column="19" selection-start-line="65" selection-start-column="19" selection-end-line="65" selection-end-column="19" />
               </first_editor>
               <second_editor />
             </state>
@@ -181,12 +181,13 @@
       <workItem from="1564638603285" duration="2392000" />
       <workItem from="1564641683600" duration="8137000" />
       <workItem from="1564751512406" duration="19965000" />
-      <workItem from="1565061437677" duration="45314000" />
+      <workItem from="1565061437677" duration="46658000" />
+      <workItem from="1566044545932" duration="4240000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="75808000" />
+    <option name="totallyTimeSpent" value="81392000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
@@ -430,21 +431,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/_posts/2019-07-10-linear-algebra.md">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="20" selection-start-line="2" selection-start-column="20" selection-end-line="2" selection-end-column="20" />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="170">
-            <caret line="10" selection-start-line="10" selection-end-line="10" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/_posts/2019-07-10-linear-algebra.md" />
     <entry file="file://$PROJECT_DIR$/_posts/2019-07-07-python.md">
       <provider editor-type-id="text-editor" />
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
@@ -491,8 +478,8 @@
     <entry file="file://$PROJECT_DIR$/_posts/2019-08-15-how-I-self-study-computer-science-and-data-science.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="85">
-            <caret line="5" column="24" selection-start-line="5" selection-start-column="24" selection-end-line="5" selection-end-column="24" />
+          <first_editor relative-caret-position="278">
+            <caret line="65" column="19" selection-start-line="65" selection-start-column="19" selection-end-line="65" selection-end-column="19" />
           </first_editor>
           <second_editor />
         </state>

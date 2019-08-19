@@ -4,6 +4,7 @@
     <list default="true" id="8972ae2c-1132-4807-919c-ef7e9cebe43a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/_posts/2019-08-15-how-I-self-study-computer-science-and-data-science.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2019-08-15-how-I-self-study-computer-science-and-data-science.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/files/cv.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/files/cv.pdf" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -34,8 +35,8 @@
         <entry file="file://$PROJECT_DIR$/_posts/2019-08-15-how-I-self-study-computer-science-and-data-science.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="278">
-                <caret line="65" column="19" selection-start-line="65" selection-start-column="19" selection-end-line="65" selection-end-column="19" />
+              <first_editor relative-caret-position="407">
+                <caret line="76" column="56" selection-start-line="76" selection-start-column="56" selection-end-line="76" selection-end-column="56" />
               </first_editor>
               <second_editor />
             </state>
@@ -87,6 +88,7 @@
         <option value="$PROJECT_DIR$/_posts/2019-07-08-how-i-use-scrapy-to-collect-the-data-i-need.md" />
         <option value="$PROJECT_DIR$/_posts/2019-07-09-how-to-calculate-the-salary-based-on-data.md" />
         <option value="$PROJECT_DIR$/_posts/2019-08-15-learning-path-for-anyone-love-data-and-computer.md" />
+        <option value="$PROJECT_DIR$/_posts/2019-08-19-basic-docker.md" />
         <option value="$PROJECT_DIR$/_posts/2019-08-15-how-I-self-study-computer-science-and-data-science.md" />
       </list>
     </option>
@@ -129,6 +131,12 @@
               <item name="pakota159.github.io" type="b2602c69:ProjectViewProjectNode" />
               <item name="pakota159.github.io" type="462c0819:PsiDirectoryNode" />
               <item name="img" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="pakota159.github.io" type="b2602c69:ProjectViewProjectNode" />
+              <item name="pakota159.github.io" type="462c0819:PsiDirectoryNode" />
+              <item name="img" type="462c0819:PsiDirectoryNode" />
+              <item name="docker" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="pakota159.github.io" type="b2602c69:ProjectViewProjectNode" />
@@ -182,18 +190,18 @@
       <workItem from="1564641683600" duration="8137000" />
       <workItem from="1564751512406" duration="19965000" />
       <workItem from="1565061437677" duration="46658000" />
-      <workItem from="1566044545932" duration="4240000" />
+      <workItem from="1566044545932" duration="8148000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="81392000" />
+    <option name="totallyTimeSpent" value="85300000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49875" visible="true" weight="0.221875" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49875" visible="true" weight="0.2984375" />
       <window_info id="Structure" order="1" sideWeight="0.50125" side_tool="true" weight="0.15390626" />
       <window_info id="Favorites" order="2" side_tool="true" weight="0.3296875" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -454,12 +462,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/_posts/2019-07-09-how-to-calculate-the-salary-based-on-data.md">
-      <provider editor-type-id="text-editor" />
+    <entry file="file://$PROJECT_DIR$/_posts/2019-08-19-basic-docker.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="119">
-            <caret line="7" column="17" selection-start-line="7" selection-start-column="17" selection-end-line="7" selection-end-column="17" />
+          <first_editor relative-caret-position="702">
+            <caret line="43" column="17" selection-start-line="43" selection-start-column="17" selection-end-line="43" selection-end-column="17" />
           </first_editor>
           <second_editor />
         </state>
@@ -468,8 +475,19 @@
     <entry file="file://$PROJECT_DIR$/_posts/2019-08-08-using-spotify-api-to-retrieve-data.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="192">
+          <first_editor relative-caret-position="-8801">
             <caret line="48" selection-start-line="48" selection-end-line="48" selection-end-column="41" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_posts/2019-07-09-how-to-calculate-the-salary-based-on-data.md">
+      <provider editor-type-id="text-editor" />
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="119">
+            <caret line="7" selection-start-line="7" selection-end-line="7" selection-end-column="17" />
           </first_editor>
           <second_editor />
         </state>
@@ -478,8 +496,8 @@
     <entry file="file://$PROJECT_DIR$/_posts/2019-08-15-how-I-self-study-computer-science-and-data-science.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="278">
-            <caret line="65" column="19" selection-start-line="65" selection-start-column="19" selection-end-line="65" selection-end-column="19" />
+          <first_editor relative-caret-position="407">
+            <caret line="76" column="56" selection-start-line="76" selection-start-column="56" selection-end-line="76" selection-end-column="56" />
           </first_editor>
           <second_editor />
         </state>

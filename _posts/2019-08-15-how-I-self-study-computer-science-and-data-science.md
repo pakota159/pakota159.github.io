@@ -65,6 +65,18 @@ this is learning path I think able to help you learn effectively.
 5. Learn DS and Algorithm: **Al_01** -> **Al_02** -> **Al_05**
 6. Do real projects
 
+To get some certifications, some courses below are recommend:
+1. Algorithms: <https://www.coursera.org/specializations/algorithms> Standford Course - Intermediate Level
+**You should learn basic algorithms before taking this one** Example: Al_01 is good start.
+2. C Programming: <https://www.edx.org/professional-certificate/dartmouth-imtx-c-programming-with-linux> Dartmouth Course - Intermediate Level
+At least you should read the book **C_1** in C sections below before take this course.
+Self-pace and **$308** fee
+3. C++ Programming: Series 3 courses from Microsoft  
+Intro C++ <https://www.edx.org/course/introduction-to-c-5>   
+Intermediate C++ <https://www.edx.org/course/intermediate-c-3>   
+Advanced C++ <https://www.edx.org/course/advanced-c-3>  
+4. Python: <https://www.coursera.org/specializations/data-science-python> Python for data science series from University of Michigan  
+
 ### Mathematics
 ___
 The courses below should be taken in order.

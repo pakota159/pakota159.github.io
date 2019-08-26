@@ -252,3 +252,10 @@ Secondly, we need to learn more about **data structure and algorithm**
 
 ### Data Science
 ___
+
+>**Probability and Statistics**
+
+#### 1. Probability and Statistics - Stanford Online Lagunita
+Link: <https://lagunita.stanford.edu/courses/course-v1:OLI+ProbStat+Open_Jan2017/about>
+
+**_Updating..._**

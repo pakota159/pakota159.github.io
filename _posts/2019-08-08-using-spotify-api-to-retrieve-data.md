@@ -3,6 +3,7 @@ layout: post
 subtitle: Music is love, data is life 
 tags: [cs, nodejs, data, spotify]
 comments: true
+bigimg: /img/spotify/bg.jpg
 spotify1: /img/spotify/spotify1.png
 spotify2: /img/spotify/spotify2.png
 spotify3: /img/spotify/spotify3.png

@@ -3,6 +3,7 @@ layout: post
 subtitle: The Good, The Bad and The Data
 tags: [cs, scrapy, splash, python, data]
 comments: true
+bigimg: /img/scrape/bg.jpg
 scrape1: /img/scrape/scrape1.png
 ---
 About 4 years ago, I encountered a huge struggle looking for a suitable room for rent.

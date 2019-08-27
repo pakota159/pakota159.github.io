@@ -3,11 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="8972ae2c-1132-4807-919c-ef7e9cebe43a" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2019-07-08-how-i-use-scrapy-to-collect-the-data-i-need.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2019-07-08-how-i-use-scrapy-to-collect-the-data-i-need.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2019-07-09-how-to-calculate-the-salary-based-on-data.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2019-08-27-econometrics-with-r.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/_posts/2019-08-08-using-spotify-api-to-retrieve-data.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2019-08-08-using-spotify-api-to-retrieve-data.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/aboutme.md" beforeDir="false" afterPath="$PROJECT_DIR$/aboutme.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/files/cv.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/files/cv.pdf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/_posts/2019-08-27-econometrics-with-r.md" beforeDir="false" afterPath="$PROJECT_DIR$/_posts/2019-08-27-econometrics-with-r.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -34,24 +30,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/_posts/2019-08-27-econometrics-with-r.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="187">
-                <caret line="11" column="3" selection-start-line="11" selection-start-column="3" selection-end-line="11" selection-end-column="3" />
-              </first_editor>
-              <second_editor />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/aboutme.md">
-          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-            <state split_layout="SPLIT">
-              <first_editor relative-caret-position="323">
-                <caret line="19" column="48" selection-start-line="19" selection-start-column="48" selection-end-line="19" selection-end-column="48" />
+              <first_editor relative-caret-position="102">
+                <caret line="6" column="3" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
               </first_editor>
               <second_editor />
             </state>
@@ -105,8 +89,8 @@
         <option value="$PROJECT_DIR$/_posts/2019-08-15-how-I-self-study-computer-science-and-data-science.md" />
         <option value="$PROJECT_DIR$/_posts/2019-08-08-using-spotify-api-to-retrieve-data.md" />
         <option value="$PROJECT_DIR$/_posts/2019-07-08-how-i-use-scrapy-to-collect-the-data-i-need.md" />
-        <option value="$PROJECT_DIR$/_posts/2019-08-27-econometrics-with-r.md" />
         <option value="$PROJECT_DIR$/aboutme.md" />
+        <option value="$PROJECT_DIR$/_posts/2019-08-27-econometrics-with-r.md" />
       </list>
     </option>
   </component>
@@ -212,18 +196,18 @@
       <workItem from="1564751512406" duration="19965000" />
       <workItem from="1565061437677" duration="46658000" />
       <workItem from="1566044545932" duration="10347000" />
-      <workItem from="1566894572232" duration="1801000" />
+      <workItem from="1566894572232" duration="2418000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="89300000" />
+    <option name="totallyTimeSpent" value="89917000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49875" visible="true" weight="0.2078125" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49875" visible="true" weight="0.3" />
       <window_info id="Structure" order="1" sideWeight="0.50125" side_tool="true" weight="0.15390626" />
       <window_info id="Favorites" order="2" side_tool="true" weight="0.3296875" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -273,9 +257,6 @@
     <option name="version" value="1" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/_includes/nav.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-310" />
@@ -504,14 +485,10 @@
     <entry file="file://$PROJECT_DIR$/files/one_page_cv.tex">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/_posts/2019-08-27-econometrics-with-r.md">
-      <provider editor-type-id="text-editor" />
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="187">
-            <caret line="11" column="3" selection-start-line="11" selection-start-column="3" selection-end-line="11" selection-end-column="3" />
-          </first_editor>
-          <second_editor />
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="10" column="10" selection-start-line="10" selection-start-column="10" selection-end-line="10" selection-end-column="10" />
         </state>
       </provider>
     </entry>
@@ -525,6 +502,17 @@
         <state split_layout="SPLIT">
           <first_editor relative-caret-position="323">
             <caret line="19" column="48" selection-start-line="19" selection-start-column="48" selection-end-line="19" selection-end-column="48" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/_posts/2019-08-27-econometrics-with-r.md">
+      <provider editor-type-id="text-editor" />
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="102">
+            <caret line="6" column="3" selection-start-line="6" selection-start-column="3" selection-end-line="6" selection-end-column="3" />
           </first_editor>
           <second_editor />
         </state>

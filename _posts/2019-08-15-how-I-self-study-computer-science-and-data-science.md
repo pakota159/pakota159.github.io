@@ -258,4 +258,11 @@ ___
 #### 1. Probability and Statistics - Stanford Online Lagunita
 Link: <https://lagunita.stanford.edu/courses/course-v1:OLI+ProbStat+Open_Jan2017/about>
 
-**_Updating..._**
+
+#### 2. Probabilistic Systems Analysis and Applied Probability
+Link: <https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-041sc-probabilistic-systems-analysis-and-applied-probability-fall-2013/>  
+This course and the standford one can be taken seperately (you can choose one of them, it's ok too).
+But for me, I take both of those and study at the same time.
+The MIT course is more engineering and the Standford course is more statistics.
+
+

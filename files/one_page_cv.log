@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.5.8)  27 AUG 2019 19:49
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019) (preloaded format=pdflatex 2019.5.8)  6 SEP 2019 10:28
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -733,11 +733,11 @@ LaTeX Font Info:    External font `lmex10' loaded for size
 LaTeX Font Info:    External font `lmex10' loaded for size
 (Font)              <6> on input line 34.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 51.
+(Font)              <10> on input line 58.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 51.
+(Font)              <7> on input line 58.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 51.
+(Font)              <5> on input line 58.
 Package atveryend Info: Empty hook `BeforeClearDocument' on input line 63.
 
 
@@ -771,20 +771,20 @@ Package atveryend Info: Empty hook `AfterLastShipout' on input line 63.
 Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 63.
 Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 63.
 Package rerunfilecheck Info: File `one_page_cv.out' has not changed.
-(rerunfilecheck)             Checksum: 26C01D3A5BB95A2A4763EB3B30F6F584;380.
+(rerunfilecheck)             Checksum: 1A0A26F6BEC702DC94801F1F76E59FC4;375.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
  ) 
 Here is how much of TeX's memory you used:
- 22915 strings out of 492616
- 384923 string characters out of 6129482
- 464197 words of memory out of 5000000
- 26616 multiletter control sequences out of 15000+600000
- 587313 words of font info for 74 fonts, out of 8000000 for 9000
+ 22911 strings out of 492616
+ 384849 string characters out of 6129482
+ 463197 words of memory out of 5000000
+ 26613 multiletter control sequences out of 15000+600000
+ 584542 words of font info for 73 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 47i,14n,65p,777b,414s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 65i,14n,65p,777b,431s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2019/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/lo
 cal/texlive/2019/texmf-dist/fonts/enc/dvips/fontawesome/fontawesometwo.enc}{/us
 r/local/texlive/2019/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}</usr/local/texliv
@@ -795,10 +795,10 @@ t/fonts/type1/public/lm/lmss17.pfb></usr/local/texlive/2019/texmf-dist/fonts/ty
 pe1/public/lm/lmssbx10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/publ
 ic/lm/lmsso10.pfb></usr/local/texlive/2019/texmf-dist/fonts/type1/public/lm/lms
 y10.pfb>
-Output written on one_page_cv.pdf (1 page, 275887 bytes).
+Output written on one_page_cv.pdf (1 page, 267171 bytes).
 PDF statistics:
  66 PDF objects out of 1000 (max. 8388607)
  54 compressed objects within 1 object stream
  6 named destinations out of 1000 (max. 500000)
- 18982 words of extra memory for PDF output out of 20736 (max. 10000000)
+ 18470 words of extra memory for PDF output out of 20736 (max. 10000000)
 

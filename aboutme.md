@@ -4,16 +4,16 @@ title: About me
 subtitle: Why you'd want to go on a date with me
 img: /img/avatar.jpg
 cv: /files/cv.pdf
-short_cv: /files/one_page_cv.pdf
 ---
 ![my photo]({{ page.img }}#avatar-about-page)
-<p style="text-align: center; margin: 0; font-style: italic">Data, lots of data</p>
-I'm just a man.
-Stand in front of the customer.
-Asking them to buy my product.
 
-I studied **economics** at university, then self-studied **computer science**.
+*I'm just a man.*   
+*Stand in front of the customers.*  
+*Asking them to buy my product.*  
+(From The movie Notting Hill 1999)
 
-I love making product, especially software stuff.
+I studied **economics** at the university, then self-studied **computer science**.
 
-[My CV]({{ page.cv }}) -- [Short Version CV]({{ page.short_cv }})
+I love making product, especially software stuff. And I hope data analysis can help me understand the customers better.
+
+[My CV]({{ page.cv }})

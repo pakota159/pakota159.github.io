@@ -6,13 +6,20 @@ comments: true
 bigimg: /img/sql/bg.jpg
 ---
 
-We start with the Relational Model. It's used by all major database systems.
+When study about SQL, a lot of us start with some statement like *Select*, *FROM*, *WHERE*, but turns out SQL is more than just that. I mean the principle of the query language is based on relational algebra and when I learn about it, I find it way more interesting to understand SQL and how the query works.
+
+So let's discover some of the relational algebra and find out if it makes you learn deeper about SQL.
+
+**Note**: this article is for people who have basic knowledge of SQL and querying database. If you don't have it, you may need to read about basic SQL at first.
+___
+
+We start with the **Relational Model**. It's used by all major database systems. It's kind of a concept used to build the world of relational database.
 
 In this model, `Database = set of named relations (or tables)`
 
 Each relation has a set of named **attributes** (or **columns**)
 
-For examle, we a relation **Student** as below  
+For examle, we have a relation **Student** as below  
 
 | ID        | Name           | Class  |
 | ------------- |:-------------:| -----:|

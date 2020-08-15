@@ -327,3 +327,23 @@ $$
 Note: **From** statement means we do cross-product if we add multiple relations.
 
 ___
+**Subqueries** is a **SQL query nested inside a larger query**
+
+A subquery may occur in:
+- SELECT clause
+- FROM clause
+- WHERE clause
+
+Example: if subquery in WHERE clause, we want to the condition in WHERE clause become some kind of SQL query itself.
+
+```sql
+SELECT *
+FROM Users
+WHERE user_id in (
+	SELECT user_id
+	FROM Booking
+)
+```
+
+As the example above, we execute a query before execute the WHERE clause, we get the column user_id from Booking table, then make user_id in that column as a condition for bigger query.
+

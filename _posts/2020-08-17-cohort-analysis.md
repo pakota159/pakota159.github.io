@@ -35,15 +35,4 @@ Explaination:
 - The triangle heat map show us how those users-group behave. In the first line, the group of 1098 users who register on Jan 25, stop using the app in the next day (Jan 26) dramatically by **66.1%** and remain only 33.9 percent. In the next day, it's getting worse when only 23.5% users of those 1098 users are still using the app.
 - So thank for the heat map, we can see that after the first day of register, most of group of users are leaving the app. So we answer the question, when our customers leave our platform. The next question is how we investigate that first day of using the app to define why they stop using our app.
 
-**Updating...**
-
-____
-READ MORE:  
-
-1. [Why cohort analysis?](https://www.onebigfluke.com/2012/11/why-cohort-analysis.html)
-
-2. [Cohort analysis](https://www.stitchdata.com/cohort-analysis/)
-
-3. [Cohort Analysis: Beginners Guide to Improving Retention](https://clevertap.com/blog/cohort-analysis/)
-
 ____

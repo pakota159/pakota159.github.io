@@ -4,7 +4,7 @@ subtitle: Các chỉ số trong Ecommerce
 tags: [metrics, data]
 comments: true
 bigimg: /img/ecommerce/bg.png
-
+thumbnail: /img/ecommerce/bg.png
 ---
 Theo nhiều người đánh giá, bước đầu tiên cũng là bước quan trọng nhất trong phân tích dữ liệu (data analysis) là **đặt câu hỏi**. Chúng ta cần biết điều gì, cần đánh giá những chỉ số nào để biết được những điều đó. Chỉ khi biết được mình đang giải bài toán gì, và cần phân tích chỉ số gì để trả lời bài toán đó thì ta mới có thể làm những bước như thu thập, sàng lọc, phân tích dữ liệu được.
 

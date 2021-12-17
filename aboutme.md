@@ -12,8 +12,8 @@ cv: /files/cv.pdf
 *Asking them to buy my product.*  
 (From The movie Notting Hill 1999)
 
-I studied **economics** at the university, then self-studied **computer science**.
+I studied **economics** at the university, then self-studied computer science, data science.
 
-I love making product, especially software stuff. And I hope data analysis can help me understand the customers better.
+I love cheer people up by making product, especially software stuff. And I hope data analysis can help me understand the people better then make the better product.
 
 [My CV]({{ page.cv }})

@@ -1,0 +1,21 @@
+project:
+  type: website
+  output-dir: docs # GitHub Pages will serve from here
+
+website:
+  title: "Cuong Pham"
+  navbar:
+    right:
+      - about.qmd
+      - icon: github
+        href: https://github.com/pakota159
+      - icon: twitter
+        href: https://twitter.com/pakota159
+  page-footer:
+    center: "Copyright 2024, Cuong Pham"
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true

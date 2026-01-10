@@ -1,9 +1,11 @@
 ---
 title: "How I use scrapy to collect the data I need"
-date: "2019-07-08"
 subtitle: "The Good, The Bad and The Data"
+date: "2019-07-08"
+author: "Cuong Pham"
 categories: [cs, scrapy, splash, python, data]
 image: "/img/scrape/bg.jpg"
+toc: true
 ---
 
 About 4 years ago, I encountered a huge struggle looking for a suitable room for rent. Information about renting house/room is vast and it's really hard to filter useful data.
@@ -40,7 +42,7 @@ So to make sure the houses are *available at the time* and *satisfy my needs*, I
 
 I expect the data flow as below:
 
-![Data Flow Diagram](/img/scrape/scrape1.jpg)
+![Data Flow Diagram](/img/scrape/scrape1.png)
 
 ## Acquiring data
 

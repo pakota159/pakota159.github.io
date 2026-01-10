@@ -1,21 +1,41 @@
 project:
   type: website
-  output-dir: docs # GitHub Pages will serve from here
+  output-dir: docs
 
 website:
   title: "Cuong Pham"
   navbar:
+    background: light
+    foreground: dark
     right:
-      - about.qmd
+      - text: "HOME"
+        href: index.qmd
       - icon: github
         href: https://github.com/pakota159
       - icon: twitter
         href: https://twitter.com/pakota159
   page-footer:
-    center: "Copyright 2024, Cuong Pham"
+    center: "Copyright 2026, Cuong Pham"
+  comments:
+    giscus:
+      repo: pakota159/pakota159.github.io
+      category: "Announcements"
+      mapping: pathname
+      reactions-enabled: true
+      input-position: bottom
+      theme: light
 
 format:
   html:
-    theme: cosmo
-    css: styles.css
+    theme: 
+      - cosmo
+      - styles.scss
     toc: true
+    toc-location: left
+    toc-title: "Contents"
+    toc-depth: 3
+    anchor-sections: true
+    smooth-scroll: true
+    code-fold: false
+    code-tools: false
+    highlight-style: github

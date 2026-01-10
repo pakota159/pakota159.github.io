@@ -1,0 +1,54 @@
+---
+title: "Introduction to Cohort Analysis"
+subtitle: "How cohort analysis helps to improve retention"
+date: "2020-08-17"
+author: "Cuong Pham"
+categories: [sql, data, analytics]
+image: "/img/cohort/bg.png"
+toc: true
+---
+
+The first data analysis technique I have ever learned is *Cohort analysis*. So what is it and what is it used for?
+
+Imagine you have a fantastic mobile app and it's your start-up product. You do marketing, invite people to use your app, but after a while you realise the number of active users is decreasing.
+
+How can that happen when you regularly promote and acquire new users to your app?
+
+To answer that question, we need to know:
+
+1. **When** do people start to leave your app since the first day they installed it?
+2. **Where** do users drop the app — which stage of your user flow is wrong?
+
+Cohort analysis is created to answer those questions. So let's dig deeper into this concept and how to implement it in your application.
+
+## What is a Cohort?
+
+A **cohort** is a group of people who share a common characteristic or experience within a defined period.
+
+For example:
+
+- People who are born in the same year are a *birth cohort*
+- Students who graduated in the same year are a *graduated cohort*
+- People who sign up for the first time in an app on the same day are a *sign-up cohort*
+
+**Cohort analysis** is a study that focuses on the activities of a particular cohort.
+
+For example, we can do cohort analysis to find how users behave after signing up.
+
+![User Acquisition Cohort](/img/cohort/acquisition.png)
+
+## Reading the Cohort Chart
+
+**Explanation**:
+
+- The users are grouped by **first date signed up**. This means there were **1,098 new users** who signed up for the app on **Jan 25**. Similarly, on Jan 26, there were another **1,358 new users** who signed up.
+
+- The triangle heat map shows us how those user groups behave. In the first row, the group of 1,098 users who registered on Jan 25 stopped using the app the next day (Jan 26) dramatically — dropping by **66.1%** and remaining at only 33.9%. The following day, it got worse when only 23.5% of those 1,098 users were still using the app.
+
+::: {.callout-important}
+## Key Insight
+
+Thanks to the heat map, we can see that after the first day of registration, most groups of users are leaving the app. This answers the question of **when** our customers leave our platform.
+
+The next question is: how do we investigate that first day of using the app to define **why** they stop using it?
+:::

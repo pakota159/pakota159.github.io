@@ -1,0 +1,348 @@
+---
+title: "Understanding SQL through Relational Algebra"
+subtitle: "SQL is based on relational algebra"
+date: "2020-08-09"
+author: "Cuong Pham"
+categories: [sql, data]
+image: "/img/sql/bg.jpg"
+toc: true
+---
+
+When studying SQL, a lot of us start with some statements like *Select*, *FROM*, *WHERE*, but it turns out SQL is more than just that. The principle of the query language is based on relational algebra, and when I learned about it, I found it way more interesting to understand SQL and how queries work.
+
+So let's discover some of the relational algebra and find out if it makes you learn deeper about SQL.
+
+::: {.callout-note}
+This article is for people who have basic knowledge of SQL and querying databases. If you don't have it, you may need to read about basic SQL first.
+:::
+
+## The Relational Model
+
+It's used by all major database systems. It's a concept used to build the world of relational databases.
+
+In this model:
+
+> **Database = set of named relations (or tables)**
+
+Each relation has a set of named **attributes** (or **columns**).
+
+For example, we have a relation **Student** as below:
+
+| ID | Name | Class |
+|----|------|-------|
+| ... | ... | ... |
+
+The table **Student** has 3 *attributes*: id, name, and class.
+
+Each **tuple** (or **row**) has a value for each *attribute*:
+
+| ID | Name | Class |
+|----|------|-------|
+| 001 | Cuong | A1 |
+| 002 | Phong | A2 |
+
+## Key Concepts
+
+**Schema** (of database) is the structural description of relations in database.
+
+**Instance** (of database) is the actual contents at a given point in time. It means the *entire data stored in database* at a particular moment of time.
+
+**NULL** is a special value for 'unknown' or 'undefined'.
+
+**Key** is an attribute whose value is unique in each tuple (row). Sometimes, this unique key can be the combination of multiple attributes.
+
+## Creating Tables in SQL
+
+```sql
+CREATE TABLE table_name(
+    column1 datatype,
+    column2 datatype,
+    ...
+);
+```
+
+Some common datatypes (depends on type of DBMS):
+
+- `CHAR(size)` — size 0-255
+- `VARCHAR(size)` — size 0-255
+- `INT()`
+- `BIGINT()`
+- `FLOAT()`
+- `DOUBLE()`
+
+For the *Student* relation, we can write:
+
+```sql
+CREATE TABLE Student (
+    id integer PRIMARY KEY,
+    name varchar(255),
+    class varchar(255)
+);
+```
+
+## Steps in Creating and Using a Relational Database
+
+1. **Design Schema**: create using DDL (Data Definition Language)
+2. **Load initial data** (if any)
+3. **Execute queries and modifications** using DML (Data Manipulation Language)
+
+*Queries will return relations.*
+
+## Query Languages
+
+- **Relational Algebra**: formal language
+- **SQL**: implemented Relational Algebra
+
+## Relational Algebra
+
+Queries on a set of relations produce a relation as a result.
+
+Imagine we have a booking system, with **User** who selects **Product** and then makes a **Booking**.
+
+The *Schema* of each relation will be something like below (*a very simple version*):
+
+- *User*: `user_id` (PK), `username`, `age`, `city`
+- *Product*: `product_id` (PK), `product_name`, `price`
+- *Booking*: `booking_id` (PK), `user_id`, `product_id`, `status`
+
+### Select Operator ($\sigma$)
+
+**Select** operator picks certain rows.
+
+We want users with *age > 20*, then the formation will be:
+
+$$\sigma_{age > 20} User$$
+
+The operator above will return a relation that contains all rows where the value of age is larger than 20.
+
+If we want to select with multiple conditions, like `age > 20` and `city = 'Hanoi'`, we use caret (∧):
+
+$$\sigma_{age > 20 \wedge city = 'Hanoi'} User$$
+
+### Project Operator ($\Pi$)
+
+**Project** operator picks certain columns.
+
+We only want the columns (attributes) *username* and *age*:
+
+$$\Pi_{username, age} User$$
+
+Now, we can combine the 2 operators above. If we want users with *age > 20* and only return columns *username, age*:
+
+$$\Pi_{username, age}(\sigma_{age > 20} User)$$
+
+### Cross-Product
+
+**Cross-product** combines 2 relations.
+
+Imagine we have *User* and *Product* tables:
+
+*User*
+
+| user_id | username | age | city |
+|---------|----------|-----|------|
+| 1 | cuong | 20 | Hanoi |
+| 2 | phong | 25 | HCM |
+
+*Product*
+
+| product_id | product_name | price |
+|------------|--------------|-------|
+| 1 | mac | 2000 |
+| 2 | iphone | 1000 |
+
+Then $User \times Product$ will return a new relation which has 4 rows (2 × 2 rows), and 7 columns (4 + 3 attributes):
+
+| user_id | username | age | city | product_id | product_name | price |
+|---------|----------|-----|------|------------|--------------|-------|
+| 1 | cuong | 20 | Hanoi | 1 | mac | 2000 |
+| 2 | phong | 25 | HCM | 1 | mac | 2000 |
+| 1 | cuong | 20 | Hanoi | 2 | iphone | 1000 |
+| 2 | phong | 25 | HCM | 2 | iphone | 1000 |
+
+Basically, each row of the User table will match with all rows of the Product table, and vice versa.
+
+### Natural Join
+
+Now if users decide to select and buy some products, we will have bookings.
+
+*Booking*
+
+| id | product_id | user_id | status |
+|----|------------|---------|--------|
+| 1 | 1 | 1 | Done |
+| 2 | 2 | 2 | Processing |
+| 3 | 2 | 1 | Done |
+
+If we do **Natural Join** between `Booking` and `User`, like $Booking \bowtie User$, we will merge the same-name column (`user_id` here) and remove rows that have different values of the same attribute, keeping rows where `user_id` values are the same.
+
+First, we do cross product normally:
+
+| id | product_id | user_id | status | user_id | username | age | city |
+|----|------------|---------|--------|---------|----------|-----|------|
+| 1 | 1 | **1** | Done | **1** | cuong | 20 | Hanoi |
+| 2 | 2 | 2 | Processing | 1 | cuong | 20 | Hanoi |
+| 3 | 2 | **1** | Done | **1** | cuong | 20 | Hanoi |
+| 1 | 1 | 1 | Done | 2 | phong | 25 | HCM |
+| 2 | 2 | **2** | Processing | **2** | phong | 25 | HCM |
+| 3 | 2 | 1 | Done | 2 | phong | 25 | HCM |
+
+We have 3 bookings and 2 users, that's why we have 6 rows. But `user_id` from Booking and `user_id` from User actually reflect the same thing (identify User), so we merge these 2 columns.
+
+We keep rows that have the same `user_id` (bold), because that's the actual **match** between 2 tables. We want to know which bookings **user_id 1** made, and we identify that by matching the `user_id` between 2 tables.
+
+Final table (column **user_id** is merged):
+
+| id | product_id | user_id | status | username | age | city |
+|----|------------|---------|--------|----------|-----|------|
+| 1 | 1 | **1** | Done | cuong | 20 | Hanoi |
+| 3 | 2 | **1** | Done | cuong | 20 | Hanoi |
+| 2 | 2 | **2** | Processing | phong | 25 | HCM |
+
+After natural join, we can apply Select and Project to get the values we want:
+
+$$\Pi_{id, product\_id, username}(\sigma_{status = 'Done'} (Booking \bowtie User))$$
+
+| id | product_id | status | username |
+|----|------------|--------|----------|
+| 1 | 1 | Done | cuong |
+| 3 | 2 | Done | cuong |
+
+### Theta Join
+
+**Theta join** is cross-product with a condition.
+
+Imagine we have an age table which defines the min age for users of each city:
+
+*Age table*
+
+| city | min_age |
+|------|---------|
+| Hanoi | 20 |
+| HCM | 35 |
+
+If we want to find users from Hanoi that satisfy the condition `age >= min_age`, we will have to do cross-product:
+
+| user_id | username | age | city | city | min_age |
+|---------|----------|-----|------|------|---------|
+| 1 | cuong | 20 | Hanoi | Hanoi | 20 |
+| 2 | phong | 25 | HCM | Hanoi | 20 |
+| 1 | cuong | 20 | Hanoi | HCM | 35 |
+| 2 | phong | 25 | HCM | HCM | 35 |
+
+If we want the city and age to match the condition, we have to eliminate tuples that don't have the same city, and where `age < min_age`:
+
+| user_id | username | age | city | city | min_age |
+|---------|----------|-----|------|------|---------|
+| 1 | cuong | 20 | Hanoi | Hanoi | 20 |
+
+### Union Operator
+
+Two tables with the same columns (attributes):
+
+*Car*
+
+| id | name | brand |
+|----|------|-------|
+| 1 | civic | honda |
+| 2 | glc | mercedes |
+
+*Bike*
+
+| id | name | brand |
+|----|------|-------|
+| 1 | air blade | honda |
+| 2 | glc | mercedes |
+
+The union of 2 tables will be:
+
+$$Car \cup Bike$$
+
+| id | name | brand |
+|----|------|-------|
+| 1 | civic | honda |
+| 2 | glc | mercedes |
+| 1 | air blade | honda |
+
+::: {.callout-note}
+The primary key (`id`) seems like it's duplicated in the union table. That's because the key is now a combination of (`id`, `name`, `brand`).
+:::
+
+### Intersection
+
+Returns tuples which are identical in both tables:
+
+$$Car \cap Bike$$
+
+| id | name | brand |
+|----|------|-------|
+| 2 | glc | mercedes |
+
+### Difference
+
+Returns tuples which are in the first table but not in the second:
+
+$$Car - Bike$$
+
+| id | name | brand |
+|----|------|-------|
+| 1 | civic | honda |
+
+### Rename Operator
+
+If we want to do those 3 operators but the names of attributes are different, we can rename them:
+
+$$\rho_{id, name, brand \rightarrow id, name, new\_brand}(Car)$$
+
+## SQL
+
+**SQL** is based on relational algebra — you can say it's implemented relational algebra in most database systems.
+
+**DDL** (Data Definition Language): commands used to create tables, drop tables.
+
+**DML** (Data Manipulation Language): commands used to select, insert, delete, update tables.
+
+### Basic SELECT Statement
+
+```sql
+SELECT A1, A2, ..., An
+FROM R1, R2, ..., Rn
+WHERE condition
+```
+
+The order is:
+
+1. **FROM** — identifies the relations
+2. **WHERE** — validates rows that satisfy the condition
+3. **SELECT** — projects columns we want
+
+In the language of Relational Algebra:
+
+$$\Pi_{A1, A2, ..., An} (\sigma_{condition}(R1 \times R2 \times ... \times Rn))$$
+
+::: {.callout-important}
+The **FROM** statement means we do cross-product if we add multiple relations.
+:::
+
+### Subqueries
+
+A **subquery** is a SQL query nested inside a larger query.
+
+A subquery may occur in:
+
+- `SELECT` clause
+- `FROM` clause
+- `WHERE` clause
+
+Example: if a subquery is in the WHERE clause, we want the condition in WHERE to become a SQL query itself:
+
+```sql
+SELECT *
+FROM Users
+WHERE user_id IN (
+    SELECT user_id
+    FROM Booking
+)
+```
+
+In the example above, we execute a query before executing the WHERE clause. We get the column `user_id` from the Booking table, then use those `user_id` values as a condition for the bigger query.

@@ -9,3 +9,7 @@ Thumbs.db
 ehthumbs.db
 
 cv_latex.*
+/.quarto/
+**/*.quarto_ipynb
+
+docs/

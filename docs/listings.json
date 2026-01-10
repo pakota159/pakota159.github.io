@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/saas-metrics-1/index.html",
       "/posts/ab-testing/index.html",
       "/posts/ecom-metrics/index.html",
       "/posts/cohort-analysis/index.html",

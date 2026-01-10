@@ -4,6 +4,7 @@ project:
 
 website:
   title: "Cuong Pham"
+  favicon: img/favicon.png
   navbar:
     background: light
     foreground: dark

@@ -1,0 +1,7 @@
+```
+quarto preview
+```
+
+```
+quarto render
+```

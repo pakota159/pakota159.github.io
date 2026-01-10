@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Cuong Pham">
+<meta name="dcterms.date" content="2020-08-11">
+
+<title>Understanding Database Indexes – Cuong Pham</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-33a8e8989a1a333c1de367ce4b6e01d2.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-561f60348dcd386bfa2ed3541773f9e5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+
+</head>
+
+<body class="floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Cuong Pham</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">HOME</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/pakota159"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/pakota159"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#tree-data-structure" id="toc-tree-data-structure" class="nav-link active" data-scroll-target="#tree-data-structure">Tree Data Structure</a></li>
+  <li><a href="#balanced-binary-tree" id="toc-balanced-binary-tree" class="nav-link" data-scroll-target="#balanced-binary-tree">Balanced Binary Tree</a></li>
+  <li><a href="#b-tree" id="toc-b-tree" class="nav-link" data-scroll-target="#b-tree">B-tree</a></li>
+  <li><a href="#the-index-in-database" id="toc-the-index-in-database" class="nav-link" data-scroll-target="#the-index-in-database">The Index in Database</a></li>
+  <li><a href="#example-index-performance" id="toc-example-index-performance" class="nav-link" data-scroll-target="#example-index-performance">Example: Index Performance</a>
+  <ul class="collapse">
+  <li><a href="#without-index" id="toc-without-index" class="nav-link" data-scroll-target="#without-index">Without Index</a></li>
+  <li><a href="#with-index" id="toc-with-index" class="nav-link" data-scroll-target="#with-index">With Index</a></li>
+  </ul></li>
+  <li><a href="#rules-for-sql-optimization" id="toc-rules-for-sql-optimization" class="nav-link" data-scroll-target="#rules-for-sql-optimization">Rules for SQL Optimization</a>
+  <ul class="collapse">
+  <li><a href="#avoid-like-with-leading-wildcards" id="toc-avoid-like-with-leading-wildcards" class="nav-link" data-scroll-target="#avoid-like-with-leading-wildcards">1. Avoid LIKE with Leading Wildcards</a></li>
+  <li><a href="#multi-column-index-rules" id="toc-multi-column-index-rules" class="nav-link" data-scroll-target="#multi-column-index-rules">2. Multi-Column Index Rules</a></li>
+  <li><a href="#case-insensitive-indexes" id="toc-case-insensitive-indexes" class="nav-link" data-scroll-target="#case-insensitive-indexes">3. Case-Insensitive Indexes</a></li>
+  <li><a href="#function-based-index-considerations" id="toc-function-based-index-considerations" class="nav-link" data-scroll-target="#function-based-index-considerations">4. Function-Based Index Considerations</a></li>
+  <li><a href="#datetime-range-conditions" id="toc-datetime-range-conditions" class="nav-link" data-scroll-target="#datetime-range-conditions">5. DateTime Range Conditions</a></li>
+  </ul></li>
+  <li><a href="#further-reading" id="toc-further-reading" class="nav-link" data-scroll-target="#further-reading">Further Reading</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Understanding Database Indexes</h1>
+<p class="subtitle lead">Index makes query fast - a simple explanation</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">sql</div>
+    <div class="quarto-category">data</div>
+    <div class="quarto-category">index</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Cuong Pham </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 11, 2020</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Well, most developers or people who work with data know that “Index makes query fast” and they also understand why. But for people who don’t really know about indexing, I would like to write this post to introduce them to it.</p>
+<p>Furthermore, I also give some notes from my experience and what I have read about SQL optimization. I hope this will be helpful for those who work in the field of data and computer science.</p>
+<section id="tree-data-structure" class="level2">
+<h2 class="anchored" data-anchor-id="tree-data-structure">Tree Data Structure</h2>
+<p><strong>Tree</strong> is a data structure created to improve the efficiency of searching stuff at the cost of low performance of writing/updating.</p>
+<p>Imagine we have a list like <code>[2, 4, 7, 6, 11]</code></p>
+<p>We want to find <code>number 6</code>. Normally we’ll search one by one from left to right of the list: <code>2 -&gt; 4 -&gt; 7 -&gt; 6</code>. We found it, but if the list has thousands of items, it would take a lot of time to do the <code>search</code> operation like that.</p>
+<p>Alternatively, we can use a binary search tree data structure to improve the speed. We basically arrange the order of the items in the list with the rule:</p>
+<ul>
+<li>Each item is stored in a node</li>
+<li>Each node (item) may have left and right child with the condition: <code>left child &lt; item &lt; right child</code></li>
+</ul>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../..\img/sql/img1.png" class="img-fluid figure-img"></p>
+<figcaption>Binary Search Tree</figcaption>
+</figure>
+</div>
+<p>With that logic, we don’t have to go through all items to find the number we want.</p>
+<p>Start from root (top item). If we want number 6, we compare it with the root node. <code>6 &lt; 7</code> so we go to the left branch (because smaller items are always stored to the left of the parent item). We get <code>number 4</code> and because <code>6 &gt; 4</code> we go to the right of 4.</p>
+<p>The time to search/find an item only depends on the <strong>height</strong> of the tree, which is the longest path from root node to any leaf node (other items) in the tree. The bigger the height, the slower the speed to find the item we want.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../..\img/sql/img2.png" class="img-fluid figure-img"></p>
+<figcaption>Tree Height</figcaption>
+</figure>
+</div>
+</section>
+<section id="balanced-binary-tree" class="level2">
+<h2 class="anchored" data-anchor-id="balanced-binary-tree">Balanced Binary Tree</h2>
+<p>A Balanced Binary Tree is simply a Binary search tree as stated above, but the <strong>height</strong> is balanced. This means that for any node of the tree, the left branch height and the right branch height is the same or almost the same (differ no more than 1).</p>
+<p><strong>Example</strong>: With the tree in the image below, if we check the node <code>4</code>:</p>
+<ul>
+<li>Left branch has a height of 1 (contains number 2)</li>
+<li>Right branch has a height of 1 (contains number 6)</li>
+</ul>
+<p>If we check the node <code>7</code>:</p>
+<ul>
+<li>Left branch has a height of 2</li>
+<li>Right branch has a height of 1</li>
+<li>Difference: <code>2 - 1 = 1</code></li>
+</ul>
+<p>The binary tree below is a balanced binary tree.</p>
+<p>This kind of tree is used to optimize the speed of searching, because it optimizes the height of the tree (which is the factor that affects the speed of searching).</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../..\img/sql/img1.png" class="img-fluid figure-img"></p>
+<figcaption>Balanced Binary Tree</figcaption>
+</figure>
+</div>
+</section>
+<section id="b-tree" class="level2">
+<h2 class="anchored" data-anchor-id="b-tree">B-tree</h2>
+<p>B-tree is a kind of upgraded Balanced Binary Tree. You can now have multiple items stored in one node (instead of 1 item per node), and each node can have more than 2 children.</p>
+<p>As shown in the structure below, we can see each node can have a bulk of data on the left or right. The left bulk contains values which are smaller than the value of the parent node. The right bulk contains values which are bigger than the parent.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../..\img/sql/img3.png" class="img-fluid figure-img"></p>
+<figcaption>B-tree Structure</figcaption>
+</figure>
+</div>
+</section>
+<section id="the-index-in-database" class="level2">
+<h2 class="anchored" data-anchor-id="the-index-in-database">The Index in Database</h2>
+<p>Imagine your table will be stored in database like this:</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>ID</th>
+<th>author_name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>001</td>
+<td>Gilles van den Hoven</td>
+</tr>
+<tr class="even">
+<td>002</td>
+<td>Michael Geary</td>
+</tr>
+<tr class="odd">
+<td>003</td>
+<td>Stefan Petre</td>
+</tr>
+<tr class="even">
+<td>004</td>
+<td>Yehuda Katz</td>
+</tr>
+<tr class="odd">
+<td>005</td>
+<td>Corey Jewett</td>
+</tr>
+<tr class="even">
+<td>006</td>
+<td>Klaus Hartl</td>
+</tr>
+<tr class="odd">
+<td>007</td>
+<td>Franck Marcia</td>
+</tr>
+<tr class="even">
+<td>008</td>
+<td>Jörn Zaefferer</td>
+</tr>
+<tr class="odd">
+<td>009</td>
+<td>Paul Bakaus</td>
+</tr>
+<tr class="even">
+<td>010</td>
+<td>Brandon Aaron</td>
+</tr>
+</tbody>
+</table>
+<p><em>(Authors above are people who contributed to the jQuery library)</em></p>
+<p>We want to search the name of the author fast, so we need to add a new table — an <strong>index table</strong> — which contains the data of column <strong>author_name</strong> and organizes that data into a B-tree data structure so the search can be optimized.</p>
+<p>The <strong>index of author_name</strong> can be simply expressed like below:</p>
+<p>At the root node of the Tree, we store a list of a few <strong>author_name</strong> values, for example: <strong>[Corey Jewett, Michael Geary, Paul Bakaus]</strong>, all <code>sorted by A-Z order</code>.</p>
+<p>Then for each value, we create a child node which contains other names that satisfy the rule of B-tree: <code>left node contains all values smaller than parent, right node contains bigger values</code>. In this case, <em>smaller</em> means it comes before in the alphabet.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../..\img/sql/img4.png" class="img-fluid figure-img"></p>
+<figcaption>Index B-tree Structure</figcaption>
+</figure>
+</div>
+<p>When we search for a name like <code>Yehuda Katz</code>, we start from the root. Y is <em>bigger</em> than <em>P</em> in <em>Paul Bakaus</em> so we look up the right node of <em>Paul Bakaus</em>.</p>
+<p>In the child node, we do the same thing until we reach the lowest child node. In this lowest node, we do <em>binary search</em> to search the value. The number of values stored in each node is small, so binary search will do the search really fast.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Why We Use B-tree
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>We can store data in each node instead of only 1 in a balanced tree, therefore reducing the <em>height</em> of the tree and improving the speed of the search.</li>
+<li>Values in each node are sorted in a particular order, therefore we can look up faster. The number of values in each node is small enough so binary search can be quick too.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="example-index-performance" class="level2">
+<h2 class="anchored" data-anchor-id="example-index-performance">Example: Index Performance</h2>
+<p>I will demonstrate the difference between no-index and indexed query performance. The data I use is <em>1.5 million records of sales</em>, and I use PostgreSQL database to store those records.</p>
+<section id="without-index" class="level3">
+<h3 class="anchored" data-anchor-id="without-index">Without Index</h3>
+<p>Before adding an index to the column <code>Item Type</code>, I try the query below, and it returns <code>125,022 records</code> with a speed of <strong>2.244 seconds</strong>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../..\img/sql/img5.png" class="img-fluid figure-img"></p>
+<figcaption>Query without index</figcaption>
+</figure>
+</div>
+</section>
+<section id="with-index" class="level3">
+<h3 class="anchored" data-anchor-id="with-index">With Index</h3>
+<p>Now, we will add an index to the <code>Item Type</code> column:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> item_type_index <span class="kw">ON</span> sale_records (<span class="ot">"Item Type"</span>);</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>That command will run for a while to create a new table which is an <code>index table</code> containing the data of column <code>Item Type</code> with the principle of B-tree as we mentioned earlier.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../..\img/sql/img6.png" class="img-fluid figure-img"></p>
+<figcaption>Query with index</figcaption>
+</figure>
+</div>
+<p>As we can see, the speed is much better now. The index helps us identify the word <em>Beverages</em> faster, hence we can search for it better.</p>
+</section>
+</section>
+<section id="rules-for-sql-optimization" class="level2">
+<h2 class="anchored" data-anchor-id="rules-for-sql-optimization">Rules for SQL Optimization</h2>
+<p>Thanks to understanding the underlying principle of indexes, we can now note down some rules for better queries in the future.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The notes below will be updated regularly.</p>
+</div>
+</div>
+<section id="avoid-like-with-leading-wildcards" class="level3">
+<h3 class="anchored" data-anchor-id="avoid-like-with-leading-wildcards">1. Avoid LIKE with Leading Wildcards</h3>
+<p>Avoid <strong>LIKE</strong> expressions with leading wildcards (e.g., <code>'%TERM'</code>).</p>
+<p>Because the index uses the first letter and sorts by A-Z order, we should avoid LIKE expressions without the first letter specified. The index table will be useless in this case.</p>
+</section>
+<section id="multi-column-index-rules" class="level3">
+<h3 class="anchored" data-anchor-id="multi-column-index-rules">2. Multi-Column Index Rules</h3>
+<p>If we create an index for multiple columns, then the <em>WHERE</em> condition applied for only one of those columns will not use the index.</p>
+<p>For example, if we make an index for <code>user_id</code> and <code>company</code>, then searching for <code>user_id = 1000</code> alone will not use the index. The index is only valid for the combination of <code>user_id</code> and <code>company</code>. We have to search for <code>user_id = 1000 AND company = 'GOOGLE'</code> to use the index.</p>
+</section>
+<section id="case-insensitive-indexes" class="level3">
+<h3 class="anchored" data-anchor-id="case-insensitive-indexes">3. Case-Insensitive Indexes</h3>
+<p>If we want to search with Case-Insensitive matching (meaning CUONG and Cuong return the same result), then we should create an index with case-insensitivity:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">INDEX</span> user_index <span class="kw">ON</span> users (<span class="fu">UPPER</span>(first_name));</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This creates an index with uppercase of <em>first_name</em> column values. Then we execute the query:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> <span class="op">*</span> <span class="kw">FROM</span> users <span class="kw">WHERE</span> <span class="fu">UPPER</span>(first_name) <span class="op">=</span> <span class="st">'CUONG'</span>;</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+<section id="function-based-index-considerations" class="level3">
+<h3 class="anchored" data-anchor-id="function-based-index-considerations">4. Function-Based Index Considerations</h3>
+<p>If you want to query data like “how many days from the latest day each user bought a product”, you might write something like <code>TRUNC(DAYS_BETWEEN(SYSDATE, buy_date))</code>.</p>
+<p>However, this value cannot be indexed because it changes daily. (Index can be updated with INSERT, UPDATE, DELETE commands, but can’t automatically update daily or when executing SELECT commands).</p>
+<p><strong>Solution</strong>: Index <code>buy_date</code> instead. If we want to query all users that have 30 days from now to their latest purchase, we calculate that date (<code>that_date = today - 30 days</code>), then query with condition <code>that_date = buy_date</code>.</p>
+</section>
+<section id="datetime-range-conditions" class="level3">
+<h3 class="anchored" data-anchor-id="datetime-range-conditions">5. DateTime Range Conditions</h3>
+<p>When writing conditions for datetime ranges, explicitly declare the start and end of the time range.</p>
+<p>Instead of:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> date_time <span class="op">&lt;</span> <span class="st">'2020-10-10'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Write:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> date_time <span class="op">&gt;</span> <span class="st">'2020-10-09'</span> <span class="kw">AND</span> date_time <span class="op">&lt;</span> <span class="st">'2020-10-10'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</section>
+</section>
+<section id="further-reading" class="level2">
+<h2 class="anchored" data-anchor-id="further-reading">Further Reading</h2>
+<ol type="1">
+<li><a href="https://use-the-index-luke.com/">Use The Index, Luke</a> — An excellent resource for understanding SQL indexing in depth.</li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<input type="hidden" id="giscus-base-theme" value="light">
+<input type="hidden" id="giscus-alt-theme" value="light">
+<script>
+  function loadGiscus() {
+    // Function to get the theme based on body class
+    const getTheme = () => {
+      let baseTheme = document.getElementById('giscus-base-theme').value;
+      let altTheme = document.getElementById('giscus-alt-theme').value;
+      return document.body.classList.contains('quarto-dark') ? altTheme : baseTheme;
+    };
+    const script = document.createElement("script");
+    script.src = "https://giscus.app/client.js";
+    script.async = true;
+    script.dataset.repo = "pakota159/pakota159.github.io";
+    script.dataset.repoId = "MDEwOlJlcG9zaXRvcnkxOTk5ODMwMTI=";
+    script.dataset.category = "Announcements";
+    script.dataset.categoryId = "DIC_kwDOC-t_pM4C0yEB";
+    script.dataset.mapping = "pathname";
+    script.dataset.reactionsEnabled = "1";
+    script.dataset.emitMetadata = "0";
+    script.dataset.inputPosition = "bottom";
+    script.dataset.theme = getTheme();
+    script.dataset.lang = "en";
+    script.crossOrigin = "anonymous";
+    // Append the script to the desired div instead of at the end of the body
+    document.getElementById("quarto-content").appendChild(script);
+  }
+  loadGiscus();
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2026, Cuong Pham</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

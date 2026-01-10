@@ -1,0 +1,16 @@
+[
+  {
+    "listing": "/index.html",
+    "items": [
+      "/posts/ab-testing/index.html",
+      "/posts/ecom-metrics/index.html",
+      "/posts/cohort-analysis/index.html",
+      "/posts/index-and-query/index.html",
+      "/posts/sql-relational-db/index.html",
+      "/posts/review-cs-61b/index.html",
+      "/posts/cs-learning-guide/index.html",
+      "/posts/using-spotify-api-to-retrieve-data/index.html",
+      "/posts/how-i-use-scrapy-to-collect-the-data-i-need/index.html"
+    ]
+  }
+]

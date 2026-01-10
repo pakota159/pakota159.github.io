@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="vi" xml:lang="vi"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.26">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Cuong Pham">
+
+<title>Các chỉ số quan trọng trong E-commerce – Cuong Pham</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-33a8e8989a1a333c1de367ce4b6e01d2.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-561f60348dcd386bfa2ed3541773f9e5.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<style>html{ scroll-behavior: smooth; }</style>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="floating nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Cuong Pham</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">HOME</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/pakota159"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com/pakota159"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#thương-mại-điện-tử-là-gì" id="toc-thương-mại-điện-tử-là-gì" class="nav-link active" data-scroll-target="#thương-mại-điện-tử-là-gì">Thương mại điện tử là gì?</a></li>
+  <li><a href="#tổng-quan" id="toc-tổng-quan" class="nav-link" data-scroll-target="#tổng-quan">Tổng quan</a></li>
+  <li><a href="#repurchase-rate-rr" id="toc-repurchase-rate-rr" class="nav-link" data-scroll-target="#repurchase-rate-rr">Repurchase Rate (RR)</a>
+  <ul class="collapse">
+  <li><a href="#ví-dụ-tính-rr" id="toc-ví-dụ-tính-rr" class="nav-link" data-scroll-target="#ví-dụ-tính-rr">Ví dụ tính RR</a></li>
+  </ul></li>
+  <li><a href="#conversion-rate-cr" id="toc-conversion-rate-cr" class="nav-link" data-scroll-target="#conversion-rate-cr">Conversion Rate (CR)</a></li>
+  <li><a href="#customer-acquisition-cost-cac" id="toc-customer-acquisition-cost-cac" class="nav-link" data-scroll-target="#customer-acquisition-cost-cac">Customer Acquisition Cost (CAC)</a></li>
+  <li><a href="#lifetime-value-clv-hoặc-ltv" id="toc-lifetime-value-clv-hoặc-ltv" class="nav-link" data-scroll-target="#lifetime-value-clv-hoặc-ltv">Lifetime Value (CLV hoặc LTV)</a>
+  <ul class="collapse">
+  <li><a href="#vòng-đời-khách-hàng-lifespan" id="toc-vòng-đời-khách-hàng-lifespan" class="nav-link" data-scroll-target="#vòng-đời-khách-hàng-lifespan">Vòng đời khách hàng (Lifespan)</a></li>
+  <li><a href="#churn-rate" id="toc-churn-rate" class="nav-link" data-scroll-target="#churn-rate">Churn Rate</a></li>
+  <li><a href="#tính-ltv" id="toc-tính-ltv" class="nav-link" data-scroll-target="#tính-ltv">Tính LTV</a></li>
+  </ul></li>
+  <li><a href="#roi-return-on-investment" id="toc-roi-return-on-investment" class="nav-link" data-scroll-target="#roi-return-on-investment">ROI (Return on Investment)</a></li>
+  <li><a href="#kết-luận" id="toc-kết-luận" class="nav-link" data-scroll-target="#kết-luận">Kết luận</a></li>
+  <li><a href="#tài-liệu-tham-khảo" id="toc-tài-liệu-tham-khảo" class="nav-link" data-scroll-target="#tài-liệu-tham-khảo">Tài liệu tham khảo</a></li>
+  </ul>
+</nav>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Các chỉ số quan trọng trong E-commerce</h1>
+<p class="subtitle lead">Các chỉ số trong Ecommerce</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">metrics</div>
+    <div class="quarto-category">data</div>
+    <div class="quarto-category">ecommerce</div>
+  </div>
+  </div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Cuong Pham </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">9 tháng 9, 2020</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Theo nhiều người đánh giá, bước đầu tiên cũng là bước quan trọng nhất trong phân tích dữ liệu (data analysis) là <strong>đặt câu hỏi</strong>. Chúng ta cần biết điều gì, cần đánh giá những chỉ số nào để biết được những điều đó. Chỉ khi biết được mình đang giải bài toán gì, và cần phân tích chỉ số gì để trả lời bài toán đó thì ta mới có thể làm những bước như thu thập, sàng lọc, phân tích dữ liệu được.</p>
+<p>Tuy nhiên, việc đặt câu hỏi này lại phụ thuộc vào mô hình kinh doanh mà bạn đang làm việc, vì mỗi mô hình kinh doanh lại yêu cầu những chỉ số khác nhau. Và sau khi tự mình tìm hiểu, cũng như trải qua 1 thời gian làm việc trong lĩnh vực này, mình tự thấy chưa có 1 bài viết tiếng việt nào tóm tắt và mô tả được những chỉ số mà chúng ta quan tâm trong mô hình kinh doanh thương mại điện tử (E-commerce).</p>
+<p>Vì vậy, mình quyết định viết bài này nhằm tổng hợp những điều mình biết, mình tìm hiểu từ trước đến nay để phần nào trả lời được câu hỏi: <strong>trong e-commerce, chúng ta cần quan tâm những chỉ số nào, và tại sao?</strong></p>
+<section id="thương-mại-điện-tử-là-gì" class="level2">
+<h2 class="anchored" data-anchor-id="thương-mại-điện-tử-là-gì">Thương mại điện tử là gì?</h2>
+<p>Hình thức <strong>thương mại điện tử</strong> chủ yếu trên thế giới và cả ở Việt Nam là kinh doanh, <strong>bán hàng trên các nền tảng trực tuyến</strong>. Khách hàng <em>đến trang web</em> của bạn, <em>tìm kiếm sản phẩm</em>, và <em>đặt mua</em>.</p>
+<p>Một số nền tảng thương mại điện tử phổ biến tại Việt Nam có thể kể đến: Shopee, Tiki, Lazada, Thế Giới Di Động, Sendo, FPT Shop, …</p>
+<p>Điểm chung của các trang trên đó là chúng đều là các nền tảng B2C (từ doanh nghiệp đến cá nhân) và có thể được phân ra làm 2 dạng:</p>
+<ul>
+<li><strong>Marketplace</strong>: những nền tảng đóng vai trò là trung gian, không có kho hàng như Shopee, Tiki, Lazada, …</li>
+<li><strong>Inventory</strong>: những nền tảng có kho hàng, có sản phẩm của chính họ như Thế Giới Di Động, FPT Shop, …</li>
+</ul>
+<p>2 dạng này chủ yếu chỉ khác nhau về cách thức lưu trữ hàng hoá còn về cơ chế bán hàng trên web/app của họ không có sự khác biệt đáng kể, vì vậy, dù mô hình kinh doanh của bạn có là dạng nào trong 2 dạng trên thì cũng có thể sử dụng những chỉ số dưới đây.</p>
+</section>
+<section id="tổng-quan" class="level2">
+<h2 class="anchored" data-anchor-id="tổng-quan">Tổng quan</h2>
+<p>Theo mình, có 4 nhóm chỉ số mà bạn cần quan tâm để đánh giá được nền tảng ecommerce có đang hoạt động ổn không:</p>
+<ol type="1">
+<li><p><strong>Retention</strong>: việc tái sử dụng dịch vụ, web, app, … của người dùng. Retention có thể là <code>Repurchase Rate</code> - tỷ lệ lặp lại hành vi mua hàng của người dùng, hoặc <code>Churn Rate</code> - tỷ lệ người dùng rời bỏ nền tảng của bạn. Điểm chung của các chỉ số về Retention là bạn sẽ theo dõi 1 nhóm người dùng xác định (1 cohort) và đánh giá xem nhóm người này tiếp tục sử dụng hay rời bỏ nền tảng của bạn như thế nào trong 1 khoảng thời gian nhất định.</p></li>
+<li><p><strong>Conversion</strong>: tỷ lệ chuyển đổi. Đây là những chỉ số liên quan đến khả năng chuyển đổi khách hàng từ bước A đến bước B trong luồng người dùng của bạn. Nó có thể là tỷ lệ chuyển đổi của các kênh marketing, hoặc của từng bước trong luồng của web/app.</p></li>
+<li><p><strong>Cost</strong>: chi phí. Chi phí ở đây có thể là chi phí để tìm kiếm 1 khách hàng (<code>CAC - Customer acquisition cost</code>) hoặc chi phí trên từng đơn hàng (Cost per Order). Về cơ bản, nó là chi phí mà bạn phải bỏ ra trên 1 đơn vị, bạn cần biết thông số này để so sánh nó với giá trị bạn mang lại, và từ đó đánh giá được mô hình của bạn đang hoạt động có mang lại lợi nhuận hay không.</p></li>
+<li><p><strong>Revenue</strong>: doanh thu. Có chi phí thì tất nhiên phải quan tâm đến doanh thu. Revenue ở đây cũng tính trên 1 đơn vị, có thể là <code>Customer Lifetime Value - CLV</code> cho ta biết 1 khách hàng sẽ mang lại bao nhiêu doanh thu trong suốt vòng đời sử dụng. Hoặc có thể tính Average order value, giá trị đơn hàng trung bình để biết trung bình 1 đơn hàng, bạn sẽ có doanh thu bao nhiêu.</p></li>
+</ol>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Trong mỗi nhóm chỉ số trên, mình sẽ chỉ lấy ra 1 chỉ số mà mình cảm thấy quan trọng và cần thiết nhất, tuỳ trường hợp mô hình kinh doanh của bạn, chỉ số bạn quan tâm có thể sẽ khác.</p>
+</div>
+</div>
+</section>
+<section id="repurchase-rate-rr" class="level2">
+<h2 class="anchored" data-anchor-id="repurchase-rate-rr">Repurchase Rate (RR)</h2>
+<p>Đối với Retention, mình quyết định chọn Repurchase Rate là chỉ số chính vì hành vi mua hàng là hành vi quan trọng nhất của nền tảng và chỉ số này cũng giúp ta xác định tỷ lệ khách hàng cũ, mới và từ đó hỗ trợ việc đưa ra chiến lược.</p>
+<p>Nền tảng của bạn có thể chú trọng vào:</p>
+<ul>
+<li><strong>Acquisition</strong>: tìm kiếm khách hàng mới</li>
+<li><strong>Loyalty</strong>: tập trung vào khách hàng cũ</li>
+<li><strong>Hybrid</strong>: đồng thời làm cả 2 việc trên</li>
+</ul>
+<p>Theo nhìn nhận chủ quan của mình, hầu hết các start-up trong lĩnh vực này sẽ khởi đầu bằng <strong>Acquisition</strong> — họ cố gắng kéo càng nhiều khách hàng mới càng tốt. Sau đó, khi đã có 1 số lượng khách hàng trung thành nhất định, sẽ là trạng thái <strong>Hybrid</strong>, vừa chăm sóc khách hàng cũ, vừa duy trì các chương trình thu hút khách mới (như những chương trình khuyến mãi cho người dùng mới trên Shopee, Tiki, Lazada, …). Cuối cùng, khi nền tảng của bạn trở nên khổng lồ như Amazon, bạn sẽ tập trung cho chương trình <strong>Loyalty</strong>.</p>
+<section id="ví-dụ-tính-rr" class="level3">
+<h3 class="anchored" data-anchor-id="ví-dụ-tính-rr">Ví dụ tính RR</h3>
+<p>Trong database của bạn có 1 bảng thống kê đơn hàng như sau:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 21%">
+<col style="width: 17%">
+<col style="width: 23%">
+<col style="width: 14%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>order_id</th>
+<th>username</th>
+<th>order_completed_at</th>
+<th>first_order_at</th>
+<th>30_days_since_first</th>
+<th>is_30day_RR</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>71</td>
+<td>Cuong</td>
+<td>2020-07-06 10:23:54</td>
+<td>July 2020</td>
+<td><strong>2020-08-05</strong></td>
+<td>false</td>
+</tr>
+<tr class="even">
+<td>72</td>
+<td>Long</td>
+<td>2020-07-08 11:24:35</td>
+<td>July 2020</td>
+<td><strong>2020-08-07</strong></td>
+<td>false</td>
+</tr>
+<tr class="odd">
+<td>73</td>
+<td>Hoang</td>
+<td>2020-07-27 11:25:35</td>
+<td>July 2020</td>
+<td><strong>2020-08-26</strong></td>
+<td>false</td>
+</tr>
+<tr class="even">
+<td>101</td>
+<td>Cuong</td>
+<td>2020-08-02 10:23:54</td>
+<td>July 2020</td>
+<td>2020-08-05</td>
+<td><code>true</code></td>
+</tr>
+<tr class="odd">
+<td>102</td>
+<td>Hoang</td>
+<td>2020-08-25 11:22:35</td>
+<td>July 2020</td>
+<td>2020-08-26</td>
+<td><code>true</code></td>
+</tr>
+<tr class="even">
+<td>103</td>
+<td>Cuong</td>
+<td>2020-09-09 04:20:54</td>
+<td>July 2020</td>
+<td>2020-08-05</td>
+<td>false</td>
+</tr>
+<tr class="odd">
+<td>104</td>
+<td>Long</td>
+<td>2020-09-09 14:22:35</td>
+<td>July 2020</td>
+<td>2020-08-07</td>
+<td>false</td>
+</tr>
+</tbody>
+</table>
+<p>Bảng trên đã được xử lý để cho chúng ta có thể xác định được <strong>cohort</strong> — 1 tập khách hàng có chung 1 hành vi xác định. Ở đây là những <strong>khách hàng có đơn hàng đầu tiên vào tháng 7 năm 2020</strong>. Nói cách khác, đó là những <em>khách hàng mới</em> mà chúng ta kiếm được <em>trong tháng 7</em>, và ghi nhận tất cả các đơn hàng thành công của họ từ lúc bắt đầu (tháng 7) cho đến hiện tại.</p>
+<p>Trong số những khách hàng này (3 người), chỉ có 2 người thực hiện 1 đơn hàng khác trong vòng 30 ngày kể từ ngày đầu tiên mua hàng. Để xác định điều đó, chỉ cần so sánh <code>order_completed_at</code> với <code>30_days_since_first</code>, nếu nhỏ hơn thì đó là 1 đơn hàng được thực hiện trong vòng 30 ngày từ ngày đầu tiên mua.</p>
+<p>Như vậy, ta có thể nói <strong>30-day repurchase rate</strong> hay <strong>30 days RR</strong> là:</p>
+<p><span class="math display">\[\text{30 days RR} = \frac{2}{3} = 66.6\%\]</span></p>
+<p>Tương tự, ta có thể tính <strong>15, 30, 90 days RR</strong> — <strong>tỷ lệ khách hàng mua lại trong 15, 30 hay 90 ngày</strong>, tuỳ vào từng trường hợp kinh doanh cụ thể của bạn.</p>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>RR là 1 tỷ lệ phụ thuộc vào 2 khoảng thời gian, như trường hợp trên là 30 days RR của <em>tháng 7</em>. Nếu bạn tính cho các tháng khác, hoặc <em>cohort</em> của 1 khoảng thời gian khác (tuần, quý, năm, …) thì kết quả sẽ ra khác.</p>
+</div>
+</div>
+<p>Tỷ lệ này cho chúng ta biết tỷ lệ khách hàng vẫn còn <em>trung thành</em> với sản phẩm của mình:</p>
+<ul>
+<li><strong>Trên 30%</strong>: nền tảng đang ở trạng thái <strong>Loyalty</strong></li>
+<li><strong>15% đến 30%</strong>: trạng thái <strong>Hybrid</strong></li>
+<li><strong>Dưới 15%</strong>: trạng thái <strong>Acquisition</strong></li>
+</ul>
+</section>
+</section>
+<section id="conversion-rate-cr" class="level2">
+<h2 class="anchored" data-anchor-id="conversion-rate-cr">Conversion Rate (CR)</h2>
+<p>Tỷ lệ chuyển đổi Conversion Rate là 1 chỉ số đơn giản nhưng được sử dụng rất đa dạng. Về cơ bản, bạn có thể tính tỷ lệ chuyển đổi khách hàng từ bước A đến bước B, với bước A và B có thể là bất cứ bước nào trong luồng người dùng (<strong>user flow</strong>) của bạn.</p>
+<p>Ví dụ khách hàng mở app của bạn lên (A), tìm kiếm sản phẩm, thêm vào giỏ hàng (B). Như vậy ta có thể tính trong 100 khách hàng mở app, có bao nhiêu người sẽ đi đến bước thêm vào giỏ hàng.</p>
+<p><span class="math display">\[\text{CR từ A đến B} = \frac{\text{số người ở bước B}}{\text{số người ở bước A}}\]</span></p>
+<p>Để biết được bạn cần tính <strong>CR</strong> cho bước A nào, B nào, bạn cần xác định rõ <code>user flow</code> của mình.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>Nếu mô hình của bạn tập trung vào <strong>acquisition</strong>, có thể bạn sẽ chấp nhận 1 mức CR <em>thấp hơn</em> 1 mô hình tập trung vào <strong>loyalty</strong>.</li>
+<li>Với acquisition, bạn thậm chí sẽ tập trung vào CR của các kênh marketing hơn là CR của luồng người dùng sử dụng trên web/app của bạn.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="customer-acquisition-cost-cac" class="level2">
+<h2 class="anchored" data-anchor-id="customer-acquisition-cost-cac">Customer Acquisition Cost (CAC)</h2>
+<p><strong>CAC</strong> được tính bằng việc lấy chi phí bỏ ra chia cho số lượng khách hàng mới thu về được trong 1 khoảng thời gian.</p>
+<p><span class="math display">\[\text{CAC} = \frac{\text{Tổng chi phí (marketing, sale, vận hành, ...)}}{\text{Số người dùng mới}}\]</span></p>
+<p>Tất nhiên, CAC đối với từng doanh nghiệp, mô hình khác nhau sẽ có những tiêu chuẩn khác nhau. Nếu mô hình acquisition, thì CAC có thể sẽ cao vì bạn tập trung vào việc tìm kiếm khách hàng mới, còn nếu loyalty, thì CAC được kỳ vọng sẽ thấp hơn.</p>
+</section>
+<section id="lifetime-value-clv-hoặc-ltv" class="level2">
+<h2 class="anchored" data-anchor-id="lifetime-value-clv-hoặc-ltv">Lifetime Value (CLV hoặc LTV)</h2>
+<p><strong>LTV</strong> là doanh thu mà 1 khách hàng tạo ra trong vòng đời của khách hàng.</p>
+<section id="vòng-đời-khách-hàng-lifespan" class="level3">
+<h3 class="anchored" data-anchor-id="vòng-đời-khách-hàng-lifespan">Vòng đời khách hàng (Lifespan)</h3>
+<p>Vòng đời khách hàng là thời gian trung bình của 1 khách hàng từ lúc mua hàng lần đầu đến khi không còn mua nữa.</p>
+<p><span class="math display">\[\text{Lifespan} = \frac{\text{Tổng thời gian từ lúc mua đến khi không mua nữa}}{\text{Số lượng khách hàng}}\]</span></p>
+<p>Tất nhiên, việc thống kê thời gian từ lúc mua hàng đến lúc không còn mua nữa của 1 khách hàng có thể là 1 việc rất khó khăn, có khi thời gian này là vài năm thì bạn không thể chờ vài năm để tính nó được.</p>
+<p>Có 1 cách để ước lượng giá trị này là dựa vào <strong>Churn Rate</strong>.</p>
+</section>
+<section id="churn-rate" class="level3">
+<h3 class="anchored" data-anchor-id="churn-rate">Churn Rate</h3>
+<p><strong>Churn Rate</strong> là tỷ lệ người không tiếp tục mua hàng trên nền tảng của bạn nữa (thực tế Churn có thể tính cho bất kỳ hành động nào, nhưng ở đây ta xét hành động mua hàng).</p>
+<p><span class="math display">\[\text{Churn Rate} = 1 - \frac{\text{tổng số người mua hàng tháng trước và tháng này}}{\text{tổng số người mua hàng tháng trước}}\]</span></p>
+<p><strong>Ví dụ</strong>: Có 100 người mua hàng vào tháng 7, trong số 100 người này, có 25 người đến tháng 8 vẫn mua tiếp, thì <strong>Churn Rate = 75%</strong>. Ta có thể nói là có 75% người dùng đã không tiếp tục mua hàng vào tháng tiếp theo.</p>
+<p>Từ đây có thể ước lượng:</p>
+<p><span class="math display">\[\text{Average Lifespan} = \frac{1}{\text{Churn Rate}}\]</span></p>
+<p>Nếu churn rate tính theo tháng, thì AL cũng sẽ tính theo tháng. Như trên thì monthly churn rate là 75%, vậy AL là <span class="math inline">\(\frac{100}{75} = 1.3\)</span> tháng.</p>
+</section>
+<section id="tính-ltv" class="level3">
+<h3 class="anchored" data-anchor-id="tính-ltv">Tính LTV</h3>
+<p>Sau khi tính được thời gian trung bình 1 khách hàng sử dụng nền tảng, ta tính giá trị trung bình mà 1 khách hàng mang lại cho chúng ta.</p>
+<p><span class="math display">\[\text{Giá trị trung bình của đơn hàng (AOV)} = \frac{\text{Tổng doanh thu}}{\text{Tổng số đơn hàng}}\]</span></p>
+<p>Sau đó, tính số đơn hàng trung bình của 1 khách:</p>
+<p><span class="math display">\[\text{Số đơn hàng trung bình của 1 khách} = \frac{\text{Tổng số đơn}}{\text{Tổng số khách}}\]</span></p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Lưu ý là doanh thu và số đơn trên tính trong cùng đơn vị thời gian với churn rate và AL ở trên (tính theo tháng).</p>
+</div>
+</div>
+<p><span class="math display">\[\text{Giá trị mang lại trung bình của 1 khách hàng} = \text{AOV} \times \text{Số đơn hàng trung bình của 1 khách}\]</span></p>
+<p>Cuối cùng, ta nhân giá trị trên với lifespan để ra LTV:</p>
+<p><span class="math display">\[\text{LTV} = \text{Giá trị mang lại trung bình của 1 khách hàng} \times \text{Vòng đời trung bình}\]</span></p>
+</section>
+</section>
+<section id="roi-return-on-investment" class="level2">
+<h2 class="anchored" data-anchor-id="roi-return-on-investment">ROI (Return on Investment)</h2>
+<p>Như vậy, ta đã tính được chi phí để có được 1 khách hàng (CAC) và giá trị trung bình 1 khách hàng mang lại (LTV). Dễ thấy, ta muốn <strong>LTV càng cao càng tốt</strong> còn <strong>CAC thì ngược lại</strong>.</p>
+<p>Tỷ lệ <strong>LTV/CAC</strong> cũng là 1 chỉ số quan trọng để đánh giá khả năng tạo ra doanh thu của 1 nền tảng ecommerce, đó là <strong>ROI</strong>:</p>
+<p><span class="math display">\[\text{ROI (Return on Investment)} = \frac{\text{LTV}}{\text{CAC}} - 1\]</span></p>
+</section>
+<section id="kết-luận" class="level2">
+<h2 class="anchored" data-anchor-id="kết-luận">Kết luận</h2>
+<p>Như vậy, mình đã đi qua các chỉ số mà mình nghĩ là quan trọng khi làm phân tích dữ liệu cho 1 nền tảng Ecommerce. Vì là những hiểu biết của bản thân còn hạn chế nên khó tránh khỏi những sai sót. Mong người đọc có thể đóng góp thêm để bài viết có thể được hoàn thiện hơn.</p>
+</section>
+<section id="tài-liệu-tham-khảo" class="level2">
+<h2 class="anchored" data-anchor-id="tài-liệu-tham-khảo">Tài liệu tham khảo</h2>
+<ol type="1">
+<li>Lean Analytics Book</li>
+<li><a href="https://medium.com/@jspanom/how-to-deep-dive-in-your-product-funnel-performance-with-ga-and-data-studio-step-by-step-guide-328d1bbb4dd4">How to deep dive in your product funnel performance with GA and Data Studio</a></li>
+<li><a href="https://medium.com/better-marketing/the-marketers-guide-to-customer-acquisition-costs-bf465b5903b0/">The Marketer’s Guide to Customer Acquisition Costs</a></li>
+<li><a href="https://medium.com/better-marketing/the-marketers-guide-to-customer-lifetime-value-7f0eb5991098/">The Marketer’s Guide to Customer Lifetime Value</a></li>
+<li><a href="https://blog.hubspot.com/service/how-to-calculate-customer-lifetime-value">How to Calculate Customer Lifetime Value</a></li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<input type="hidden" id="giscus-base-theme" value="light">
+<input type="hidden" id="giscus-alt-theme" value="light">
+<script>
+  function loadGiscus() {
+    // Function to get the theme based on body class
+    const getTheme = () => {
+      let baseTheme = document.getElementById('giscus-base-theme').value;
+      let altTheme = document.getElementById('giscus-alt-theme').value;
+      return document.body.classList.contains('quarto-dark') ? altTheme : baseTheme;
+    };
+    const script = document.createElement("script");
+    script.src = "https://giscus.app/client.js";
+    script.async = true;
+    script.dataset.repo = "pakota159/pakota159.github.io";
+    script.dataset.repoId = "MDEwOlJlcG9zaXRvcnkxOTk5ODMwMTI=";
+    script.dataset.category = "Announcements";
+    script.dataset.categoryId = "DIC_kwDOC-t_pM4C0yEB";
+    script.dataset.mapping = "pathname";
+    script.dataset.reactionsEnabled = "1";
+    script.dataset.emitMetadata = "0";
+    script.dataset.inputPosition = "bottom";
+    script.dataset.theme = getTheme();
+    script.dataset.lang = "en";
+    script.crossOrigin = "anonymous";
+    // Append the script to the desired div instead of at the end of the body
+    document.getElementById("quarto-content").appendChild(script);
+  }
+  loadGiscus();
+</script>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">
+      &nbsp;
+    </div>   
+    <div class="nav-footer-center">
+<p>Copyright 2026, Cuong Pham</p>
+</div>
+    <div class="nav-footer-right">
+      &nbsp;
+    </div>
+  </div>
+</footer>
+
+
+
+
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
+</body></html>

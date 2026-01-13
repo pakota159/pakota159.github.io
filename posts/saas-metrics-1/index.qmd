@@ -33,6 +33,342 @@ mindmap
       Vertical
 ```
 
+## Khám phá Bản đồ SaaS theo từng Chiều {#saas-landscape}
+
+Chọn một cách phân loại để xem các công ty SaaS được định vị như thế nào:
+
+```{ojs}
+//| echo: false
+
+// Dữ liệu công ty với ước tính market cap (cho kích thước bubble)
+companies = [
+  // Công ty lớn
+  {name: "Salesforce", marketCap: 280, sales: "Enterprise", growth: "Sales-Led", pricing: "Tiered", market: "Horizontal"},
+  {name: "Microsoft 365", marketCap: 350, sales: "Enterprise", growth: "Hybrid", pricing: "Per-User", market: "Horizontal"},
+  {name: "SAP", marketCap: 200, sales: "Enterprise", growth: "Sales-Led", pricing: "Tiered", market: "Horizontal"},
+  {name: "Oracle", marketCap: 220, sales: "Enterprise", growth: "Sales-Led", pricing: "Tiered", market: "Horizontal"},
+  {name: "Workday", marketCap: 60, sales: "Enterprise", growth: "Sales-Led", pricing: "Per-User", market: "Horizontal"},
+  {name: "ServiceNow", marketCap: 150, sales: "Enterprise", growth: "Sales-Led", pricing: "Per-User", market: "Horizontal"},
+  {name: "Adobe CC", marketCap: 180, sales: "Transactional", growth: "Hybrid", pricing: "Flat-Rate", market: "Horizontal"},
+  
+  // Công ty trung bình
+  {name: "Zoom", marketCap: 20, sales: "Transactional", growth: "Product-Led", pricing: "Per-User", market: "Horizontal"},
+  {name: "Slack", marketCap: 25, sales: "Transactional", growth: "Product-Led", pricing: "Per-User", market: "Horizontal"},
+  {name: "Dropbox", marketCap: 8, sales: "Self-Service", growth: "Product-Led", pricing: "Freemium", market: "Horizontal"},
+  {name: "HubSpot", marketCap: 30, sales: "Transactional", growth: "Marketing-Led", pricing: "Tiered", market: "Horizontal"},
+  {name: "Atlassian", marketCap: 45, sales: "Transactional", growth: "Hybrid", pricing: "Tiered", market: "Horizontal"},
+  {name: "Datadog", marketCap: 35, sales: "Transactional", growth: "Hybrid", pricing: "Usage-Based", market: "Horizontal"},
+  {name: "Snowflake", marketCap: 50, sales: "Enterprise", growth: "Sales-Led", pricing: "Usage-Based", market: "Horizontal"},
+  {name: "Shopify", marketCap: 90, sales: "Self-Service", growth: "Product-Led", pricing: "Transactional", market: "Vertical"},
+  {name: "Twilio", marketCap: 12, sales: "Self-Service", growth: "Product-Led", pricing: "Usage-Based", market: "Horizontal"},
+  {name: "Stripe", marketCap: 65, sales: "Self-Service", growth: "Product-Led", pricing: "Transactional", market: "Horizontal"},
+  
+  // Công ty nhỏ / Tăng trưởng
+  {name: "Figma", marketCap: 20, sales: "Self-Service", growth: "Product-Led", pricing: "Freemium", market: "Horizontal"},
+  {name: "Notion", marketCap: 10, sales: "Self-Service", growth: "Product-Led", pricing: "Freemium", market: "Horizontal"},
+  {name: "Canva", marketCap: 26, sales: "Self-Service", growth: "Product-Led", pricing: "Freemium", market: "Horizontal"},
+  {name: "Miro", marketCap: 17, sales: "Self-Service", growth: "Product-Led", pricing: "Freemium", market: "Horizontal"},
+  {name: "Asana", marketCap: 5, sales: "Transactional", growth: "Product-Led", pricing: "Per-User", market: "Horizontal"},
+  {name: "Monday.com", marketCap: 12, sales: "Self-Service", growth: "Product-Led", pricing: "Per-User", market: "Horizontal"},
+  {name: "Airtable", marketCap: 11, sales: "Self-Service", growth: "Hybrid", pricing: "Freemium", market: "Horizontal"},
+  {name: "GitLab", marketCap: 8, sales: "Transactional", growth: "Hybrid", pricing: "Tiered", market: "Horizontal"},
+  {name: "Loom", marketCap: 1.5, sales: "Self-Service", growth: "Product-Led", pricing: "Freemium", market: "Horizontal"},
+  {name: "Calendly", marketCap: 3, sales: "Self-Service", growth: "Product-Led", pricing: "Freemium", market: "Horizontal"},
+  {name: "Grammarly", marketCap: 13, sales: "Self-Service", growth: "Product-Led", pricing: "Freemium", market: "Horizontal"},
+  {name: "Mailchimp", marketCap: 12, sales: "Self-Service", growth: "Marketing-Led", pricing: "Tiered", market: "Horizontal"},
+  {name: "Zendesk", marketCap: 10, sales: "Transactional", growth: "Marketing-Led", pricing: "Tiered", market: "Horizontal"},
+  {name: "Intercom", marketCap: 6, sales: "Transactional", growth: "Product-Led", pricing: "Hybrid", market: "Horizontal"},
+  {name: "Zapier", marketCap: 5, sales: "Self-Service", growth: "Product-Led", pricing: "Tiered", market: "Horizontal"},
+  {name: "Webflow", marketCap: 4, sales: "Self-Service", growth: "Product-Led", pricing: "Tiered", market: "Horizontal"},
+  {name: "SendGrid", marketCap: 3, sales: "Self-Service", growth: "Product-Led", pricing: "Usage-Based", market: "Horizontal"},
+  {name: "Trello", marketCap: 0.4, sales: "Self-Service", growth: "Product-Led", pricing: "Freemium", market: "Horizontal"},
+  {name: "Basecamp", marketCap: 0.1, sales: "Self-Service", growth: "Marketing-Led", pricing: "Flat-Rate", market: "Horizontal"},
+  
+  // Vertical SaaS
+  {name: "Veeva", marketCap: 30, sales: "Enterprise", growth: "Sales-Led", pricing: "Per-User", market: "Vertical"},
+  {name: "Toast", marketCap: 14, sales: "Transactional", growth: "Sales-Led", pricing: "Transactional", market: "Vertical"},
+  {name: "Procore", marketCap: 10, sales: "Enterprise", growth: "Sales-Led", pricing: "Tiered", market: "Vertical"},
+  {name: "Mindbody", marketCap: 2, sales: "Transactional", growth: "Sales-Led", pricing: "Tiered", market: "Vertical"},
+  
+  // Payment/Fintech
+  {name: "PayPal", marketCap: 70, sales: "Self-Service", growth: "Product-Led", pricing: "Transactional", market: "Horizontal"},
+  {name: "Square", marketCap: 45, sales: "Self-Service", growth: "Product-Led", pricing: "Transactional", market: "Horizontal"},
+  
+  // Cloud Infrastructure
+  {name: "AWS", marketCap: 400, sales: "Transactional", growth: "Hybrid", pricing: "Usage-Based", market: "Horizontal"},
+  {name: "Google Cloud", marketCap: 150, sales: "Transactional", growth: "Hybrid", pricing: "Per-User", market: "Horizontal"},
+  {name: "GitHub", marketCap: 7.5, sales: "Self-Service", growth: "Product-Led", pricing: "Hybrid", market: "Horizontal"},
+]
+
+// Cấu hình các danh mục
+categories = ({
+  sales: {
+    title: "Mô Hình Bán Hàng và Tiếp Cận Thị Trường",
+    subtitle: "Sales and Go-to-Market Model",
+    field: "sales",
+    segments: ["Self-Service", "Transactional", "Enterprise"],
+    colors: ["#22c55e", "#3b82f6", "#8b5cf6"],
+    descriptions: {
+      "Self-Service": "ACV < $5K • Tự động hóa",
+      "Transactional": "ACV $5K-$50K • Inside sales",
+      "Enterprise": "ACV > $50K • Field sales"
+    }
+  },
+  growth: {
+    title: "Chiến Lược Tăng Trưởng và Thu Hút Khách Hàng",
+    subtitle: "Growth Strategy and Acquisition Motion",
+    field: "growth",
+    segments: ["Product-Led", "Sales-Led", "Marketing-Led", "Hybrid"],
+    colors: ["#6366f1", "#f59e0b", "#10b981", "#ec4899"],
+    descriptions: {
+      "Product-Led": "Sản phẩm là động lực chính",
+      "Sales-Led": "Đội ngũ bán hàng dẫn dắt",
+      "Marketing-Led": "Content & demand gen",
+      "Hybrid": "Kết hợp nhiều chiến lược"
+    }
+  },
+  pricing: {
+    title: "Mô Hình Định Giá và Doanh Thu",
+    subtitle: "Pricing and Revenue Model",
+    field: "pricing",
+    segments: ["Freemium", "Per-User", "Usage-Based", "Tiered", "Flat-Rate", "Transactional", "Hybrid"],
+    colors: ["#22c55e", "#3b82f6", "#f59e0b", "#8b5cf6", "#64748b", "#ef4444", "#ec4899"],
+    descriptions: {
+      "Freemium": "Miễn phí + Premium",
+      "Per-User": "$/user/tháng",
+      "Usage-Based": "Trả theo sử dụng",
+      "Tiered": "Gói Good-Better-Best",
+      "Flat-Rate": "Một giá cho tất cả",
+      "Transactional": "% mỗi giao dịch",
+      "Hybrid": "Kết hợp nhiều mô hình"
+    }
+  },
+  market: {
+    title: "Định Hướng Thị Trường và Tiếp Cận Ngành",
+    subtitle: "Market Focus and Industry Approach",
+    field: "market",
+    segments: ["Horizontal", "Vertical"],
+    colors: ["#3b82f6", "#f59e0b"],
+    descriptions: {
+      "Horizontal": "Đa ngành, đa mục đích",
+      "Vertical": "Chuyên biệt theo ngành"
+    }
+  }
+})
+
+// Chọn view
+viewof selectedView = Inputs.radio(
+  ["sales", "growth", "pricing", "market"],
+  {
+    value: "growth",
+    label: "Chọn cách phân loại:",
+    format: x => ({
+      sales: "🏪 Mô Hình Bán Hàng",
+      growth: "🚀 Chiến Lược Tăng Trưởng", 
+      pricing: "💰 Mô Hình Định Giá",
+      market: "🎯 Định Hướng Thị Trường"
+    })[x]
+  }
+)
+
+currentCat = categories[selectedView]
+```
+
+```{ojs}
+//| echo: false
+
+chart = {
+  const segments = currentCat.segments;
+  const field = currentCat.field;
+  const colors = currentCat.colors;
+  
+  // Calculate max companies in any segment to determine row height
+  const grouped = d3.group(companies, d => d[field]);
+  
+  const width = 800;
+  const headerHeight = 70;
+  const rowHeaderHeight = 50;
+  const bubbleRowHeight = 70; // Height per bubble row
+  const padding = 30;
+  
+  // Calculate how many bubble rows needed for each segment
+  const getRowsNeeded = (segCompanies) => {
+    const maxBubblesPerRow = 12;
+    return Math.ceil(segCompanies.length / maxBubblesPerRow);
+  };
+  
+  // Calculate total height for each segment
+  const segmentHeights = segments.map(seg => {
+    const segCompanies = grouped.get(seg) || [];
+    const rowsNeeded = getRowsNeeded(segCompanies);
+    return rowHeaderHeight + rowsNeeded * bubbleRowHeight;
+  });
+  const height = headerHeight + d3.sum(segmentHeights) + 30;
+  
+  const colorScale = d3.scaleOrdinal().domain(segments).range(colors);
+  
+  const svg = d3.create("svg")
+    .attr("viewBox", [0, 0, width, height])
+    .attr("style", "max-width: 100%; height: auto; font-family: 'Inter', system-ui, sans-serif;");
+  
+  // Background
+  svg.append("rect")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("fill", "#f3f3f3")
+    .attr("rx", 12);
+  
+  // Title
+  svg.append("text")
+    .attr("x", width / 2)
+    .attr("y", 28)
+    .attr("text-anchor", "middle")
+    .attr("fill", "#0062ec")
+    .attr("font-size", 18)
+    .attr("font-weight", 700)
+    .text(currentCat.title);
+  
+  svg.append("text")
+    .attr("x", width / 2)
+    .attr("y", 48)
+    .attr("text-anchor", "middle")
+    .attr("fill", "#0062ec")
+    .attr("font-size", 13)
+    .text(currentCat.subtitle);
+  
+  // Size scale
+  const sizeScale = d3.scaleSqrt()
+    .domain([0, d3.max(companies, d => d.marketCap)])
+    .range([4, 32]);
+  
+  // Tooltip (create once)
+  const tooltip = svg.append("g").style("display", "none").style("pointer-events", "none");
+  tooltip.append("rect")
+    .attr("fill", "#1e293b")
+    .attr("rx", 5)
+    .attr("stroke", "#475569")
+    .attr("stroke-width", 1);
+  const tooltipText = tooltip.append("text")
+    .attr("fill", "white")
+    .attr("font-size", 11)
+    .attr("text-anchor", "middle");
+  
+  // Draw each segment as a ROW (stacked vertically)
+  let cumulativeY = headerHeight;
+  
+  segments.forEach((seg, rowIdx) => {
+    const rowY = cumulativeY;
+    const segCompanies = grouped.get(seg) || [];
+    segCompanies.sort((a, b) => b.marketCap - a.marketCap);
+    const currentSegmentHeight = segmentHeights[rowIdx];
+    
+    // Row background
+    svg.append("rect")
+      .attr("x", 15)
+      .attr("y", rowY + 5)
+      .attr("width", width - 30)
+      .attr("height", currentSegmentHeight - 10)
+      .attr("fill", colorScale(seg))
+      .attr("opacity", 0.06)
+      .attr("rx", 8);
+    
+    // Segment header (centered at top of row)
+    svg.append("text")
+      .attr("x", width / 2)
+      .attr("y", rowY + 25)
+      .attr("text-anchor", "middle")
+      .attr("fill", colorScale(seg))
+      .attr("font-size", 14)
+      .attr("font-weight", 600)
+      .text(seg);
+    
+    svg.append("text")
+      .attr("x", width / 2)
+      .attr("y", rowY + 42)
+      .attr("text-anchor", "middle")
+      .attr("fill", "#64748b")
+      .attr("font-size", 10)
+      .text(currentCat.descriptions[seg]);
+    
+    // Bubbles - wrap to multiple rows if needed
+    const maxBubblesPerRow = 12;
+    const bubbleAreaWidth = width - 60;
+    
+    segCompanies.forEach((company, i) => {
+      const bubbleRowIndex = Math.floor(i / maxBubblesPerRow);
+      const indexInRow = i % maxBubblesPerRow;
+      const companiesInThisRow = Math.min(maxBubblesPerRow, segCompanies.length - bubbleRowIndex * maxBubblesPerRow);
+      
+      const r = sizeScale(company.marketCap);
+      const bubbleY = rowY + rowHeaderHeight + bubbleRowIndex * bubbleRowHeight + 35;
+      const spacing = bubbleAreaWidth / (companiesInThisRow + 1);
+      const x = 30 + spacing * (indexInRow + 1);
+      
+      const g = svg.append("g")
+        .attr("transform", `translate(${x}, ${bubbleY})`);
+      
+      // Bubble
+      g.append("circle")
+        .attr("r", r)
+        .attr("fill", colorScale(seg))
+        .attr("opacity", 0.85)
+        .attr("stroke", colorScale(seg))
+        .attr("stroke-width", 1.5)
+        .style("cursor", "pointer")
+        .on("mouseenter", function(event) {
+          d3.select(this)
+            .transition().duration(150)
+            .attr("opacity", 1)
+            .attr("stroke-width", 3)
+            .attr("r", r * 1.1);
+          
+          tooltip.style("display", null);
+          tooltipText.text(`${company.name} • $${company.marketCap}B`);
+          const bbox = tooltipText.node().getBBox();
+          tooltip.select("rect")
+            .attr("x", bbox.x - 8)
+            .attr("y", bbox.y - 4)
+            .attr("width", bbox.width + 16)
+            .attr("height", bbox.height + 8);
+          tooltip.attr("transform", `translate(${x}, ${bubbleY - r - 20})`);
+        })
+        .on("mouseleave", function() {
+          d3.select(this)
+            .transition().duration(150)
+            .attr("opacity", 0.85)
+            .attr("stroke-width", 1.5)
+            .attr("r", r);
+          tooltip.style("display", "none");
+        });
+      
+      // Company name inside bubble (only if big enough)
+      if (r > 14) {
+        g.append("text")
+          .attr("text-anchor", "middle")
+          .attr("dy", "0.35em")
+          .attr("fill", "white")
+          .attr("font-size", Math.min(r * 0.45, 10))
+          .attr("font-weight", 500)
+          .style("pointer-events", "none")
+          .text(company.name.length > 10 ? company.name.slice(0, 8) + ".." : company.name);
+      }
+    });
+    
+    // Update cumulative Y for next segment
+    cumulativeY += currentSegmentHeight;
+  });
+  
+  // Legend at bottom
+  svg.append("text")
+    .attr("x", 20)
+    .attr("y", height - 10)
+    .attr("fill", "#64748b")
+    .attr("font-size", 10)
+    .text("Kích thước bubble = Market Cap (tỷ USD)");
+  
+  return svg.node();
+}
+```
 
 ## 1. Mô Hình Bán Hàng và Tiếp Cận Thị Trường
 

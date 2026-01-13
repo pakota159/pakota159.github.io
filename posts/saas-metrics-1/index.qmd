@@ -9,33 +9,106 @@ image: "/img/saas-metrics/saas-framework.png"
 toc: true
 ---
 
+
+## SaaS là gì?
+
+Trước khi đi sâu vào các chỉ số phức tạp, hãy trả lời câu hỏi cơ bản: SaaS thực chất là gì?
+
+**SaaS (Software as a Service)** là mô hình phân phối phần mềm trong đó nhà cung cấp lưu trữ ứng dụng trên đám mây (Cloud) và cung cấp cho khách hàng qua Internet.
+
+- **Thay vì** mua đứt và cài đặt vào máy (như đĩa CD Microsoft Office 2003 ngày xưa)
+- **Khách hàng** trả phí thuê bao (Subscription) để truy cập và sử dụng (như Office 365, Google Workspace)
+
+::: {.callout-note}
+## Tư duy cho Data Analyst
+
+Sự thay đổi này chuyển dịch doanh thu từ **One-time payment** (mua 1 lần) sang **Recurring Revenue** (doanh thu định kỳ). Đây là lý do tại sao các metrics như MRR, ARR, Churn ra đời.
+:::
+
+## Phân biệt SaaS với các mô hình khác
+
+Để dễ hình dung, hãy so sánh SaaS với mô hình truyền thống (On-Premise) và các tầng khác của Cloud Computing.
+
+### 1. SaaS vs. On-Premise (Mô hình truyền thống)
+
+Đây là sự so sánh quan trọng nhất về mặt kinh doanh.
+
+| Đặc điểm | On-Premise (Truyền thống) | SaaS (Hiện đại) |
+|----------|---------------------------|-----------------|
+| **Sở hữu** | Bạn mua phần mềm vĩnh viễn ("Cái đĩa là của bạn") | Bạn thuê quyền sử dụng ("Dịch vụ là của họ") |
+| **Chi phí** | CapEx (Chi phí vốn): Trả 1 cục tiền lớn ban đầu | OpEx (Chi phí vận hành): Trả nhỏ giọt hàng tháng/năm |
+| **Bảo trì** | Bạn tự lo server, update, vá lỗi, bảo mật | Nhà cung cấp lo từ A-Z (Auto-update) |
+| **Truy cập** | Tại nơi cài đặt (Tại văn phòng/máy tính cá nhân) | Mọi lúc, mọi nơi, miễn có Internet |
+| **Metrics** | Sales, Unit Sold (Số bản bán được) | MRR, Churn, LTV (Vòng đời khách hàng) |
+
+### 2. SaaS vs. IaaS vs. PaaS (Các tầng Cloud)
+
+Nếu ví việc xây dựng phần mềm như việc **Ăn Pizza**, thì:
+
+- **On-Premise (Làm tại nhà)**: Bạn mua bột, mua lò nướng, tự làm đế, tự nướng, tự dọn dẹp.
+
+- **IaaS (Infrastructure as a Service)**: Bạn thuê nhà bếp và lò nướng. Bạn vẫn tự mua bột và làm bánh.  
+  *Ví dụ: AWS EC2, DigitalOcean*
+
+- **PaaS (Platform as a Service)**: Bạn mua đế bánh làm sẵn. Bạn chỉ việc rắc topping (code) lên và nướng.  
+  *Ví dụ: Heroku, Google App Engine*
+
+- **SaaS (Software as a Service)**: Bạn đến nhà hàng Pizza. Bạn chỉ việc gọi món và ăn.  
+  *Ví dụ: Gmail, Salesforce, Dropbox*
+
+## Tại sao Data Analyst cần quan tâm sự phân biệt này?
+
+Vì **mô hình quyết định dữ liệu bạn có**:
+
+1. **SaaS**: Bạn có quyền truy cập vào **Behavioral Data** (Dữ liệu hành vi). Bạn biết khách hàng click vào đâu, dùng tính năng nào mỗi ngày.
+
+2. **On-Premise**: Bạn thường bị "mù" về cách khách hàng sử dụng sản phẩm sau khi bán xong (trừ khi có cơ chế telemetry đặc biệt).
+
+---
+
+::: {.callout-tip}
+## Tài liệu tham khảo
+
+Để tìm hiểu sâu hơn về các mô hình kinh doanh SaaS, xem thêm:
+
+- [Business Model Document](business-model.html) - Phân loại chi tiết các mô hình SaaS
+- [SaaS Metrics Guide](https://www.forentrepreneurs.com/saas-metrics-2/) - David Skok's classic reference
+:::
+
+
+## Khám phá Bản đồ SaaS theo từng Chiều {#saas-landscape}
+
 Ở vai trò của 1 nhà quản lý, hoặc 1 data analyst, để biết được những chỉ số nào quan trọng cần theo dõi để đánh giá hiệu quả kinh doanh của công ty, thì bạn phải biết công ty mình thuộc loại nào trong những loại sau.
 
 ```{mermaid}
 %%| label: fig-saas-mindmap
 %%| fig-cap: "4 cách phân loại của mô hình kinh doanh SaaS"
+%%| fig-width: 10
+%%| fig-height: 8
+
 mindmap
-  root((SaaS Model))
-    (1. Bán hàng & GTM)
-      Product-Led
-      Sales-Led
-      Marketing-Led
-    (2. Chiến lược Tăng trưởng)
-      Viral Loops
-      Paid Acquisition
-      Partnerships
-    (3. Định giá & Doanh thu)
+  root((SaaS Business Model))
+    Bán hàng & Go-to-Market
+      Self-Service
+      Transactional
+      Enterprise
+    Chiến lược Tăng trưởng
+      Product-Led Growth
+      Sales-Led Growth
+      Marketing-Led Growth
+      Hybrid Motion
+    Mô hình Định giá
       Freemium
-      Subscription
+      Per-User Seat-Based
       Usage-Based
-    (4. Định hướng Thị trường)
-      Horizontal
-      Vertical
+      Tiered Packages
+      Flat-Rate
+      Transactional
+      Hybrid Pricing
+    Định hướng Thị trường
+      Horizontal SaaS
+      Vertical SaaS
 ```
-
-## Khám phá Bản đồ SaaS theo từng Chiều {#saas-landscape}
-
-Chọn một cách phân loại để xem các công ty SaaS được định vị như thế nào:
 
 ```{ojs}
 //| echo: false

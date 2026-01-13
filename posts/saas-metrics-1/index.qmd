@@ -71,12 +71,13 @@ Vì **mô hình quyết định dữ liệu bạn có**:
 
 Để tìm hiểu sâu hơn về các mô hình kinh doanh SaaS, xem thêm:
 
-- [Business Model Document](business-model.html) - Phân loại chi tiết các mô hình SaaS
-- [SaaS Metrics Guide](https://www.forentrepreneurs.com/saas-metrics-2/) - David Skok's classic reference
+- [Định nghĩa SaaS của NIST](https://nvlpubs.nist.gov/nistpubs/Legacy/SP/nistspecialpublication800-145.pdf) - Thế nào là SaaS
+- [Saleforce articles](https://www.salesforce.com/saas/) - What is SaaS? Software as a Service Defined
+- [Phân biệt IaaS, SaaS, PaaS](https://www.ibm.com/think/topics/iaas-paas-saas) - IBM document
 :::
 
 
-## Khám phá Bản đồ SaaS theo từng Chiều {#saas-landscape}
+## Phân loại SaaS {#saas-landscape}
 
 Ở vai trò của 1 nhà quản lý, hoặc 1 data analyst, để biết được những chỉ số nào quan trọng cần theo dõi để đánh giá hiệu quả kinh doanh của công ty, thì bạn phải biết công ty mình thuộc loại nào trong những loại sau.
 
@@ -492,7 +493,12 @@ Xu hướng hiện nay là Product-led cho thu hút khách hàng và Sales-led c
 
 Cách bạn tính phí khách hàng cho phần mềm.
 
-> **Nguồn tham khảo:** OpenView, Codica, G2.
+> **Nguồn tham khảo và Tài liệu chuyên sâu:**
+> 
+> * **[OpenView - Usage-Based Pricing](https://openviewpartners.com/usage-based-pricing/)**: Quỹ đầu tư mạo hiểm (VC) đã định hình và phổ cập khái niệm "Product-Led Growth". OpenView là tác giả của cuốn "Usage-Based Pricing Playbook" - tài liệu kinh điển được coi là sách giáo khoa cho các công ty SaaS hiện đại muốn chuyển dịch sang mô hình định giá theo mức tiêu thụ (Pay-as-you-go).  
+> * **[Codica - SaaS Business Model](https://www.codica.com/blog/saas-business-model/)**: Đơn vị tư vấn và phát triển phần mềm chuyên sâu cho các Startup. Các tài liệu của Codica cung cấp góc nhìn thực chiến (builder's perspective), giúp phân tích ưu/nhược điểm kỹ thuật của từng mô hình doanh thu và cách lựa chọn chiến lược giá phù hợp ngay từ giai đoạn xây dựng sản phẩm.  
+> * **[G2 - SaaS Pricing Strategy](https://learn.g2.com/product-led-saas-pricing)**: Sàn thương mại và đánh giá phần mềm lớn nhất thế giới. Dữ liệu của G2 phản ánh "tiếng nói thị trường" dựa trên hàng triệu đánh giá từ người dùng thật, giúp Data Analyst nắm bắt được các xu hướng định giá đang thịnh hành và được khách hàng chấp nhận rộng rãi nhất.  
+
 
 | Mô hình | Đặc điểm | Ví dụ điển hình |
 | :--- | :--- | :--- |
@@ -507,7 +513,9 @@ Cách bạn tính phí khách hàng cho phần mềm.
 
 *(Market Focus and Industry Approach)*
 
-> **Nguồn tham khảo:** FLG Partners.
+> **Nguồn tham khảo và Tài liệu chuyên sâu:**  
+>  
+> * **[FLG Partners - Horizontal vs Vertical SaaS](https://flgpartners.com/saas-industry-centric-business-models-horizontal-vertical/)**: Một trong những công ty tư vấn Giám đốc Tài chính (CFO) hàng đầu tại Thung lũng Silicon, chuyên hỗ trợ các startup trong giai đoạn IPO và M&A. Góc nhìn của FLG Partners đặc biệt giá trị vì họ không chỉ phân loại mô hình, mà còn chỉ ra sự khác biệt cốt yếu trong cấu trúc tài chính, chi phí bán hàng (CAC) và tiềm năng lợi nhuận giữa SaaS Chiều ngang (Horizontal) và SaaS Chiều dọc (Vertical).  
 
 | Loại hình | Đặc điểm | Ví dụ điển hình |
 | :--- | :--- | :--- |
@@ -521,8 +529,6 @@ Ngoài những cách phân loại này, có thể phân loại theo những các
 ### 1. Phân Khúc Khách Hàng Mục Tiêu
 
 *(Target Customer Segment)*
-
-> **Nguồn tham khảo:** Stripe Atlas, The CFO Club.
 
 * **B2C (Consumer):** Cá nhân. Giá thấp, số lượng lớn. (Netflix, Canva).
 * **B2B SMB (Small Biz):** 1-100 nhân viên. (QuickBooks, Mailchimp).
@@ -556,4 +562,12 @@ Chức năng chính và giải pháp mà phần mềm cung cấp.
 2. **Kinh tế đơn vị (Unit Economics):** Cách bạn phân loại công ty quyết định cấu trúc chi phí (CAC) và giá trị vòng đời (LTV).
 3. **Sự tiến hóa:** Các công ty thường bắt đầu với Self-Service và chuyển dần sang Enterprise khi trưởng thành.
 4. **Sự phù hợp của mô hình định giá:** Phải dựa trên "Value Metric" - cách mà khách hàng nhận được giá trị thực sự từ sản phẩm.
+:::
+
+---
+
+## Next step
+
+::: {.callout-tip}
+Bạn xác định công ty của mình đang có mô hình như thế nào và từ đó tìm ra frameword phân tích phù hợp trong phần 2.
 :::

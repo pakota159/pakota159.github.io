@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Cuong Pham">
+<meta name="dcterms.date" content="2026-01-12">
+<meta name="description" content="Các chỉ số cho SaaS">
 
-<title>Data for Profit – Cuong Pham</title>
+<title>SaaS Metrics that actually make sense - Part 2 – Cuong Pham</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,30 +23,63 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./img/favicon.png" rel="icon" type="image/png">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-8ebfbabd275cff996c9318031f1d1737.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-5034ea2f0b6f7aaf68ffad7b50598023.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../img/favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-8ebfbabd275cff996c9318031f1d1737.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-5034ea2f0b6f7aaf68ffad7b50598023.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -71,35 +107,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-subtitle','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-subtitle","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 <style>html{ scroll-behavior: smooth; }</style>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
@@ -141,7 +148,7 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Cuong Pham</span>
     </a>
   </div>
@@ -152,7 +159,7 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="../../index.html"> 
 <span class="menu-text">HOME</span></a>
   </li>  
   <li class="nav-item compact">
@@ -176,7 +183,21 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#layer-1-universal-saas-metrics" id="toc-layer-1-universal-saas-metrics" class="nav-link active" data-scroll-target="#layer-1-universal-saas-metrics">Layer 1: Universal SaaS Metrics</a>
+  <ul class="collapse">
+  <li><a href="#định-nghĩa-chuẩn-the-definition" id="toc-định-nghĩa-chuẩn-the-definition" class="nav-link" data-scroll-target="#định-nghĩa-chuẩn-the-definition">1. Định nghĩa chuẩn (The Definition)</a></li>
+  <li><a href="#công-thức-tính-cách-xử-lý-dữ-liệu" id="toc-công-thức-tính-cách-xử-lý-dữ-liệu" class="nav-link" data-scroll-target="#công-thức-tính-cách-xử-lý-dữ-liệu">2. Công thức tính &amp; Cách xử lý dữ liệu</a></li>
+  <li><a href="#benchmark-so-sánh-sức-khỏe-doanh-nghiệp" id="toc-benchmark-so-sánh-sức-khỏe-doanh-nghiệp" class="nav-link" data-scroll-target="#benchmark-so-sánh-sức-khỏe-doanh-nghiệp">3. Benchmark: So sánh “Sức khỏe” doanh nghiệp</a></li>
+  </ul></li>
+  <li><a href="#layer-2-business-model-specific-metrics" id="toc-layer-2-business-model-specific-metrics" class="nav-link" data-scroll-target="#layer-2-business-model-specific-metrics">Layer 2: Business Model-Specific Metrics</a></li>
+  <li><a href="#layer-3-product-oriented-metrics" id="toc-layer-3-product-oriented-metrics" class="nav-link" data-scroll-target="#layer-3-product-oriented-metrics">Layer 3: Product Oriented Metrics</a></li>
+  <li><a href="#layer-4-operational-oriented-metrics" id="toc-layer-4-operational-oriented-metrics" class="nav-link" data-scroll-target="#layer-4-operational-oriented-metrics">Layer 4: Operational Oriented Metrics</a></li>
+  </ul>
+</nav>
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
@@ -187,15 +208,38 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Data for Profit</h1>
-<p class="subtitle lead">Notes on data science, programming, and business</p>
-</div>
+<h1 class="title">SaaS Metrics that actually make sense - Part 2</h1>
+<p class="subtitle lead">Đầu tư vào SaaS là ngon luôn? Cùng tìm hiểu những mô hình kinh doanh SaaS và cách đo đạc hiệu quả</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">SaaS</div>
+    <div class="quarto-category">Business Model</div>
+    <div class="quarto-category">Strategy</div>
+    <div class="quarto-category">Startup</div>
+  </div>
+  </div>
 
+<div>
+  <div class="description">
+    Các chỉ số cho SaaS
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Cuong Pham </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">January 12, 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -205,323 +249,150 @@ window.Quarto = {
 </header>
 
 
+<blockquote class="blockquote">
+<p>Từ nhiều nguồn tài liệu tham khảo, cùng kinh nghiệm trong những năm làm phân tích dữ liệu, tôi tổng hợp thành 1 frameword tổng quan có thể áp dụng cho các mô hình SaaS</p>
+</blockquote>
+<iframe id="saas-metrics-frame" src="saas_metrics_chart.html" width="100%" scrolling="no" style="border:none; overflow:hidden;"></iframe>
+
+<script>
+  window.addEventListener("message", function(e) {
+    // Check if the message contains our height data
+    if (e.data && e.data.frameHeight) {
+      const iframe = document.getElementById("saas-metrics-frame");
+      if (iframe) {
+        // Apply the new height
+        iframe.style.height = e.data.frameHeight + "px";
+      }
+    }
+  });
+</script>
+<section id="layer-1-universal-saas-metrics" class="level2">
+<h2 class="anchored" data-anchor-id="layer-1-universal-saas-metrics">Layer 1: Universal SaaS Metrics</h2>
+<p>Nếu công ty SaaS là một cơ thể sống, thì <strong>MRR (Monthly Recurring Revenue)</strong> chính là nhịp tim. Nó cho biết cơ thể có đang sống khỏe mạnh, ổn định và bơm máu đều đặn hay không.</p>
+<p>Khác với các mô hình bán lẻ (E-commerce) nơi doanh thu trồi sụt theo mùa hoặc các đợt khuyến mãi, điểm quan trọng của SaaS nằm ở sự <strong>“Định kỳ” (Recurring)</strong>.</p>
+<section id="định-nghĩa-chuẩn-the-definition" class="level3">
+<h3 class="anchored" data-anchor-id="định-nghĩa-chuẩn-the-definition">1. Định nghĩa chuẩn (The Definition)</h3>
+<p>Là một Data Analyst, bạn cần phân biệt rạch ròi các khái niệm sau để tránh làm báo cáo sai lệch:</p>
+<ul>
+<li><strong>MRR (Monthly Recurring Revenue):</strong> Tổng doanh thu <em>dự kiến</em> lặp lại hàng tháng từ tất cả khách hàng đang active.</li>
+<li><strong>ARR (Annual Recurring Revenue):</strong> Đơn giản là <span class="math inline">\(MRR \times 12\)</span>. Chỉ số này thường dùng cho các công ty B2B Enterprise ký hợp đồng theo năm.</li>
+</ul>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>⚠️ Sai lầm “chết người” của Data Analyst
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>MRR KHÔNG PHẢI là dòng tiền (Cash Flow) hay Doanh thu ghi nhận (GAAP Revenue).</strong></p>
+<p>Ví dụ: Nếu khách hàng trả trước 12 tháng (<strong>120 triệu VND</strong>) vào tháng 1: 1. <strong>Cash Flow (Tháng 1):</strong> 120 triệu. 2. <strong>GAAP Revenue (Tháng 1):</strong> 10 triệu (ghi nhận dần). 3. <strong>MRR (Tháng 1):</strong> <strong>10 triệu.</strong></p>
+<p>👉 <strong>Tại sao?</strong> MRR sinh ra để đo lường <strong>tốc độ tăng trưởng thực tế</strong> và <strong>quy mô</strong> của sản phẩm, không phải để đo lượng tiền mặt trong két sắt.</p>
+</div>
+</div>
+</section>
+<section id="công-thức-tính-cách-xử-lý-dữ-liệu" class="level3">
+<h3 class="anchored" data-anchor-id="công-thức-tính-cách-xử-lý-dữ-liệu">2. Công thức tính &amp; Cách xử lý dữ liệu</h3>
+<p>Là một DA, bạn không tính thủ công bằng Excel. Bạn cần tư duy theo công thức toán học để viết SQL query.</p>
+<section id="công-thức-cơ-bản" class="level4">
+<h4 class="anchored" data-anchor-id="công-thức-cơ-bản">Công thức cơ bản</h4>
+<p>Tổng quát nhất, MRR được tính bằng tổng phí thuê bao của toàn bộ khách hàng đang hoạt động:</p>
+<p><span class="math display">\[
+MRR = \sum_{i=1}^{n} (\text{Active User}_i \times \text{Monthly Fee}_i)
+\]</span></p>
+</section>
+<section id="thành-phần-của-mrr-the-mrr-equation" class="level4">
+<h4 class="anchored" data-anchor-id="thành-phần-của-mrr-the-mrr-equation">Thành phần của MRR (The MRR Equation)</h4>
+<p>Để trả lời câu hỏi <em>“Tại sao tháng này MRR tăng/giảm?”</em>, bạn cần tách MRR thành 4 dòng chảy (Components):</p>
+<p><span class="math display">\[
+Net \ New \ MRR = (\underbrace{New + Expansion}_{\text{Growth}}) - (\underbrace{Contraction + Churned}_{\text{Loss}})
+\]</span></p>
+<p>Trong đó: 1. <strong>New MRR:</strong> Từ khách hàng mới tinh (New Logos). 2. <strong>Expansion MRR:</strong> Từ khách cũ nâng cấp gói (Upsell) hoặc mua thêm user (Cross-sell). 3. <strong>Contraction MRR:</strong> Khách cũ hạ cấp gói (Downgrade). 4. <strong>Churned MRR:</strong> Khách hàng hủy hoàn toàn.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>💡 SQL Logic cho Data Analyst
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Khi viết query tính MRR, hãy nhớ <strong>loại bỏ (exclude)</strong> tuyệt đối các khoản phí One-time: * ❌ Phí cài đặt (Setup fees) * ❌ Phí tư vấn/đào tạo (Consulting fees) * ❌ Phí phần cứng (Hardware - nếu có)</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    DATE_TRUNC(<span class="st">'month'</span>, transaction_date) <span class="kw">as</span> <span class="dt">month</span>,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">SUM</span>(amount) <span class="kw">as</span> mrr</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> subscriptions</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    status <span class="op">=</span> <span class="st">'active'</span> </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">AND</span> <span class="kw">type</span> <span class="op">=</span> <span class="st">'recurring'</span> <span class="co">-- Quan trọng!</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> <span class="dv">1</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="kw">ORDER</span> <span class="kw">BY</span> <span class="dv">1</span> <span class="kw">DESC</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</div>
+</section>
+</section>
+<section id="benchmark-so-sánh-sức-khỏe-doanh-nghiệp" class="level3">
+<h3 class="anchored" data-anchor-id="benchmark-so-sánh-sức-khỏe-doanh-nghiệp">3. Benchmark: So sánh “Sức khỏe” doanh nghiệp</h3>
+<p>Đừng so sánh con cá với con chim. Benchmark của SaaS phụ thuộc rất lớn vào khu vực địa lý và đặc thù thị trường. Dưới đây là bức tranh so sánh thú vị giữa các thị trường:</p>
+<section id="us-global-tiêu-chuẩn-vàng" class="level4">
+<h4 class="anchored" data-anchor-id="us-global-tiêu-chuẩn-vàng">🇺🇸 US / Global (Tiêu chuẩn Vàng)</h4>
+<p>Thị trường Mỹ coi trọng tốc độ tăng trưởng (Growth Rate) hơn là lợi nhuận ở giai đoạn đầu.</p>
+<ul>
+<li><strong>Mô hình T2D3:</strong> Triple, Triple, Double, Double, Double (Nhân 3 doanh thu trong 2 năm đầu, nhân 2 trong 3 năm tiếp theo).</li>
+<li><strong>$1M ARR:</strong> Chứng tỏ bạn đã tìm thấy <strong>Product-Market Fit (PMF)</strong>.</li>
+<li><strong>$10M ARR:</strong> Bạn là Scale-up, sẵn sàng cho Series B/C.</li>
+<li><strong>Top Tier:</strong> Các công ty top đầu thường tăng trưởng <strong>100-200% mỗi năm</strong> trong giai đoạn $1M - $10M ARR.</li>
+</ul>
+</section>
+<section id="china-market-hệ-sinh-thái-rồng" class="level4">
+<h4 class="anchored" data-anchor-id="china-market-hệ-sinh-thái-rồng">🇨🇳 China Market (Hệ sinh thái “Rồng”)</h4>
+<p>Trung Quốc là một ngoại lệ của thế giới SaaS với văn hóa kinh doanh khác biệt.</p>
+<ul>
+<li><strong>SaaS-enabled Service:</strong> Khách hàng Trung Quốc (đặc biệt là SME) có thói quen “trả tiền một lần” (One-off) và thích dịch vụ trọn gói hơn là phần mềm thuần túy.</li>
+<li><strong>Willingness to Pay (WTP):</strong> Thấp hơn US khoảng <strong>4-5 lần</strong> với cùng một loại sản phẩm.</li>
+<li><strong>Retention thấp:</strong> Do sự cạnh tranh khốc liệt và thói quen thay đổi nhà cung cấp nhanh chóng.</li>
+<li><strong>Chiến lược:</strong> Các công ty SaaS thường phải tích hợp vào các “Super App” như DingTalk (Alibaba) hay WeCom (Tencent) để tồn tại.</li>
+</ul>
+</section>
+<section id="vietnam-market-thị-trường-mới-nổi" class="level4">
+<h4 class="anchored" data-anchor-id="vietnam-market-thị-trường-mới-nổi">🇻🇳 Vietnam Market (Thị trường mới nổi)</h4>
+<p>Việt Nam đang trong giai đoạn chuyển dịch thú vị, nhưng có những “nỗi đau” (Pain points) riêng mà DA cần hiểu khi nhìn vào số liệu.</p>
+<section id="phân-khúc-sme-micro-saas-kiotviet-sapo-base" class="level5">
+<h5 class="anchored" data-anchor-id="phân-khúc-sme-micro-saas-kiotviet-sapo-base">1. Phân khúc SME &amp; Micro-SaaS (KiotViet, Sapo, Base…)</h5>
+<ul>
+<li><strong>ARPU (Giá trung bình):</strong> Rất thấp. Thường dao động từ <strong>200.000đ - 1.000.000đ / tháng</strong>.</li>
+<li><strong>The Volume Game:</strong> Đây là bài toán lấy số lượng bù chất lượng.</li>
+<li>Ví dụ: Để đạt <strong>$1M ARR</strong> (~25 tỷ VND/năm) tại Việt Nam với ARPU 500k/tháng.</li>
+<li>Bạn cần: <span class="math display">\[ \frac{25,000,000,000}{500,000 \times 12} \approx 4,166 \text{ khách hàng trả phí} \]</span></li>
+<li><em>Insight:</em> Quản lý 4.000 khách hàng đòi hỏi đội ngũ Support và Sales vận hành khổng lồ, làm giảm Gross Margin.</li>
+</ul>
+</section>
+<section id="phân-khúc-enterprise" class="level5">
+<h5 class="anchored" data-anchor-id="phân-khúc-enterprise">2. Phân khúc Enterprise</h5>
+<ul>
+<li><strong>Tư duy On-premise:</strong> Các tập đoàn lớn vẫn thích “mua đứt” hoặc yêu cầu chỉnh sửa (Customize) rất sâu.</li>
+<li><strong>Biến động MRR:</strong> MRR thường không mượt mà (smooth) như US vì phụ thuộc vào các hợp đồng dự án lớn (Lumpy Revenue).</li>
+</ul>
+</section>
+</section>
+</section>
+</section>
+<section id="layer-2-business-model-specific-metrics" class="level2">
+<h2 class="anchored" data-anchor-id="layer-2-business-model-specific-metrics">Layer 2: Business Model-Specific Metrics</h2>
+</section>
+<section id="layer-3-product-oriented-metrics" class="level2">
+<h2 class="anchored" data-anchor-id="layer-3-product-oriented-metrics">Layer 3: Product Oriented Metrics</h2>
+</section>
+<section id="layer-4-operational-oriented-metrics" class="level2">
+<h2 class="anchored" data-anchor-id="layer-4-operational-oriented-metrics">Layer 4: Operational Oriented Metrics</h2>
 
 
+</section>
 
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="U2FhUyUyQ0J1c2luZXNzJTIwTW9kZWwlMkNTdHJhdGVneSUyQ1N0YXJ0dXA=" data-listing-date-sort="1768150800000" data-listing-file-modified-sort="1768294595573" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1001">
-<div class="thumbnail"><a href="./posts/saas-metrics-2/index.html" class="no-external">
-
-<img loading="lazy" src="./img/saas-metrics/saas-framework.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/saas-metrics-2/index.html" class="no-external">SaaS Metrics that actually make sense - Part 2</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/saas-metrics-2/index.html" class="no-external">Đầu tư vào SaaS là ngon luôn? Cùng tìm hiểu những mô hình kinh doanh SaaS và cách đo đạc hiệu quả</a>
-</div>
-<div class="delink listing-description"><a href="./posts/saas-metrics-2/index.html" class="no-external">
-<p>Các chỉ số cho SaaS</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/saas-metrics-2/index.html" class="no-external">
-<div class="listing-date">
-Jan 12, 2026
-</div>
-<div class="listing-author">
-Cuong Pham
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="U2FhUyUyQ0J1c2luZXNzJTIwTW9kZWwlMkNTdHJhdGVneSUyQ1N0YXJ0dXA=" data-listing-date-sort="1767978000000" data-listing-file-modified-sort="1768288144436" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="24" data-listing-word-count-sort="4793">
-<div class="thumbnail"><a href="./posts/saas-metrics-1/index.html" class="no-external">
-
-<img loading="lazy" src="./img/saas-metrics/saas-framework.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/saas-metrics-1/index.html" class="no-external">SaaS Metrics that actually make sense - Part 1</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/saas-metrics-1/index.html" class="no-external">Đầu tư vào SaaS là ngon luôn? Cùng tìm hiểu những mô hình kinh doanh SaaS và cách đo đạc hiệu quả</a>
-</div>
-<div class="delink listing-description"><a href="./posts/saas-metrics-1/index.html" class="no-external">
-<p>Phân loại các mô hình kinh doanh SaaS</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/saas-metrics-1/index.html" class="no-external">
-<div class="listing-date">
-Jan 10, 2026
-</div>
-<div class="listing-author">
-Cuong Pham
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="ZGF0YSUyQ2FiLXRlc3RpbmclMkNzdGF0aXN0aWNz" data-listing-date-sort="1599670800000" data-listing-file-modified-sort="1768032186714" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1134">
-<div class="thumbnail"><a href="./posts/ab-testing/index.html" class="no-external">
-
-<img loading="lazy" src="./img/abtesting/bg.jpeg" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/ab-testing/index.html" class="no-external">(Hầu như) Tất cả những thứ bạn cần biết về A/B Testing</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/ab-testing/index.html" class="no-external">Xác suất thống kê ứng dụng vào sản phẩm kinh doanh của bạn như nào</a>
-</div>
-<div class="delink listing-description"><a href="./posts/ab-testing/index.html" class="no-external">
-Nhờ các góp ý từ bài viết trước, trong bài này mình muốn đề cập đến đối tượng và giới hạn nội dung của bài viết này:
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/ab-testing/index.html" class="no-external">
-<div class="listing-date">
-Sep 10, 2020
-</div>
-<div class="listing-author">
-Cuong Pham
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-categories="bWV0cmljcyUyQ2RhdGElMkNlY29tbWVyY2U=" data-listing-date-sort="1599584400000" data-listing-file-modified-sort="1768032043959" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12" data-listing-word-count-sort="2249">
-<div class="thumbnail"><a href="./posts/ecom-metrics/index.html" class="no-external">
-
-<img loading="lazy" src="./img/ecommerce/bg.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/ecom-metrics/index.html" class="no-external">Các chỉ số quan trọng trong E-commerce</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/ecom-metrics/index.html" class="no-external">Các chỉ số trong Ecommerce</a>
-</div>
-<div class="delink listing-description"><a href="./posts/ecom-metrics/index.html" class="no-external">
-Theo nhiều người đánh giá, bước đầu tiên cũng là bước quan trọng nhất trong phân tích dữ liệu (data analysis) là <strong>đặt câu hỏi</strong>. Chúng ta cần biết điều gì, cần đánh giá những…
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/ecom-metrics/index.html" class="no-external">
-<div class="listing-date">
-Sep 9, 2020
-</div>
-<div class="listing-author">
-Cuong Pham
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-categories="c3FsJTJDZGF0YSUyQ2FuYWx5dGljcw==" data-listing-date-sort="1597597200000" data-listing-file-modified-sort="1768031583028" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="378">
-<div class="thumbnail"><a href="./posts/cohort-analysis/index.html" class="no-external">
-
-<img loading="lazy" src="./img/cohort/bg.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/cohort-analysis/index.html" class="no-external">Introduction to Cohort Analysis</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/cohort-analysis/index.html" class="no-external">How cohort analysis helps to improve retention</a>
-</div>
-<div class="delink listing-description"><a href="./posts/cohort-analysis/index.html" class="no-external">
-The first data analysis technique I have ever learned is <em>Cohort analysis</em>. So what is it and what is it used for?
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/cohort-analysis/index.html" class="no-external">
-<div class="listing-date">
-Aug 17, 2020
-</div>
-<div class="listing-author">
-Cuong Pham
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-categories="c3FsJTJDZGF0YSUyQ2luZGV4" data-listing-date-sort="1597078800000" data-listing-file-modified-sort="1768031453789" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1382">
-<div class="thumbnail"><a href="./posts/index-and-query/index.html" class="no-external">
-
-<img loading="lazy" src="./img/sql/bg.jpg" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/index-and-query/index.html" class="no-external">Understanding Database Indexes</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/index-and-query/index.html" class="no-external">Index makes query fast - a simple explanation</a>
-</div>
-<div class="delink listing-description"><a href="./posts/index-and-query/index.html" class="no-external">
-Well, most developers or people who work with data know that “Index makes query fast” and they also understand why. But for people who don’t really know about indexing, I…
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/index-and-query/index.html" class="no-external">
-<div class="listing-date">
-Aug 11, 2020
-</div>
-<div class="listing-author">
-Cuong Pham
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="6" data-categories="c3FsJTJDZGF0YQ==" data-listing-date-sort="1596906000000" data-listing-file-modified-sort="1768031231775" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1607">
-<div class="thumbnail"><a href="./posts/sql-relational-db/index.html" class="no-external">
-
-<img loading="lazy" src="./img/sql/bg.jpg" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/sql-relational-db/index.html" class="no-external">Understanding SQL through Relational Algebra</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/sql-relational-db/index.html" class="no-external">SQL is based on relational algebra</a>
-</div>
-<div class="delink listing-description"><a href="./posts/sql-relational-db/index.html" class="no-external">
-When studying SQL, a lot of us start with some statements like <em>Select</em>, <em>FROM</em>, <em>WHERE</em>, but it turns out SQL is more than just that. The principle of the query language is based…
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/sql-relational-db/index.html" class="no-external">
-<div class="listing-date">
-Aug 9, 2020
-</div>
-<div class="listing-author">
-Cuong Pham
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="7" data-categories="cmV2aWV3JTJDY3MlMkNqYXZh" data-listing-date-sort="1588698000000" data-listing-file-modified-sort="1768031250169" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1127">
-<div class="thumbnail"><a href="./posts/review-cs-61b/index.html" class="no-external">
-
-<img loading="lazy" src="./img/note/sky.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/review-cs-61b/index.html" class="no-external">CS 61B Berkeley - Java and Data Structures Review</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/review-cs-61b/index.html" class="no-external">My review for CS 61B Berkeley</a>
-</div>
-<div class="delink listing-description"><a href="./posts/review-cs-61b/index.html" class="no-external">
-The most common way to execute a Java program is to run it through a sequence of two programs. The first is the Java compiler, or <code>javac</code>. The second is the Java interpreter…<code></code>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/review-cs-61b/index.html" class="no-external">
-<div class="listing-date">
-May 6, 2020
-</div>
-<div class="listing-author">
-Cuong Pham
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="8" data-categories="Y3MlMkNsZWFybmluZyUyQ2RhdGE=" data-listing-date-sort="1565802000000" data-listing-file-modified-sort="1768030982641" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1716">
-<div class="thumbnail"><a href="./posts/cs-learning-guide/index.html" class="no-external">
-
-<img loading="lazy" src="./img/note/bg.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/cs-learning-guide/index.html" class="no-external">How to self-study Computer Science and Data Science</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/cs-learning-guide/index.html" class="no-external">The Lord of self-studying: The Fellowship of studying</a>
-</div>
-<div class="delink listing-description"><a href="./posts/cs-learning-guide/index.html" class="no-external">
-Today, a friend asked me how to study computer science well — a popular question that many others wonder too. Thus, I decided to write an <strong>all-in-one note</strong> to explain in…
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/cs-learning-guide/index.html" class="no-external">
-<div class="listing-date">
-Aug 15, 2019
-</div>
-<div class="listing-author">
-Cuong Pham
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="9" data-categories="Y3MlMkNub2RlanMlMkNkYXRhJTJDc3BvdGlmeQ==" data-listing-date-sort="1565197200000" data-listing-file-modified-sort="1768030494205" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16" data-listing-word-count-sort="3140">
-<div class="thumbnail"><a href="./posts/using-spotify-api-to-retrieve-data/index.html" class="no-external">
-
-<img loading="lazy" src="./img/spotify/bg.jpg" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/using-spotify-api-to-retrieve-data/index.html" class="no-external">Working with Spotify API to collect music data</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/using-spotify-api-to-retrieve-data/index.html" class="no-external">Music is love, data is life</a>
-</div>
-<div class="delink listing-description"><a href="./posts/using-spotify-api-to-retrieve-data/index.html" class="no-external">
-Recently, I am working on a personal project related to analysing music taste of people and it requires retrieving data from some music sources like Spotify. And fortunely…
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/using-spotify-api-to-retrieve-data/index.html" class="no-external">
-<div class="listing-date">
-Aug 8, 2019
-</div>
-<div class="listing-author">
-Cuong Pham
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="10" data-categories="Y3MlMkNzY3JhcHklMkNzcGxhc2glMkNweXRob24lMkNkYXRh" data-listing-date-sort="1562518800000" data-listing-file-modified-sort="1768029296050" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1658">
-<div class="thumbnail"><a href="./posts/how-i-use-scrapy-to-collect-the-data-i-need/index.html" class="no-external">
-
-<img loading="lazy" src="./img/scrape/bg.jpg" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/how-i-use-scrapy-to-collect-the-data-i-need/index.html" class="no-external">How I use scrapy to collect the data I need</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/how-i-use-scrapy-to-collect-the-data-i-need/index.html" class="no-external">The Good, The Bad and The Data</a>
-</div>
-<div class="delink listing-description"><a href="./posts/how-i-use-scrapy-to-collect-the-data-i-need/index.html" class="no-external">
-About 4 years ago, I encountered a huge struggle looking for a suitable room for rent. Information about renting house/room is vast and it’s really hard to filter useful data.
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/how-i-use-scrapy-to-collect-the-data-i-need/index.html" class="no-external">
-<div class="listing-date">
-Jul 8, 2019
-</div>
-<div class="listing-author">
-Cuong Pham
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -969,5 +840,5 @@ Cuong Pham
 
 
 
-<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

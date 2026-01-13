@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaaS Metrics Framework</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body { margin: 0; padding: 0; overflow: hidden; } /* Hide scrollbar inside iframe */
+        #unified-metrics-root { padding: 1rem; } /* Add padding inside the container instead */
+    </style>
+</head>
+<body>
+
+    <div id="unified-metrics-root"></div>
+
+    <script type="text/babel">
+      const { useState } = React;
+
+      const UnifiedMetricsFramework = () => {
+        const [activeLayer, setActiveLayer] = useState(1);
+        const [selectedGTM, setSelectedGTM] = useState(null);
+        const [selectedGrowth, setSelectedGrowth] = useState(null);
+        const [selectedPricing, setSelectedPricing] = useState(null);
+        const [selectedMarket, setSelectedMarket] = useState(null);
+        const [productView, setProductView] = useState('frameworks'); 
+        const [activePlatform, setActivePlatform] = useState('ga4');
+
+        // --- FIXED DATA: URLs are now clean strings, not Markdown ---
+        const layerReferences = {
+          1: [
+            { title: "SaaS Metrics 2.0", source: "David Skok", url: "https://www.forentrepreneurs.com/saas-metrics-2/" },
+            { title: "The Rule of 40", source: "Brad Feld", url: "https://feld.com/archives/2015/02/rule-40-healthy-saas-company.html" },
+            { title: "KeyBanc SaaS Survey", source: "KeyBanc", url: "https://www.key.com/businesses-institutions/industry-expertise/technology-group/saas-survey.html" }
+          ],
+          2: [
+            { title: "Usage-Based Pricing", source: "OpenView", url: "https://openviewpartners.com/usage-based-pricing/" },
+            { title: "PLG Index", source: "OpenView", url: "https://openviewpartners.com/plg/" },
+            { title: "Enterprise GTM", source: "a16z", url: "https://a16z.com/growth/sales/" },
+            { title: "Marketplace Metrics", source: "a16z", url: "https://a16z.com/marketplace-metrics/" }
+          ],
+          3: [
+            { title: "HEART Framework", source: "Google", url: "https://library.gv.com/google-heart-framework-b068897040ce" },
+            { title: "AARRR Metrics", source: "Dave McClure", url: "https://500hats.com/startup-metrics-for-pirates-aarrr/" },
+            { title: "North Star", source: "Amplitude", url: "https://amplitude.com/north-star" },
+            { title: "Product Analytics", source: "Mixpanel", url: "https://mixpanel.com/content/guide-to-product-analytics/" }
+          ],
+          4: [
+            { title: "Sales Metrics", source: "HubSpot", url: "https://blog.hubspot.com/sales/sales-metrics" },
+            { title: "Burn Multiple", source: "David Sacks", url: "https://sacks.substack.com/p/the-burn-multiple" },
+            { title: "Customer Health", source: "Totango", url: "https://www.totango.com/blog/customer-health-score" }
+          ]
+        };
+
+        // ... PASTE THE REST OF YOUR REACT COMPONENT LOGIC HERE ...
+        // ... (Keep the render logic exactly as you had it) ...
+        
+        // --- DATA: LAYER 1 UNIVERSAL ---
+        const layer1Metrics = [
+          { name: 'ARR/MRR', formula: 'Sum of recurring revenue' },
+          { name: 'LTV:CAC Ratio', formula: 'LTV / CAC | Target: >3x' },
+          { name: 'CAC Payback', formula: 'CAC / (MRR * GM%) | <12mo' },
+          { name: 'Net Revenue Retention', formula: '(Start + Exp - Churn) / Start | >100%' },
+          { name: 'Gross Revenue Retention', formula: '(Start - Churn) / Start | >85%' },
+          { name: 'Rule of 40', formula: 'Growth% + FCF% | >40%' },
+          { name: 'Gross Margin', formula: '(Rev - COGS) / Rev | 70-80%+' }
+        ];
+
+        // --- DATA: LAYER 2 MODEL ---
+        const gtmOptions = [
+          { id: 'self-service', label: 'Self-Service', acv: '<$5K' },
+          { id: 'transactional', label: 'Transactional', acv: '$5K-$50K' },
+          { id: 'enterprise', label: 'Enterprise', acv: '>$50K' }
+        ];
+        const growthOptions = [
+          { id: 'plg', label: 'Product-Led' },
+          { id: 'slg', label: 'Sales-Led' },
+          { id: 'hybrid', label: 'Hybrid PLG+SLG' }
+        ];
+        const pricingOptions = [
+          { id: 'seat', label: 'Per-Seat/User' },
+          { id: 'usage', label: 'Usage-Based' },
+          { id: 'tiered', label: 'Tiered/Package' },
+          { id: 'hybrid-pricing', label: 'Hybrid (Base+Usage)' }
+        ];
+        const marketOptions = [
+          { id: 'horizontal', label: 'Horizontal SaaS' },
+          { id: 'vertical', label: 'Vertical SaaS' }
+        ];
+
+        const getLayer2Metrics = () => {
+          const metrics = [];
+          // GTM metrics
+          if (selectedGTM === 'self-service') {
+            metrics.push({ name: 'Trial to Paid Conversion', desc: 'Target: 15-25%', cat: 'GTM' });
+            metrics.push({ name: 'Time to Value (TTV)', desc: 'Hours to activation', cat: 'GTM' });
+            metrics.push({ name: 'Viral Coefficient', desc: 'K-factor for referrals', cat: 'GTM' });
+          } else if (selectedGTM === 'transactional') {
+            metrics.push({ name: 'Sales Cycle Length', desc: '30-90 days typical', cat: 'GTM' });
+            metrics.push({ name: 'Win Rate', desc: 'Closed-won / Total opps', cat: 'GTM' });
+            metrics.push({ name: 'ARR per Rep', desc: 'Sales productivity', cat: 'GTM' });
+          } else if (selectedGTM === 'enterprise') {
+            metrics.push({ name: 'ACV', desc: 'Avg contract value', cat: 'GTM' });
+            metrics.push({ name: 'Sales Cycle', desc: '90-180+ days', cat: 'GTM' });
+            metrics.push({ name: 'Expansion Revenue %', desc: 'Upsell/cross-sell', cat: 'GTM' });
+            metrics.push({ name: 'Logo Retention', desc: 'Customer count retention', cat: 'GTM' });
+          }
+          // Growth metrics
+          if (selectedGrowth === 'plg') {
+            metrics.push({ name: 'PQLs', desc: 'Product Qualified Leads', cat: 'Growth' });
+            metrics.push({ name: 'Activation Rate', desc: 'Users hitting key actions', cat: 'Growth' });
+            metrics.push({ name: 'Free to Paid Conversion', desc: 'Freemium upgrade rate', cat: 'Growth' });
+            metrics.push({ name: 'Feature Adoption Rate', desc: 'Sticky feature usage', cat: 'Growth' });
+          } else if (selectedGrowth === 'slg') {
+            metrics.push({ name: 'MQL to SQL Rate', desc: 'Lead qualification', cat: 'Growth' });
+            metrics.push({ name: 'Pipeline Coverage', desc: 'Target: 3-4x quota', cat: 'Growth' });
+            metrics.push({ name: 'Magic Number', desc: 'S&M efficiency (>0.75)', cat: 'Growth' });
+            metrics.push({ name: 'Quota Attainment', desc: '% reps hitting quota', cat: 'Growth' });
+          } else if (selectedGrowth === 'hybrid') {
+            metrics.push({ name: 'PQL to SQL Conversion', desc: 'Product to Sales handoff', cat: 'Growth' });
+            metrics.push({ name: 'Self-Serve Revenue %', desc: 'Channel mix', cat: 'Growth' });
+            metrics.push({ name: 'Land & Expand Rate', desc: 'Small to large growth', cat: 'Growth' });
+            metrics.push({ name: 'Product Usage Score', desc: 'Engagement predictor', cat: 'Growth' });
+          }
+          // Pricing metrics
+          if (selectedPricing === 'seat') {
+            metrics.push({ name: 'Seats per Account', desc: 'Avg users/customer', cat: 'Pricing' });
+            metrics.push({ name: 'Seat Expansion Rate', desc: 'User growth in accounts', cat: 'Pricing' });
+            metrics.push({ name: 'ARPU', desc: 'Revenue per user', cat: 'Pricing' });
+          } else if (selectedPricing === 'usage') {
+            metrics.push({ name: 'Consumption Forecast', desc: 'Predicted vs actual', cat: 'Pricing' });
+            metrics.push({ name: 'Usage Growth Rate', desc: 'MoM consumption increase', cat: 'Pricing' });
+            metrics.push({ name: 'RPO', desc: 'Remaining Performance Obligations', cat: 'Pricing' });
+            metrics.push({ name: 'Dollar-Based Net Expansion', desc: 'Usage-driven growth', cat: 'Pricing' });
+          } else if (selectedPricing === 'tiered') {
+            metrics.push({ name: 'Tier Distribution', desc: '% customers per tier', cat: 'Pricing' });
+            metrics.push({ name: 'Upgrade Rate', desc: 'Movement to higher tiers', cat: 'Pricing' });
+            metrics.push({ name: 'Feature Utilization Gap', desc: 'Unused features by tier', cat: 'Pricing' });
+          } else if (selectedPricing === 'hybrid-pricing') {
+            metrics.push({ name: 'Base vs Variable Split', desc: 'Revenue composition', cat: 'Pricing' });
+            metrics.push({ name: 'Overage Revenue', desc: 'Revenue above base', cat: 'Pricing' });
+            metrics.push({ name: 'Commitment Utilization', desc: '% committed usage consumed', cat: 'Pricing' });
+          }
+          // Market metrics
+          if (selectedMarket === 'vertical') {
+            metrics.push({ name: 'Market Penetration %', desc: 'Share of vertical TAM', cat: 'Market' });
+            metrics.push({ name: 'Product Attach Rate', desc: 'Multi-product adoption', cat: 'Market' });
+            metrics.push({ name: 'Location/Unit Coverage', desc: 'Sites using product', cat: 'Market' });
+            metrics.push({ name: 'ARPA', desc: 'Wallet share captured', cat: 'Market' });
+            metrics.push({ name: 'Embedded Finance Take Rate', desc: 'If fintech layer exists', cat: 'Market' });
+          } else if (selectedMarket === 'horizontal') {
+            metrics.push({ name: 'Industry Mix', desc: 'Revenue by vertical', cat: 'Market' });
+            metrics.push({ name: 'Geographic Expansion', desc: 'Revenue by region', cat: 'Market' });
+            metrics.push({ name: 'Use Case Distribution', desc: 'Product usage patterns', cat: 'Market' });
+          }
+          return metrics;
+        };
+        const layer2Metrics = getLayer2Metrics();
+        const catColors = { GTM: 'bg-blue-100 text-blue-800', Growth: 'bg-green-100 text-green-800', Pricing: 'bg-purple-100 text-purple-800', Market: 'bg-orange-100 text-orange-800' };
+
+        // --- DATA: LAYER 3 PRODUCT (MERGED) ---
+        const productFrameworks = {
+          heart: { name: 'HEART (Google)', dims: ['Happiness', 'Engagement', 'Adoption', 'Retention', 'Task Success'] },
+          aarrr: { name: 'AARRR Pirate', dims: ['Acquisition', 'Activation', 'Retention', 'Revenue', 'Referral'] },
+          northstar: { name: 'North Star', dims: ['North Star Metric', 'Breadth', 'Depth', 'Frequency', 'Efficiency'] },
+          rae: { name: 'RAE (Mixpanel)', dims: ['Reach', 'Activation', 'Engagement'] }
+        };
+
+        const platformFrameworks = {
+          ga4: {
+            name: 'GA4', color: 'bg-orange-500', approach: 'Event-Based Model',
+            desc: 'All interactions as events. Engaged session = >10s, 2+ pages, or conversion.',
+            categories: [
+              { name: 'Users', metrics: ['Total Users', 'New Users', 'Active Users'] },
+              { name: 'Engagement', metrics: ['Engagement Rate', 'Avg Engagement Time', 'Sessions/User'] },
+              { name: 'Events', metrics: ['Event Count', 'Key Events', 'Event Value'] },
+              { name: 'Retention', metrics: ['User Retention', 'Cohort Analysis'] }
+            ]
+          },
+          amplitude: {
+            name: 'Amplitude', color: 'bg-blue-600', approach: 'North Star Framework',
+            desc: 'Single metric capturing customer value. Three games: Attention, Transaction, Productivity.',
+            categories: [
+              { name: 'North Star', metrics: ['North Star Metric', 'Breadth', 'Depth', 'Frequency'] },
+              { name: 'Behavioral', metrics: ['User Paths', 'Retention Curves', 'Stickiness'] },
+              { name: 'Experimentation', metrics: ['A/B Tests', 'Feature Flags', 'Lift %'] }
+            ]
+          },
+          mixpanel: {
+            name: 'Mixpanel', color: 'bg-purple-600', approach: 'RAE Framework',
+            desc: 'Reach -> Activation -> Engagement. Value moment vs value exchange.',
+            categories: [
+              { name: 'RAE', metrics: ['Reach', 'Activation', 'Engagement'] },
+              { name: 'Funnels', metrics: ['Conversion Rate', 'Time to Convert', 'Drop-off'] },
+              { name: 'Retention', metrics: ['Rolling', 'Calendar', 'Frequency', 'Cohorts'] }
+            ]
+          },
+          pendo: {
+            name: 'Pendo', color: 'bg-pink-600', approach: 'Product Experience',
+            desc: 'Analytics + In-app guidance. Analyze -> Guide -> Measure in one platform.',
+            categories: [
+              { name: 'Analytics', metrics: ['Feature Adoption', 'Paths', 'Retention'] },
+              { name: 'Guidance', metrics: ['Guide Completion', 'Walkthrough Success'] },
+              { name: 'Feedback', metrics: ['NPS', 'Surveys', 'Feature Requests'] }
+            ]
+          },
+          posthog: {
+            name: 'PostHog', color: 'bg-blue-500', approach: 'Open Source All-in-One',
+            desc: 'Self-hostable: Analytics + Replay + Flags + A/B + Surveys.',
+            categories: [
+              { name: 'Analytics', metrics: ['Funnels', 'Paths', 'Retention', 'Trends'] },
+              { name: 'Session', metrics: ['Replays', 'Console Logs', 'Errors'] },
+              { name: 'Experiments', metrics: ['Feature Flags', 'A/B Tests', 'Surveys'] }
+            ]
+          }
+        };
+        const currentPlatform = platformFrameworks[activePlatform];
+
+        // --- DATA: LAYER 4 OPERATIONAL ---
+        const operationalMetrics = {
+          funnel: {
+            title: 'Sales Funnel',
+            metrics: ['Visitors', 'Signups/Leads', 'MQLs', 'SQLs/Demos', 'Opportunities', 'Closed-Won'],
+            conversions: ['Visitor->Lead', 'Lead->MQL', 'MQL->SQL', 'SQL->Opp', 'Opp->Close']
+          },
+          salesOps: {
+            title: 'Sales Operations',
+            metrics: ['Lead Velocity Rate', 'Sales Capacity (FTE)', 'Leads per Rep', 'Avg Deal Size', 'Activity Metrics', 'Rep Ramp Time']
+          },
+          customerHealth: {
+            title: 'Customer Health',
+            metrics: ['Engagement Score', 'NPS Score', 'Support Tickets', 'DAU/MAU Stickiness', 'Time in Product', 'Usage Depth']
+          },
+          cohort: {
+            title: 'Cohort Analysis',
+            metrics: ['Retention Curves', 'Revenue by Cohort', 'Churn Timing', 'Expansion by Cohort', 'LTV by Cohort']
+          },
+          leadROI: {
+            title: 'Lead Source ROI',
+            metrics: ['CAC by Channel', 'LTV by Channel', 'Payback by Channel', 'Channel Attribution', 'Blended vs Paid CAC']
+          },
+          efficiency: {
+            title: 'Efficiency',
+            metrics: ['ARR per Employee', 'Revenue per Rep', 'Support Cost/Cust', 'Burn Multiple', 'Months of Runway']
+          }
+        };
+
+        // --- COMPONENT HELPERS ---
+        const SelectionGroup = ({ title, options, selected, onSelect }) => (
+          <div className="mb-2">
+            <div className="text-xs font-semibold text-gray-600 mb-1">{title}</div>
+            <div className="flex flex-wrap gap-1">
+              {options.map(o => (
+                <button key={o.id} onClick={() => onSelect(selected === o.id ? null : o.id)}
+                  className={`px-2 py-0.5 rounded-full text-xs transition-all ${selected === o.id ? 'bg-indigo-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>
+                  {o.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        );
+
+        const LayerTab = ({ num, title, active, onClick, color }) => (
+          <button onClick={onClick}
+            className={`flex-1 p-2 text-center rounded-lg transition-all border-b-4 hover:bg-gray-50 ${active ? `${color} border-current bg-white shadow-sm` : 'border-transparent text-gray-500'}`}>
+            <div className="text-xs uppercase tracking-wider opacity-60">Layer {num}</div>
+            <div className="font-bold text-sm">{title}</div>
+          </button>
+        );
+
+        React.useEffect(() => {
+            const sendHeight = () => {
+                const root = document.getElementById('unified-metrics-root');
+                if (root) {
+                    // Send height + 20px buffer to avoid edge clipping
+                    const height = root.scrollHeight + 20;
+                    window.parent.postMessage({ frameHeight: height }, '*');
+                }
+            };
+
+            // 1. Send height immediately on render
+            sendHeight();
+
+            // 2. Watch for any DOM changes (like switching tabs) and send new height
+            const observer = new ResizeObserver(sendHeight);
+            const rootElement = document.getElementById('unified-metrics-root');
+            if (rootElement) observer.observe(rootElement);
+
+            return () => observer.disconnect();
+        }, [activeLayer, productView, selectedGTM]); // Re-run when these state change
+
+        return (
+          <div className="bg-slate-50 p-4 rounded-xl font-sans text-left border border-slate-200" style={{minHeight: '700px'}}>
+            <div className="max-w-5xl mx-auto">
+              <h1 className="text-2xl font-bold text-gray-900 mb-1 text-center">4-Layer SaaS Metrics Framework</h1>
+              <p className="text-gray-500 text-sm mb-6 text-center">From Financial Fundamentals to Deep Product Analysis</p>
+              
+              {/* TOP NAVIGATION */}
+              <div className="flex gap-2 mb-4 bg-slate-200 p-1 rounded-xl">
+                <LayerTab num={1} title="Universal" active={activeLayer === 1} onClick={() => setActiveLayer(1)} color="text-red-600 border-red-500" />
+                <LayerTab num={2} title="Business Model" active={activeLayer === 2} onClick={() => setActiveLayer(2)} color="text-blue-600 border-blue-500" />
+                <LayerTab num={3} title="Product Analysis" active={activeLayer === 3} onClick={() => setActiveLayer(3)} color="text-purple-600 border-purple-500" />
+                <LayerTab num={4} title="Operational" active={activeLayer === 4} onClick={() => setActiveLayer(4)} color="text-amber-600 border-amber-500" />
+              </div>
+
+              {/* LAYER 1: UNIVERSAL */}
+              {activeLayer === 1 && (
+                <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-5 animate-fade-in">
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="p-1.5 bg-red-100 text-red-600 rounded text-lg">💰</span>
+                    <div>
+                      <h2 className="font-bold text-gray-800">Financial Metrics</h2>
+                      <p className="text-xs text-gray-500">Các chỉ số tài chính công ty nào cũng nên follow</p>
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    {layer1Metrics.map((m, i) => (
+                      <div key={i} className="flex items-center justify-between bg-red-50 rounded-lg px-4 py-3 hover:bg-red-100 transition-colors">
+                        <span className="font-medium text-gray-900">{m.name}</span>
+                        <span className="text-xs text-red-700 font-mono bg-white px-2 py-1 rounded border border-red-100">{m.formula}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* LAYER 2: BUSINESS MODEL */}
+              {activeLayer === 2 && (
+                <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-5 animate-fade-in">
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="p-1.5 bg-blue-100 text-blue-600 rounded text-lg">🏗️</span>
+                    <h2 className="font-bold text-gray-800">Business Model Specifics</h2>
+                  </div>
+                  
+                  <div className="bg-slate-50 rounded-lg p-4 mb-4 border border-slate-200">
+                    <SelectionGroup title="1. Go-to-Market Model" options={gtmOptions} selected={selectedGTM} onSelect={setSelectedGTM} />
+                    <SelectionGroup title="2. Growth Strategy" options={growthOptions} selected={selectedGrowth} onSelect={setSelectedGrowth} />
+                    <SelectionGroup title="3. Pricing Model" options={pricingOptions} selected={selectedPricing} onSelect={setSelectedPricing} />
+                    <SelectionGroup title="4. Market Focus" options={marketOptions} selected={selectedMarket} onSelect={setSelectedMarket} />
+                  </div>
+
+                  {layer2Metrics.length > 0 ? (
+                    <div>
+                      <h3 className="text-xs font-bold text-gray-400 uppercase mb-2">Recommended Metrics</h3>
+                      <div className="space-y-2 max-h-80 overflow-y-auto pr-2">
+                        {layer2Metrics.map((m, i) => (
+                          <div key={i} className="flex items-center justify-between bg-white border border-gray-100 rounded-lg px-3 py-2 shadow-sm">
+                            <div className="flex items-center gap-2">
+                              <span className={`text-[10px] px-2 py-0.5 rounded-full uppercase font-bold ${catColors[m.cat]}`}>{m.cat}</span>
+                              <span className="font-medium text-gray-800 text-sm">{m.name}</span>
+                            </div>
+                            <span className="text-xs text-gray-500">{m.desc}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-center py-8 text-gray-400 bg-slate-50 rounded-lg border border-dashed border-slate-300">
+                      <p>👆 Select options above to generate metrics</p>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* LAYER 3: PRODUCT ANALYSIS (MERGED) */}
+              {activeLayer === 3 && (
+                <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-5 animate-fade-in">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-gray-100 pb-4">
+                    <div className="flex items-center gap-2">
+                      <span className="p-1.5 bg-purple-100 text-purple-600 rounded text-lg">🚀</span>
+                      <div>
+                        <h2 className="font-bold text-gray-800 leading-tight">Product Analysis</h2>
+                        <p className="text-xs text-gray-500">Strategy vs Execution</p>
+                      </div>
+                    </div>
+                    {/* SUB-NAVIGATION TOGGLE */}
+                    <div className="flex bg-slate-100 p-1 rounded-lg self-start sm:self-auto">
+                      <button onClick={() => setProductView('frameworks')} 
+                        className={`px-4 py-1.5 text-xs font-bold rounded-md transition-all ${productView === 'frameworks' ? 'bg-white shadow text-purple-700' : 'text-slate-500 hover:text-slate-700'}`}>
+                        🧠 Frameworks
+                      </button>
+                      <button onClick={() => setProductView('platforms')} 
+                        className={`px-4 py-1.5 text-xs font-bold rounded-md transition-all ${productView === 'platforms' ? 'bg-white shadow text-purple-700' : 'text-slate-500 hover:text-slate-700'}`}>
+                        🛠️ Platforms
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* VIEW 1: FRAMEWORKS */}
+                  {productView === 'frameworks' && (
+                    <div>
+                      <div className="grid md:grid-cols-2 gap-3 mb-4">
+                        {Object.entries(productFrameworks).map(([key, fw]) => (
+                          <div key={key} className="border border-slate-200 rounded-lg p-3 hover:border-purple-300 transition-colors bg-purple-50/30">
+                            <h3 className="font-bold text-gray-800 text-sm mb-2 flex items-center gap-2">
+                               {fw.name}
+                            </h3>
+                            <div className="flex flex-wrap gap-1.5">
+                              {fw.dims.map((d, i) => (
+                                <span key={i} className="text-xs bg-white text-purple-700 border border-purple-100 px-2 py-0.5 rounded shadow-sm">{d}</span>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="bg-indigo-50 rounded-lg p-3 border border-indigo-100">
+                          <h4 className="font-bold text-indigo-900 text-sm mb-2">⚡ Activation</h4>
+                          <div className="text-xs space-y-1 text-indigo-800">
+                            <div>• Time to Value (TTV)</div>
+                            <div>• Activation Rate</div>
+                            <div>• PQL Rate</div>
+                          </div>
+                        </div>
+                        <div className="bg-green-50 rounded-lg p-3 border border-green-100">
+                          <h4 className="font-bold text-green-900 text-sm mb-2">📊 Stickiness</h4>
+                          <div className="text-xs space-y-1 text-green-800">
+                            <div>• DAU/MAU Ratio</div>
+                            <div>• Feature Adoption</div>
+                            <div>• Action Frequency</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* VIEW 2: PLATFORMS */}
+                  {productView === 'platforms' && (
+                    <div>
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {Object.entries(platformFrameworks).map(([key, pf]) => (
+                          <button key={key} onClick={() => setActivePlatform(key)}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${activePlatform === key ? `${pf.color} text-white shadow-md` : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>
+                            {pf.name}
+                          </button>
+                        ))}
+                      </div>
+                      
+                      <div className="bg-slate-50 rounded-xl p-4 border border-slate-200 mb-3">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold text-white ${currentPlatform.color}`}>
+                            {currentPlatform.approach}
+                          </span>
+                        </div>
+                        <p className="text-sm text-slate-700 mb-3">{currentPlatform.desc}</p>
+                        
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {currentPlatform.categories.map((cat, i) => (
+                            <div key={i} className="bg-white p-2 rounded border border-slate-200">
+                              <h4 className="font-bold text-slate-800 text-xs mb-1">{cat.name}</h4>
+                              <div className="flex flex-wrap gap-1">
+                                {cat.metrics.map((m, j) => (
+                                  <span key={j} className="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded border border-slate-200">{m}</span>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* LAYER 4: OPERATIONAL */}
+              {activeLayer === 4 && (
+                <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-5 animate-fade-in">
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="p-1.5 bg-amber-100 text-amber-600 rounded text-lg">⚙️</span>
+                    <h2 className="font-bold text-gray-800">Operational & Funnel Metrics</h2>
+                  </div>
+                  <p className="text-xs text-gray-500 mb-4">Tactical levers to optimize day-to-day performance.</p>
+                  
+                  <div className="grid md:grid-cols-3 gap-3">
+                    {Object.entries(operationalMetrics).map(([key, section]) => (
+                      <div key={key} className="bg-amber-50 rounded-lg p-3 border border-amber-100">
+                        <h3 className="font-bold text-amber-900 text-sm mb-2">{section.title}</h3>
+                        <div className="space-y-1">
+                          {section.metrics.map((m, i) => (
+                            <div key={i} className="text-xs text-amber-800 flex items-start">
+                              <span className="mr-1.5 opacity-60">•</span> {m}
+                            </div>
+                          ))}
+                        </div>
+                        {section.conversions && (
+                          <div className="mt-2 pt-2 border-t border-amber-200">
+                            <div className="text-[10px] font-bold text-amber-900 mb-1 opacity-70">CONVERSION RATES</div>
+                            {section.conversions.map((c, i) => (
+                              <div key={i} className="text-[10px] text-amber-700 font-mono">• {c}</div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* FOOTER: DYNAMIC REFERENCE LINKS */}
+              <div className="mt-6 border-t border-slate-200 pt-4 px-2">
+                 <div className="flex items-center gap-2 mb-2">
+                    <span className="text-lg">📚</span>
+                    <h3 className="text-sm font-bold text-slate-700">Tài liệu tham khảo cho Layer {activeLayer}</h3>
+                 </div>
+                 <div className="flex flex-wrap gap-2">
+                    {layerReferences[activeLayer].map((ref, idx) => (
+                      <a key={idx} href={ref.url} target="_blank" rel="noopener noreferrer" 
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-slate-200 rounded-lg text-xs font-medium text-blue-600 hover:text-blue-800 hover:border-blue-300 hover:bg-blue-50 transition-all no-underline group shadow-sm">
+                          <span>{ref.title}</span>
+                          <span className="text-slate-400 group-hover:text-blue-400 font-normal border-l border-slate-200 pl-1.5 ml-0.5">{ref.source}</span>
+                          <svg className="w-3 h-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                      </a>
+                    ))}
+                 </div>
+              </div>
+
+            </div>
+          </div>
+        );
+      };
+
+      const root = ReactDOM.createRoot(document.getElementById('unified-metrics-root'));
+      root.render(<UnifiedMetricsFramework />);
+    </script>
+</body>
+</html>

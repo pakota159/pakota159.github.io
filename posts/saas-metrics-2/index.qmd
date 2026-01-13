@@ -1,0 +1,149 @@
+---
+title: "SaaS Metrics that actually make sense - Part 2"
+subtitle: "Đầu tư vào SaaS là ngon luôn? Cùng tìm hiểu những mô hình kinh doanh SaaS và cách đo đạc hiệu quả"
+description: "Các chỉ số cho SaaS"
+author: "Cuong Pham"
+date: "2026-01-12"
+categories: [SaaS, Business Model, Strategy, Startup]
+image: "/img/saas-metrics/saas-framework.png" 
+toc: true
+---
+
+> Từ nhiều nguồn tài liệu tham khảo, cùng kinh nghiệm trong những năm làm phân tích dữ liệu, tôi tổng hợp thành 1 frameword tổng quan có thể áp dụng cho các mô hình SaaS
+
+```{=html}
+<iframe id="saas-metrics-frame" src="saas_metrics_chart.html" width="100%" scrolling="no" style="border:none; overflow:hidden;"></iframe>
+
+<script>
+  window.addEventListener("message", function(e) {
+    // Check if the message contains our height data
+    if (e.data && e.data.frameHeight) {
+      const iframe = document.getElementById("saas-metrics-frame");
+      if (iframe) {
+        // Apply the new height
+        iframe.style.height = e.data.frameHeight + "px";
+      }
+    }
+  });
+</script>
+```
+
+## Layer 1: Universal SaaS Metrics  
+
+Nếu công ty SaaS là một cơ thể sống, thì **MRR (Monthly Recurring Revenue)** chính là nhịp tim. Nó cho biết cơ thể có đang sống khỏe mạnh, ổn định và bơm máu đều đặn hay không.
+
+Khác với các mô hình bán lẻ (E-commerce) nơi doanh thu trồi sụt theo mùa hoặc các đợt khuyến mãi, điểm quan trọng của SaaS nằm ở sự **"Định kỳ" (Recurring)**.
+
+### 1. Định nghĩa chuẩn (The Definition)
+
+Là một Data Analyst, bạn cần phân biệt rạch ròi các khái niệm sau để tránh làm báo cáo sai lệch:
+
+* **MRR (Monthly Recurring Revenue):** Tổng doanh thu *dự kiến* lặp lại hàng tháng từ tất cả khách hàng đang active.
+* **ARR (Annual Recurring Revenue):** Đơn giản là $MRR \times 12$. Chỉ số này thường dùng cho các công ty B2B Enterprise ký hợp đồng theo năm.
+
+::: callout-warning
+## ⚠️ Sai lầm "chết người" của Data Analyst
+**MRR KHÔNG PHẢI là dòng tiền (Cash Flow) hay Doanh thu ghi nhận (GAAP Revenue).**
+
+Ví dụ: Nếu khách hàng trả trước 12 tháng (**120 triệu VND**) vào tháng 1:
+1.  **Cash Flow (Tháng 1):** 120 triệu.
+2.  **GAAP Revenue (Tháng 1):** 10 triệu (ghi nhận dần).
+3.  **MRR (Tháng 1):** **10 triệu.**
+
+👉 **Tại sao?** MRR sinh ra để đo lường **tốc độ tăng trưởng thực tế** và **quy mô** của sản phẩm, không phải để đo lượng tiền mặt trong két sắt.
+:::
+
+### 2. Công thức tính & Cách xử lý dữ liệu
+
+Là một DA, bạn không tính thủ công bằng Excel. Bạn cần tư duy theo công thức toán học để viết SQL query.
+
+#### Công thức cơ bản
+Tổng quát nhất, MRR được tính bằng tổng phí thuê bao của toàn bộ khách hàng đang hoạt động:
+
+$$
+MRR = \sum_{i=1}^{n} (\text{Active User}_i \times \text{Monthly Fee}_i)
+$$
+
+#### Thành phần của MRR (The MRR Equation)
+Để trả lời câu hỏi *"Tại sao tháng này MRR tăng/giảm?"*, bạn cần tách MRR thành 4 dòng chảy (Components):
+
+$$
+Net \ New \ MRR = (\underbrace{New + Expansion}_{\text{Growth}}) - (\underbrace{Contraction + Churned}_{\text{Loss}})
+$$
+
+Trong đó:
+1.  **New MRR:** Từ khách hàng mới tinh (New Logos).
+2.  **Expansion MRR:** Từ khách cũ nâng cấp gói (Upsell) hoặc mua thêm user (Cross-sell).
+3.  **Contraction MRR:** Khách cũ hạ cấp gói (Downgrade).
+4.  **Churned MRR:** Khách hàng hủy hoàn toàn.
+
+::: callout-tip
+### 💡 SQL Logic cho Data Analyst
+Khi viết query tính MRR, hãy nhớ **loại bỏ (exclude)** tuyệt đối các khoản phí One-time:
+* ❌ Phí cài đặt (Setup fees)
+* ❌ Phí tư vấn/đào tạo (Consulting fees)
+* ❌ Phí phần cứng (Hardware - nếu có)
+
+```sql
+SELECT 
+    DATE_TRUNC('month', transaction_date) as month,
+    SUM(amount) as mrr
+FROM subscriptions
+WHERE 
+    status = 'active' 
+    AND type = 'recurring' -- Quan trọng!
+GROUP BY 1
+ORDER BY 1 DESC
+
+```
+
+:::
+
+### 3. Benchmark: So sánh "Sức khỏe" doanh nghiệp
+
+Đừng so sánh con cá với con chim. Benchmark của SaaS phụ thuộc rất lớn vào khu vực địa lý và đặc thù thị trường. Dưới đây là bức tranh so sánh thú vị giữa các thị trường:
+
+#### 🇺🇸 US / Global (Tiêu chuẩn Vàng)
+
+Thị trường Mỹ coi trọng tốc độ tăng trưởng (Growth Rate) hơn là lợi nhuận ở giai đoạn đầu.
+
+* **Mô hình T2D3:** Triple, Triple, Double, Double, Double (Nhân 3 doanh thu trong 2 năm đầu, nhân 2 trong 3 năm tiếp theo).
+* **$1M ARR:** Chứng tỏ bạn đã tìm thấy **Product-Market Fit (PMF)**.
+* **$10M ARR:** Bạn là Scale-up, sẵn sàng cho Series B/C.
+* **Top Tier:** Các công ty top đầu thường tăng trưởng **100-200% mỗi năm** trong giai đoạn $1M - $10M ARR.
+
+#### 🇨🇳 China Market (Hệ sinh thái "Rồng")
+
+Trung Quốc là một ngoại lệ của thế giới SaaS với văn hóa kinh doanh khác biệt.
+
+* **SaaS-enabled Service:** Khách hàng Trung Quốc (đặc biệt là SME) có thói quen "trả tiền một lần" (One-off) và thích dịch vụ trọn gói hơn là phần mềm thuần túy.
+* **Willingness to Pay (WTP):** Thấp hơn US khoảng **4-5 lần** với cùng một loại sản phẩm.
+* **Retention thấp:** Do sự cạnh tranh khốc liệt và thói quen thay đổi nhà cung cấp nhanh chóng.
+* **Chiến lược:** Các công ty SaaS thường phải tích hợp vào các "Super App" như DingTalk (Alibaba) hay WeCom (Tencent) để tồn tại.
+
+#### 🇻🇳 Vietnam Market (Thị trường mới nổi)
+
+Việt Nam đang trong giai đoạn chuyển dịch thú vị, nhưng có những "nỗi đau" (Pain points) riêng mà DA cần hiểu khi nhìn vào số liệu.
+
+##### 1. Phân khúc SME & Micro-SaaS (KiotViet, Sapo, Base...)
+
+* **ARPU (Giá trung bình):** Rất thấp. Thường dao động từ **200.000đ - 1.000.000đ / tháng**.
+* **The Volume Game:** Đây là bài toán lấy số lượng bù chất lượng.
+* Ví dụ: Để đạt **$1M ARR** (~25 tỷ VND/năm) tại Việt Nam với ARPU 500k/tháng.
+* Bạn cần: $$ \frac{25,000,000,000}{500,000 \times 12} \approx 4,166 \text{ khách hàng trả phí} $$
+* *Insight:* Quản lý 4.000 khách hàng đòi hỏi đội ngũ Support và Sales vận hành khổng lồ, làm giảm Gross Margin.
+
+##### 2. Phân khúc Enterprise
+
+* **Tư duy On-premise:** Các tập đoàn lớn vẫn thích "mua đứt" hoặc yêu cầu chỉnh sửa (Customize) rất sâu.
+* **Biến động MRR:** MRR thường không mượt mà (smooth) như US vì phụ thuộc vào các hợp đồng dự án lớn (Lumpy Revenue).
+
+
+## Layer 2: Business Model-Specific Metrics  
+
+
+## Layer 3: Product Oriented Metrics  
+
+
+## Layer 4: Operational Oriented Metrics  
+

@@ -28,7 +28,7 @@ toc: true
 </script>
 ```
 
-## Layer 1: Universal SaaS Metrics  
+## Layer 1: Universal SaaS Metrics 
 
 ### MRR, ARR
 

@@ -9,8 +9,12 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
-        body { margin: 0; padding: 0; overflow: hidden; } /* Hide scrollbar inside iframe */
-        #unified-metrics-root { padding: 1rem; } /* Add padding inside the container instead */
+        body { margin: 0; padding: 0; overflow: hidden; background-color: #f8fafc; } 
+        #unified-metrics-root { padding: 0.5rem; }
+        /* Custom scrollbar for inputs */
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
     </style>
 </head>
 <body>
@@ -18,7 +22,47 @@
     <div id="unified-metrics-root"></div>
 
     <script type="text/babel">
-      const { useState } = React;
+      const { useState, useEffect, useMemo } = React;
+
+      // --- HELPER: Input Field Component ---
+      const CalculatorInput = ({ label, value, onChange, unit = "", placeholder = "0" }) => (
+        <div className="flex flex-col">
+            <label className="text-[10px] uppercase font-bold text-slate-500 mb-1">{label}</label>
+            <div className="relative">
+                <input 
+                    type="number" 
+                    value={value} 
+                    onChange={(e) => onChange(parseFloat(e.target.value) || 0)}
+                    className="w-full border border-slate-300 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors bg-white text-slate-700 font-mono"
+                    placeholder={placeholder}
+                />
+                {unit && <span className="absolute right-3 top-1.5 text-xs text-slate-400 font-medium">{unit}</span>}
+            </div>
+        </div>
+      );
+
+      // --- HELPER: Result Badge Component ---
+      const ResultBadge = ({ label, value, unit, status, insight }) => {
+        const colors = {
+            good: "bg-green-100 text-green-800 border-green-200",
+            warning: "bg-yellow-50 text-yellow-800 border-yellow-200",
+            bad: "bg-red-50 text-red-800 border-red-200",
+            neutral: "bg-slate-100 text-slate-600 border-slate-200"
+        };
+        const statusColor = colors[status] || colors.neutral;
+
+        return (
+            <div className={`p-3 rounded-lg border ${statusColor} flex flex-col justify-between h-full`}>
+                <div>
+                    <div className="text-[10px] uppercase tracking-wider opacity-70 font-bold mb-1">{label}</div>
+                    <div className="text-xl font-bold font-mono">
+                        {value === Infinity || isNaN(value) ? "--" : value} <span className="text-sm font-normal opacity-80">{unit}</span>
+                    </div>
+                </div>
+                {insight && <div className="mt-2 text-xs border-t border-black/10 pt-2 italic leading-tight">{insight}</div>}
+            </div>
+        );
+      };
 
       const UnifiedMetricsFramework = () => {
         const [activeLayer, setActiveLayer] = useState(1);
@@ -29,6 +73,79 @@
         const [productView, setProductView] = useState('frameworks'); 
         const [activePlatform, setActivePlatform] = useState('ga4');
 
+        const [isCalculatorMode, setIsCalculatorMode] = useState(false);
+
+        // --- CALCULATOR STATE ---
+        const [inputs, setInputs] = useState({
+            revenue: 100000,
+            cogs: 25000,
+            marketingSpend: 30000,
+            newCustomers: 50,
+            totalCustomers: 500,
+            churnedCustomers: 15,
+            growthRate: 35,
+            fcfMargin: 10
+        });
+
+        // --- CALCULATIONS LOGIC ---
+        const metrics = useMemo(() => {
+            const gm = inputs.revenue > 0 ? ((inputs.revenue - inputs.cogs) / inputs.revenue) * 100 : 0;
+            const cac = inputs.newCustomers > 0 ? inputs.marketingSpend / inputs.newCustomers : 0;
+            const arpu = inputs.totalCustomers > 0 ? (inputs.revenue / 12) / inputs.totalCustomers : 0; // Assuming annual revenue input
+            const churnRate = inputs.totalCustomers > 0 ? (inputs.churnedCustomers / inputs.totalCustomers) * 100 : 0;
+            
+            // LTV = (ARPU * GM%) / Churn%
+            const ltv = churnRate > 0 ? (arpu * (gm / 100)) / (churnRate / 100) : 0;
+            const ltvCac = cac > 0 ? ltv / cac : 0;
+            
+            // Payback = CAC / (ARPU * GM%)
+            const payback = (arpu * (gm/100)) > 0 ? cac / (arpu * (gm/100)) : 0;
+            
+            const rule40 = inputs.growthRate + inputs.fcfMargin;
+
+            return { gm, cac, ltv, ltvCac, payback, rule40, churnRate, arpu };
+        }, [inputs]);
+
+        // --- BENCHMARK JUDGMENT ---
+        const getInsight = (type, val) => {
+            if (type === 'gm') {
+                if (val >= 70) return { status: 'good', text: "Excellent! Pure SaaS model." };
+                if (val >= 50) return { status: 'warning', text: "Average. Watch your server/support costs." };
+                return { status: 'bad', text: "Low. Likely a service business or heavy COGS." };
+            }
+            if (type === 'ltvCac') {
+                if (val >= 3) return { status: 'good', text: "Healthy growth engine." };
+                if (val >= 1) return { status: 'warning', text: "Inefficient. Verify pricing or reduce CAC." };
+                return { status: 'bad', text: "Burning money. You lose $ on every sale." };
+            }
+            if (type === 'payback') {
+                if (val <= 12) return { status: 'good', text: "Great cash flow cycle." };
+                if (val <= 18) return { status: 'warning', text: "Acceptable for Enterprise, risky for SMB." };
+                return { status: 'bad', text: "Dangerous. Takes too long to recover cost." };
+            }
+            if (type === 'rule40') {
+                if (val >= 40) return { status: 'good', text: "Investor favorite (Healthy)." };
+                return { status: 'warning', text: "Below standard. Balance growth vs profit." };
+            }
+            return { status: 'neutral', text: "" };
+        };
+
+        // --- AUTO-RESIZE LOGIC ---
+        useEffect(() => {
+            const sendHeight = () => {
+                const root = document.getElementById('unified-metrics-root');
+                if (root) {
+                    const height = root.scrollHeight + 20; 
+                    window.parent.postMessage({ frameHeight: height }, '*');
+                }
+            };
+            sendHeight();
+            const observer = new ResizeObserver(sendHeight);
+            const rootElement = document.getElementById('unified-metrics-root');
+            if (rootElement) observer.observe(rootElement);
+            return () => observer.disconnect();
+        }, [activeLayer, isCalculatorMode]); // Re-trigger on toggle
+        
         // --- FIXED DATA: URLs are now clean strings, not Markdown ---
         const layerReferences = {
           1: [
@@ -54,9 +171,6 @@
             { title: "Customer Health", source: "Totango", url: "https://www.totango.com/blog/customer-health-score" }
           ]
         };
-
-        // ... PASTE THE REST OF YOUR REACT COMPONENT LOGIC HERE ...
-        // ... (Keep the render logic exactly as you had it) ...
         
         // --- DATA: LAYER 1 UNIVERSAL ---
         const layer1Metrics = [
@@ -309,21 +423,118 @@
               {/* LAYER 1: UNIVERSAL */}
               {activeLayer === 1 && (
                 <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-5 animate-fade-in">
-                  <div className="flex items-center gap-2 mb-4">
-                    <span className="p-1.5 bg-red-100 text-red-600 rounded text-lg">💰</span>
-                    <div>
-                      <h2 className="font-bold text-gray-800">Financial Metrics</h2>
-                      <p className="text-xs text-gray-500">Các chỉ số tài chính công ty nào cũng nên follow</p>
+                  <div className="flex items-center justify-between mb-4 border-b border-gray-100 pb-3">
+                    <div className="flex items-center gap-2">
+                        <span className="p-1.5 bg-red-100 text-red-600 rounded text-lg">💰</span>
+                        <div>
+                        <h2 className="font-bold text-gray-800">Financial Metrics</h2>
+                        <p className="text-xs text-gray-500">Các chỉ số tài chính công ty nào cũng nên follow</p>
+                        </div>
+                    </div>
+                    {/* TOGGLE SWITCH */}
+                    <div className="flex items-center bg-gray-100 p-1 rounded-lg">
+                        <button 
+                            onClick={() => setIsCalculatorMode(false)}
+                            className={`px-3 py-1 text-xs font-bold rounded-md transition-all ${!isCalculatorMode ? 'bg-white shadow text-red-600' : 'text-gray-500 hover:text-gray-700'}`}
+                        >
+                            📖 Concept
+                        </button>
+                        <button 
+                            onClick={() => setIsCalculatorMode(true)}
+                            className={`px-3 py-1 text-xs font-bold rounded-md transition-all ${isCalculatorMode ? 'bg-white shadow text-red-600' : 'text-gray-500 hover:text-gray-700'}`}
+                        >
+                            🧮 Calculator
+                        </button>
                     </div>
                   </div>
-                  <div className="space-y-2">
-                    {layer1Metrics.map((m, i) => (
-                      <div key={i} className="flex items-center justify-between bg-red-50 rounded-lg px-4 py-3 hover:bg-red-100 transition-colors">
-                        <span className="font-medium text-gray-900">{m.name}</span>
-                        <span className="text-xs text-red-700 font-mono bg-white px-2 py-1 rounded border border-red-100">{m.formula}</span>
+
+                  {!isCalculatorMode ? (
+                      // --- STATIC VIEW (ORIGINAL) ---
+                      <div className="space-y-2">
+                        {[
+                          { name: 'ARR/MRR', formula: 'Sum of recurring revenue' },
+                          { name: 'Gross Margin', formula: '(Rev - COGS) / Rev | Target: >70%' },
+                          { name: 'LTV:CAC Ratio', formula: 'LTV / CAC | Target: >3x' },
+                          { name: 'CAC Payback', formula: 'CAC / (MRR * GM%) | <12mo' },
+                          { name: 'Net Revenue Retention', formula: '(Start + Exp - Churn) / Start | >100%' },
+                          { name: 'Gross Revenue Retention', formula: '(Start - Churn) / Start | >85%' },
+                          { name: 'Rule of 40', formula: 'Growth% + FCF% | >40%' }
+                        ].map((m, i) => (
+                          <div key={i} className="flex items-center justify-between bg-red-50 rounded-lg px-4 py-3 hover:bg-red-100 transition-colors">
+                            <span className="font-medium text-gray-900">{m.name}</span>
+                            <span className="text-xs text-red-700 font-mono bg-white px-2 py-1 rounded border border-red-100">{m.formula}</span>
+                          </div>
+                        ))}
+                         <div className="mt-4 text-xs text-gray-500 text-center italic">
+                             💡 Switch to "Calculator" mode to calculate your own metrics.
+                         </div>
                       </div>
-                    ))}
-                  </div>
+                  ) : (
+                      // --- CALCULATOR VIEW (NEW) ---
+                      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+                          {/* Left Col: Inputs */}
+                          <div className="md:col-span-4 space-y-4 bg-slate-50 p-4 rounded-lg border border-slate-200">
+                              <h3 className="font-bold text-gray-700 text-sm border-b border-gray-200 pb-2 mb-2">1. Input Data</h3>
+                              <CalculatorInput label="Annual Revenue (Doanh thu)" value={inputs.revenue} onChange={(v)=>setInputs({...inputs, revenue: v})} unit="$" />
+                              <CalculatorInput label="COGS (Giá vốn)" value={inputs.cogs} onChange={(v)=>setInputs({...inputs, cogs: v})} unit="$" />
+                              <CalculatorInput label="Sales & Mkt Cost (Chi phí S&M)" value={inputs.marketingSpend} onChange={(v)=>setInputs({...inputs, marketingSpend: v})} unit="$" />
+                              <div className="grid grid-cols-2 gap-2">
+                                <CalculatorInput label="New Custs (Khách mới)" value={inputs.newCustomers} onChange={(v)=>setInputs({...inputs, newCustomers: v})} />
+                                <CalculatorInput label="Churned (Khách hủy)" value={inputs.churnedCustomers} onChange={(v)=>setInputs({...inputs, churnedCustomers: v})} />
+                              </div>
+                              <div className="grid grid-cols-2 gap-2">
+                                <CalculatorInput label="Total Custs (Tổng khách)" value={inputs.totalCustomers} onChange={(v)=>setInputs({...inputs, totalCustomers: v})} />
+                                <CalculatorInput label="Growth Rate" value={inputs.growthRate} onChange={(v)=>setInputs({...inputs, growthRate: v})} unit="%" />
+                              </div>
+                              <CalculatorInput label="FCF Margin" value={inputs.fcfMargin} onChange={(v)=>setInputs({...inputs, fcfMargin: v})} unit="%" />
+                          </div>
+
+                          {/* Right Col: Results */}
+                          <div className="md:col-span-8">
+                              <h3 className="font-bold text-gray-700 text-sm border-b border-gray-200 pb-2 mb-4">2. Your Metrics & Insights</h3>
+                              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                  {/* Gross Margin */}
+                                  <ResultBadge 
+                                    label="Gross Margin" 
+                                    value={metrics.gm.toFixed(1)} unit="%" 
+                                    {...getInsight('gm', metrics.gm)} 
+                                  />
+                                  {/* CAC */}
+                                  <ResultBadge 
+                                    label="CAC (Cost per Cust)" 
+                                    value={metrics.cac.toFixed(0)} unit="$" 
+                                    status="neutral"
+                                    insight="Keep this lower than 1/3 of LTV."
+                                  />
+                                  {/* LTV */}
+                                  <ResultBadge 
+                                    label="LTV (Lifetime Value)" 
+                                    value={metrics.ltv.toFixed(0)} unit="$" 
+                                    status="neutral"
+                                    insight={`ARPU: $${metrics.arpu.toFixed(0)} | Churn: ${metrics.churnRate.toFixed(1)}%`}
+                                  />
+                                  {/* LTV:CAC */}
+                                  <ResultBadge 
+                                    label="LTV : CAC Ratio" 
+                                    value={metrics.ltvCac.toFixed(1)} unit="x" 
+                                    {...getInsight('ltvCac', metrics.ltvCac)} 
+                                  />
+                                  {/* Payback */}
+                                  <ResultBadge 
+                                    label="CAC Payback" 
+                                    value={metrics.payback.toFixed(1)} unit="mo" 
+                                    {...getInsight('payback', metrics.payback)} 
+                                  />
+                                  {/* Rule of 40 */}
+                                  <ResultBadge 
+                                    label="Rule of 40" 
+                                    value={metrics.rule40.toFixed(1)} unit="pts" 
+                                    {...getInsight('rule40', metrics.rule40)} 
+                                  />
+                              </div>
+                          </div>
+                      </div>
+                  )}
                 </div>
               )}
 

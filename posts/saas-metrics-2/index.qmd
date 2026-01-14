@@ -1,7 +1,7 @@
 ---
 title: "SaaS Metrics that actually make sense - Part 2"
 subtitle: "Đầu tư vào SaaS là ngon luôn? Cùng tìm hiểu những mô hình kinh doanh SaaS và cách đo đạc hiệu quả"
-description: "Các chỉ số cho SaaS"
+description: "Các chỉ số cho SaaS - Financial Metrics"
 author: "Cuong Pham"
 date: "2026-01-12"
 categories: [SaaS, Business Model, Strategy, Startup]

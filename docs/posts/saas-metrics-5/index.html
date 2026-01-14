@@ -6,8 +6,11 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Cuong Pham">
+<meta name="dcterms.date" content="2026-01-15">
+<meta name="description" content="Các chỉ số cho SaaS - Operational Oriented">
 
-<title>Data for Profit – Cuong Pham</title>
+<title>SaaS Metrics that actually make sense - Part 5 – Cuong Pham</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,27 +26,25 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<link href="./img/favicon.png" rel="icon" type="image/png">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js" type="module"></script>
-<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-8ebfbabd275cff996c9318031f1d1737.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-5034ea2f0b6f7aaf68ffad7b50598023.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../img/favicon.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-8ebfbabd275cff996c9318031f1d1737.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-5034ea2f0b6f7aaf68ffad7b50598023.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -71,35 +72,6 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
-
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
-
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-subtitle','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-subtitle","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
 <style>html{ scroll-behavior: smooth; }</style>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
@@ -141,7 +113,7 @@ window.Quarto = {
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Cuong Pham</span>
     </a>
   </div>
@@ -152,7 +124,7 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link active" href="./index.html" aria-current="page"> 
+    <a class="nav-link" href="../../index.html"> 
 <span class="menu-text">HOME</span></a>
   </li>  
   <li class="nav-item compact">
@@ -176,7 +148,19 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    
+    <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul>
+  <li><a href="#layer-4-operational-metrics" id="toc-layer-4-operational-metrics" class="nav-link active" data-scroll-target="#layer-4-operational-metrics">Layer 4: Operational Metrics</a>
+  <ul class="collapse">
+  <li><a href="#sales-performance-hiệu-suất-bán-hàng" id="toc-sales-performance-hiệu-suất-bán-hàng" class="nav-link" data-scroll-target="#sales-performance-hiệu-suất-bán-hàng">1. Sales Performance (Hiệu suất Bán hàng)</a></li>
+  <li><a href="#marketing-funnel-phễu-tiếp-thị" id="toc-marketing-funnel-phễu-tiếp-thị" class="nav-link" data-scroll-target="#marketing-funnel-phễu-tiếp-thị">2. Marketing Funnel (Phễu Tiếp thị)</a></li>
+  <li><a href="#customer-health-success-sức-khỏe-khách-hàng" id="toc-customer-health-success-sức-khỏe-khách-hàng" class="nav-link" data-scroll-target="#customer-health-success-sức-khỏe-khách-hàng">3. Customer Health &amp; Success (Sức khỏe Khách hàng)</a></li>
+  <li><a href="#efficiency-metrics-chỉ-số-hiệu-quả" id="toc-efficiency-metrics-chỉ-số-hiệu-quả" class="nav-link" data-scroll-target="#efficiency-metrics-chỉ-số-hiệu-quả">4. Efficiency Metrics (Chỉ số Hiệu quả)</a></li>
+  </ul></li>
+  </ul>
+</nav>
 </nav>
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
@@ -187,15 +171,38 @@ window.Quarto = {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Data for Profit</h1>
-<p class="subtitle lead">Notes on data science, programming, and business</p>
-</div>
+<h1 class="title">SaaS Metrics that actually make sense - Part 5</h1>
+<p class="subtitle lead">Đầu tư vào SaaS là ngon luôn? Cùng tìm hiểu những mô hình kinh doanh SaaS và cách đo đạc hiệu quả</p>
+  <div class="quarto-categories">
+    <div class="quarto-category">SaaS</div>
+    <div class="quarto-category">Business Model</div>
+    <div class="quarto-category">Strategy</div>
+    <div class="quarto-category">Startup</div>
+  </div>
+  </div>
 
+<div>
+  <div class="description">
+    Các chỉ số cho SaaS - Operational Oriented
+  </div>
+</div>
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Cuong Pham </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">January 15, 2026</p>
+    </div>
+  </div>
   
     
   </div>
@@ -205,407 +212,170 @@ window.Quarto = {
 </header>
 
 
+<blockquote class="blockquote">
+<p>Từ nhiều nguồn tài liệu tham khảo, cùng kinh nghiệm trong những năm làm phân tích dữ liệu, tôi tổng hợp thành 1 frameword tổng quan có thể áp dụng cho các mô hình SaaS</p>
+</blockquote>
+<iframe id="saas-metrics-frame" src="saas_metrics_chart.html" width="100%" scrolling="no" style="border:none; overflow:hidden;"></iframe>
+
+<script>
+  window.addEventListener("message", function(e) {
+    // Check if the message contains our height data
+    if (e.data && e.data.frameHeight) {
+      const iframe = document.getElementById("saas-metrics-frame");
+      if (iframe) {
+        // Apply the new height
+        iframe.style.height = e.data.frameHeight + "px";
+      }
+    }
+  });
+</script>
+<section id="layer-4-operational-metrics" class="level2">
+<h2 class="anchored" data-anchor-id="layer-4-operational-metrics">Layer 4: Operational Metrics</h2>
+<p>Nếu Layer 1-3 là “Bảng tỷ số” (Scoreboard) cho Ban giám đốc, thì <strong>Layer 4: Operational Metrics</strong> là “Bảng điều khiển” (Dashboard) hàng ngày cho các bộ phận vận hành (Sale, customer success).</p>
+<p>Đây là những chỉ số mang tính <strong>hành động cao (Actionable)</strong>. Nếu MRR bị thấp, bạn không thể “sửa” MRR trực tiếp. Bạn phải sửa số lượng cuộc gọi của Sales, sửa thời gian phản hồi của Support, hoặc theo dõi điểm sức khỏe khách hàng.</p>
+<section id="sales-performance-hiệu-suất-bán-hàng" class="level3">
+<h3 class="anchored" data-anchor-id="sales-performance-hiệu-suất-bán-hàng">1. Sales Performance (Hiệu suất Bán hàng)</h3>
+<p>Đừng chỉ nhìn vào doanh số cuối tháng. Hãy nhìn vào <strong>đầu vào (Input)</strong> và <strong>hiệu quả chuyển đổi (Efficiency)</strong>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Metric</th>
+<th style="text-align: left;">Định nghĩa &amp; Tại sao quan trọng?</th>
+<th style="text-align: left;">Benchmark (Tham khảo)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Lead Velocity Rate (LVR)</strong></td>
+<td style="text-align: left;">Tốc độ tăng trưởng số lượng Lead chất lượng (Qualified Leads) theo tháng. Đây là chỉ số dự báo doanh thu tương lai tốt nhất.</td>
+<td style="text-align: left;"><strong>&gt; Doanh thu mục tiêu</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Pipeline Coverage</strong></td>
+<td style="text-align: left;">Tỷ lệ giá trị đường ống / Chỉ tiêu doanh số (Quota). Cần đủ “lương khô” để chốt.</td>
+<td style="text-align: left;"><strong>3x - 4x</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Sales Cycle Length</strong></td>
+<td style="text-align: left;">Thời gian trung bình để chốt một deal. Chu kỳ càng ngắn, dòng tiền càng khỏe.</td>
+<td style="text-align: left;"><strong>SMB: &lt; 30 ngày</strong><br><strong>Ent: 6-9 tháng</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Win Rate</strong></td>
+<td style="text-align: left;">Tỷ lệ thắng (Closed Won / Total Opportunities). Phản ánh kỹ năng chốt sale và chất lượng Lead.</td>
+<td style="text-align: left;"><strong>20% - 30%</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Quota Attainment</strong></td>
+<td style="text-align: left;">Tỷ lệ nhân viên Sales đạt chỉ tiêu. Nếu chỉ 1-2 người đạt <span class="math inline">\(\rightarrow\)</span> Quota quá cao. Nếu ai cũng đạt <span class="math inline">\(\rightarrow\)</span> Quota quá thấp.</td>
+<td style="text-align: left;"><strong>60% - 70%</strong> nhân sự đạt</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="marketing-funnel-phễu-tiếp-thị" class="level3">
+<h3 class="anchored" data-anchor-id="marketing-funnel-phễu-tiếp-thị">2. Marketing Funnel (Phễu Tiếp thị)</h3>
+<p>Nhiệm vụ của Marketing không phải là “làm màu”, mà là tạo ra cơ hội bán hàng.</p>
+<ul>
+<li><strong>Traffic <span class="math inline">\(\rightarrow\)</span> Lead:</strong> Tỷ lệ khách ghé thăm để lại thông tin.</li>
+<li><strong>MQL (Marketing Qualified Lead):</strong> Lead có tiềm năng (đúng chân dung khách hàng).</li>
+<li><strong>SQL (Sales Qualified Lead):</strong> Lead đã sẵn sàng mua (đã được Sales xác nhận).</li>
+<li><strong>Cost per Lead (CPL) vs.&nbsp;Cost per Opportunity:</strong> Đừng chỉ tối ưu giá Lead rẻ, hãy tối ưu giá của Cơ hội bán hàng.</li>
+</ul>
+</section>
+<section id="customer-health-success-sức-khỏe-khách-hàng" class="level3">
+<h3 class="anchored" data-anchor-id="customer-health-success-sức-khỏe-khách-hàng">3. Customer Health &amp; Success (Sức khỏe Khách hàng)</h3>
+<p>Trong SaaS, bán được hàng mới chỉ là bắt đầu. Giữ khách mới là lợi nhuận.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Metric</th>
+<th style="text-align: left;">Định nghĩa &amp; Tại sao quan trọng?</th>
+<th style="text-align: left;">Benchmark (Tham khảo)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><strong>Customer Health Score</strong></td>
+<td style="text-align: left;">Điểm số tổng hợp (1-100) dự báo khả năng khách hàng rời bỏ. Dựa trên: Usage, Support tickets, Payment history, NPS.</td>
+<td style="text-align: left;"><strong>Xanh / Vàng / Đỏ</strong></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>NPS (Net Promoter Score)</strong></td>
+<td style="text-align: left;">Đo lường lòng trung thành và khả năng giới thiệu. “Bạn có sẵn lòng giới thiệu chúng tôi cho bạn bè không?”.</td>
+<td style="text-align: left;"><strong>&gt; 30 (Good)</strong><br><strong>&gt; 50 (Excellent)</strong></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><strong>Time to First Value (TTFV)</strong></td>
+<td style="text-align: left;">Thời gian từ lúc trả tiền đến lúc khách nhận được giá trị đầu tiên (Onboarding thành công).</td>
+<td style="text-align: left;">Càng ngắn càng tốt</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><strong>Support Response Time</strong></td>
+<td style="text-align: left;">Thời gian phản hồi ticket đầu tiên (First Response Time). Ảnh hưởng trực tiếp đến CSAT.</td>
+<td style="text-align: left;"><strong>&lt; 1 giờ (Email)</strong><br><strong>&lt; 2 phút (Chat)</strong></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="efficiency-metrics-chỉ-số-hiệu-quả" class="level3">
+<h3 class="anchored" data-anchor-id="efficiency-metrics-chỉ-số-hiệu-quả">4. Efficiency Metrics (Chỉ số Hiệu quả)</h3>
+<p>Cuối cùng, hãy đo lường xem bộ máy của bạn đang chạy “tốn xăng” đến mức nào.</p>
+<ul>
+<li><strong>ARR per FTE (Full-time Employee):</strong> Tổng doanh thu / Tổng nhân viên. Thước đo năng suất chung của toàn công ty.
+<ul>
+<li><em>Benchmark:</em> <strong>$150k - $250k / nhân viên</strong> (cho công ty tăng trưởng tốt).</li>
+</ul></li>
+<li><strong>Burn Multiple:</strong> Tốc độ đốt tiền so với tốc độ thêm doanh thu mới.
+<ul>
+<li><em>Công thức:</em> Net Burn / Net New ARR.</li>
+<li><em>Ý nghĩa:</em> Để kiếm thêm $1 doanh thu, bạn phải đốt bao nhiêu tiền vốn?</li>
+<li><em>Benchmark:</em> <strong>&lt; 1.5x (Tốt)</strong>, <strong>&gt; 2.5x (Báo động)</strong>.</li>
+</ul></li>
+</ul>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>📚 Tài liệu tham khảo uy tín (Reliable Sources)
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Để xây dựng dashboard vận hành chi tiết, hãy tham khảo:</p>
+<ol type="1">
+<li><strong>Sales Metrics (HubSpot):</strong> Hướng dẫn toàn diện về các chỉ số Sales cho từng vị trí (SDR, AE, Sales Manager).
+<ul>
+<li>👉 <a href="https://blog.hubspot.com/sales/sales-metrics">Read: The Ultimate Guide to Sales Metrics</a></li>
+</ul></li>
+<li><strong>Burn Multiple (David Sacks / Craft Ventures):</strong> Chỉ số quan trọng nhất thời kỳ suy thoái để đo hiệu quả sử dụng vốn.
+<ul>
+<li>👉 <a href="https://sacks.substack.com/p/the-burn-multiple">Read: The Burn Multiple</a></li>
+</ul></li>
+<li><strong>Customer Health Score (Totango):</strong> Cách xây dựng công thức tính điểm sức khỏe khách hàng đa chiều.
+<ul>
+<li>👉 <a href="https://www.totango.com/blog/customer-health-score">Read: How to Calculate Customer Health Score</a></li>
+</ul></li>
+</ol>
+</div>
+</div>
 
 
+</section>
+</section>
 
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="U2FhUyUyQ0J1c2luZXNzJTIwTW9kZWwlMkNTdHJhdGVneSUyQ1N0YXJ0dXA=" data-listing-date-sort="1768410000000" data-listing-file-modified-sort="1768373562062" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="883">
-<div class="thumbnail"><a href="./posts/saas-metrics-5/index.html" class="no-external">
-
-<img loading="lazy" src="./img/saas-metrics/saas-framework.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/saas-metrics-5/index.html" class="no-external">SaaS Metrics that actually make sense - Part 5</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/saas-metrics-5/index.html" class="no-external">Đầu tư vào SaaS là ngon luôn? Cùng tìm hiểu những mô hình kinh doanh SaaS và cách đo đạc hiệu quả</a>
-</div>
-<div class="delink listing-description"><a href="./posts/saas-metrics-5/index.html" class="no-external">
-<p>Các chỉ số cho SaaS - Operational Oriented</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/saas-metrics-5/index.html" class="no-external">
-<div class="listing-date">
-Jan 15, 2026
-</div>
-<div class="listing-author">
-Cuong Pham
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-categories="U2FhUyUyQ0J1c2luZXNzJTIwTW9kZWwlMkNTdHJhdGVneSUyQ1N0YXJ0dXA=" data-listing-date-sort="1768323600000" data-listing-file-modified-sort="1768365812481" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="8" data-listing-word-count-sort="1593">
-<div class="thumbnail"><a href="./posts/saas-metrics-4/index.html" class="no-external">
-
-<img loading="lazy" src="./img/saas-metrics/saas-framework.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/saas-metrics-4/index.html" class="no-external">SaaS Metrics that actually make sense - Part 4</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/saas-metrics-4/index.html" class="no-external">Đầu tư vào SaaS là ngon luôn? Cùng tìm hiểu những mô hình kinh doanh SaaS và cách đo đạc hiệu quả</a>
-</div>
-<div class="delink listing-description"><a href="./posts/saas-metrics-4/index.html" class="no-external">
-<p>Các chỉ số cho SaaS - Product Oriented</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/saas-metrics-4/index.html" class="no-external">
-<div class="listing-date">
-Jan 14, 2026
-</div>
-<div class="listing-author">
-Cuong Pham
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-categories="U2FhUyUyQ0J1c2luZXNzJTIwTW9kZWwlMkNTdHJhdGVneSUyQ1N0YXJ0dXA=" data-listing-date-sort="1768237200000" data-listing-file-modified-sort="1768362054548" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="14" data-listing-word-count-sort="2753">
-<div class="thumbnail"><a href="./posts/saas-metrics-3/index.html" class="no-external">
-
-<img loading="lazy" src="./img/saas-metrics/saas-framework.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/saas-metrics-3/index.html" class="no-external">SaaS Metrics that actually make sense - Part 3</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/saas-metrics-3/index.html" class="no-external">Đầu tư vào SaaS là ngon luôn? Cùng tìm hiểu những mô hình kinh doanh SaaS và cách đo đạc hiệu quả</a>
-</div>
-<div class="delink listing-description"><a href="./posts/saas-metrics-3/index.html" class="no-external">
-<p>Các chỉ số cho SaaS - Metrics theo các Business models</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/saas-metrics-3/index.html" class="no-external">
-<div class="listing-date">
-Jan 13, 2026
-</div>
-<div class="listing-author">
-Cuong Pham
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-categories="U2FhUyUyQ0J1c2luZXNzJTIwTW9kZWwlMkNTdHJhdGVneSUyQ1N0YXJ0dXA=" data-listing-date-sort="1768150800000" data-listing-file-modified-sort="1768357931266" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="20" data-listing-word-count-sort="3969">
-<div class="thumbnail"><a href="./posts/saas-metrics-2/index.html" class="no-external">
-
-<img loading="lazy" src="./img/saas-metrics/saas-framework.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/saas-metrics-2/index.html" class="no-external">SaaS Metrics that actually make sense - Part 2</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/saas-metrics-2/index.html" class="no-external">Đầu tư vào SaaS là ngon luôn? Cùng tìm hiểu những mô hình kinh doanh SaaS và cách đo đạc hiệu quả</a>
-</div>
-<div class="delink listing-description"><a href="./posts/saas-metrics-2/index.html" class="no-external">
-<p>Các chỉ số cho SaaS - Financial Metrics</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/saas-metrics-2/index.html" class="no-external">
-<div class="listing-date">
-Jan 12, 2026
-</div>
-<div class="listing-author">
-Cuong Pham
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-categories="U2FhUyUyQ0J1c2luZXNzJTIwTW9kZWwlMkNTdHJhdGVneSUyQ1N0YXJ0dXA=" data-listing-date-sort="1767978000000" data-listing-file-modified-sort="1768288144436" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="24" data-listing-word-count-sort="4793">
-<div class="thumbnail"><a href="./posts/saas-metrics-1/index.html" class="no-external">
-
-<img loading="lazy" src="./img/saas-metrics/saas-framework.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/saas-metrics-1/index.html" class="no-external">SaaS Metrics that actually make sense - Part 1</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/saas-metrics-1/index.html" class="no-external">Đầu tư vào SaaS là ngon luôn? Cùng tìm hiểu những mô hình kinh doanh SaaS và cách đo đạc hiệu quả</a>
-</div>
-<div class="delink listing-description"><a href="./posts/saas-metrics-1/index.html" class="no-external">
-<p>Phân loại các mô hình kinh doanh SaaS</p>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/saas-metrics-1/index.html" class="no-external">
-<div class="listing-date">
-Jan 10, 2026
-</div>
-<div class="listing-author">
-Cuong Pham
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-categories="ZGF0YSUyQ2FiLXRlc3RpbmclMkNzdGF0aXN0aWNz" data-listing-date-sort="1599670800000" data-listing-file-modified-sort="1768032186714" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1134">
-<div class="thumbnail"><a href="./posts/ab-testing/index.html" class="no-external">
-
-<img loading="lazy" src="./img/abtesting/bg.jpeg" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/ab-testing/index.html" class="no-external">(Hầu như) Tất cả những thứ bạn cần biết về A/B Testing</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/ab-testing/index.html" class="no-external">Xác suất thống kê ứng dụng vào sản phẩm kinh doanh của bạn như nào</a>
-</div>
-<div class="delink listing-description"><a href="./posts/ab-testing/index.html" class="no-external">
-Nhờ các góp ý từ bài viết trước, trong bài này mình muốn đề cập đến đối tượng và giới hạn nội dung của bài viết này:
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/ab-testing/index.html" class="no-external">
-<div class="listing-date">
-Sep 10, 2020
-</div>
-<div class="listing-author">
-Cuong Pham
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="6" data-categories="bWV0cmljcyUyQ2RhdGElMkNlY29tbWVyY2U=" data-listing-date-sort="1599584400000" data-listing-file-modified-sort="1768032043959" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12" data-listing-word-count-sort="2249">
-<div class="thumbnail"><a href="./posts/ecom-metrics/index.html" class="no-external">
-
-<img loading="lazy" src="./img/ecommerce/bg.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/ecom-metrics/index.html" class="no-external">Các chỉ số quan trọng trong E-commerce</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/ecom-metrics/index.html" class="no-external">Các chỉ số trong Ecommerce</a>
-</div>
-<div class="delink listing-description"><a href="./posts/ecom-metrics/index.html" class="no-external">
-Theo nhiều người đánh giá, bước đầu tiên cũng là bước quan trọng nhất trong phân tích dữ liệu (data analysis) là <strong>đặt câu hỏi</strong>. Chúng ta cần biết điều gì, cần đánh giá những…
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/ecom-metrics/index.html" class="no-external">
-<div class="listing-date">
-Sep 9, 2020
-</div>
-<div class="listing-author">
-Cuong Pham
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="7" data-categories="c3FsJTJDZGF0YSUyQ2FuYWx5dGljcw==" data-listing-date-sort="1597597200000" data-listing-file-modified-sort="1768031583028" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="378">
-<div class="thumbnail"><a href="./posts/cohort-analysis/index.html" class="no-external">
-
-<img loading="lazy" src="./img/cohort/bg.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/cohort-analysis/index.html" class="no-external">Introduction to Cohort Analysis</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/cohort-analysis/index.html" class="no-external">How cohort analysis helps to improve retention</a>
-</div>
-<div class="delink listing-description"><a href="./posts/cohort-analysis/index.html" class="no-external">
-The first data analysis technique I have ever learned is <em>Cohort analysis</em>. So what is it and what is it used for?
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/cohort-analysis/index.html" class="no-external">
-<div class="listing-date">
-Aug 17, 2020
-</div>
-<div class="listing-author">
-Cuong Pham
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="8" data-categories="c3FsJTJDZGF0YSUyQ2luZGV4" data-listing-date-sort="1597078800000" data-listing-file-modified-sort="1768031453789" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="7" data-listing-word-count-sort="1382">
-<div class="thumbnail"><a href="./posts/index-and-query/index.html" class="no-external">
-
-<img loading="lazy" src="./img/sql/bg.jpg" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/index-and-query/index.html" class="no-external">Understanding Database Indexes</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/index-and-query/index.html" class="no-external">Index makes query fast - a simple explanation</a>
-</div>
-<div class="delink listing-description"><a href="./posts/index-and-query/index.html" class="no-external">
-Well, most developers or people who work with data know that “Index makes query fast” and they also understand why. But for people who don’t really know about indexing, I…
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/index-and-query/index.html" class="no-external">
-<div class="listing-date">
-Aug 11, 2020
-</div>
-<div class="listing-author">
-Cuong Pham
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="9" data-categories="c3FsJTJDZGF0YQ==" data-listing-date-sort="1596906000000" data-listing-file-modified-sort="1768031231775" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1607">
-<div class="thumbnail"><a href="./posts/sql-relational-db/index.html" class="no-external">
-
-<img loading="lazy" src="./img/sql/bg.jpg" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/sql-relational-db/index.html" class="no-external">Understanding SQL through Relational Algebra</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/sql-relational-db/index.html" class="no-external">SQL is based on relational algebra</a>
-</div>
-<div class="delink listing-description"><a href="./posts/sql-relational-db/index.html" class="no-external">
-When studying SQL, a lot of us start with some statements like <em>Select</em>, <em>FROM</em>, <em>WHERE</em>, but it turns out SQL is more than just that. The principle of the query language is based…
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/sql-relational-db/index.html" class="no-external">
-<div class="listing-date">
-Aug 9, 2020
-</div>
-<div class="listing-author">
-Cuong Pham
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="10" data-categories="cmV2aWV3JTJDY3MlMkNqYXZh" data-listing-date-sort="1588698000000" data-listing-file-modified-sort="1768031250169" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1127">
-<div class="thumbnail"><a href="./posts/review-cs-61b/index.html" class="no-external">
-
-<img loading="lazy" src="./img/note/sky.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/review-cs-61b/index.html" class="no-external">CS 61B Berkeley - Java and Data Structures Review</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/review-cs-61b/index.html" class="no-external">My review for CS 61B Berkeley</a>
-</div>
-<div class="delink listing-description"><a href="./posts/review-cs-61b/index.html" class="no-external">
-The most common way to execute a Java program is to run it through a sequence of two programs. The first is the Java compiler, or <code>javac</code>. The second is the Java interpreter…<code></code>
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/review-cs-61b/index.html" class="no-external">
-<div class="listing-date">
-May 6, 2020
-</div>
-<div class="listing-author">
-Cuong Pham
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="11" data-categories="Y3MlMkNsZWFybmluZyUyQ2RhdGE=" data-listing-date-sort="1565802000000" data-listing-file-modified-sort="1768030982641" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1716">
-<div class="thumbnail"><a href="./posts/cs-learning-guide/index.html" class="no-external">
-
-<img loading="lazy" src="./img/note/bg.png" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/cs-learning-guide/index.html" class="no-external">How to self-study Computer Science and Data Science</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/cs-learning-guide/index.html" class="no-external">The Lord of self-studying: The Fellowship of studying</a>
-</div>
-<div class="delink listing-description"><a href="./posts/cs-learning-guide/index.html" class="no-external">
-Today, a friend asked me how to study computer science well — a popular question that many others wonder too. Thus, I decided to write an <strong>all-in-one note</strong> to explain in…
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/cs-learning-guide/index.html" class="no-external">
-<div class="listing-date">
-Aug 15, 2019
-</div>
-<div class="listing-author">
-Cuong Pham
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="12" data-categories="Y3MlMkNub2RlanMlMkNkYXRhJTJDc3BvdGlmeQ==" data-listing-date-sort="1565197200000" data-listing-file-modified-sort="1768030494205" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="16" data-listing-word-count-sort="3140">
-<div class="thumbnail"><a href="./posts/using-spotify-api-to-retrieve-data/index.html" class="no-external">
-
-<img loading="lazy" src="./img/spotify/bg.jpg" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/using-spotify-api-to-retrieve-data/index.html" class="no-external">Working with Spotify API to collect music data</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/using-spotify-api-to-retrieve-data/index.html" class="no-external">Music is love, data is life</a>
-</div>
-<div class="delink listing-description"><a href="./posts/using-spotify-api-to-retrieve-data/index.html" class="no-external">
-Recently, I am working on a personal project related to analysing music taste of people and it requires retrieving data from some music sources like Spotify. And fortunely…
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/using-spotify-api-to-retrieve-data/index.html" class="no-external">
-<div class="listing-date">
-Aug 8, 2019
-</div>
-<div class="listing-author">
-Cuong Pham
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="13" data-categories="Y3MlMkNzY3JhcHklMkNzcGxhc2glMkNweXRob24lMkNkYXRh" data-listing-date-sort="1562518800000" data-listing-file-modified-sort="1768029296050" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="9" data-listing-word-count-sort="1658">
-<div class="thumbnail"><a href="./posts/how-i-use-scrapy-to-collect-the-data-i-need/index.html" class="no-external">
-
-<img loading="lazy" src="./img/scrape/bg.jpg" class="thumbnail-image">
-
-</a></div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/how-i-use-scrapy-to-collect-the-data-i-need/index.html" class="no-external">How I use scrapy to collect the data I need</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/how-i-use-scrapy-to-collect-the-data-i-need/index.html" class="no-external">The Good, The Bad and The Data</a>
-</div>
-<div class="delink listing-description"><a href="./posts/how-i-use-scrapy-to-collect-the-data-i-need/index.html" class="no-external">
-About 4 years ago, I encountered a huge struggle looking for a suitable room for rent. Information about renting house/room is vast and it’s really hard to filter useful data.
-</a></div>
-</div>
-<div class="metadata">
-<a href="./posts/how-i-use-scrapy-to-collect-the-data-i-need/index.html" class="no-external">
-<div class="listing-date">
-Jul 8, 2019
-</div>
-<div class="listing-author">
-Cuong Pham
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">No matching items</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
@@ -1053,5 +823,5 @@ Cuong Pham
 
 
 
-<script src="site_libs/quarto-html/zenscroll-min.js"></script>
+<script src="../../site_libs/quarto-html/zenscroll-min.js"></script>
 </body></html>

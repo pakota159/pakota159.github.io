@@ -267,12 +267,92 @@
         const layer2Metrics = getLayer2Metrics();
         const catColors = { GTM: 'bg-blue-100 text-blue-800', Growth: 'bg-green-100 text-green-800', Pricing: 'bg-purple-100 text-purple-800', Market: 'bg-orange-100 text-orange-800' };
 
-        // --- DATA: LAYER 3 PRODUCT & LAYER 4 OPERATIONAL (Placeholder for brevity) ---
-        // (You can paste the full objects here from previous versions if needed for full functionality)
-        const productFrameworks = { heart: { name: 'HEART', dims: [] } }; 
-        const platformFrameworks = { ga4: { name: 'GA4', color: 'bg-orange-500', approach: 'Event-Based', desc: '', categories: [] } };
-        const currentPlatform = platformFrameworks[activePlatform] || {categories: []};
-        const operationalMetrics = {};
+        // --- DATA: LAYER 3 PRODUCT (MERGED) ---
+        const productFrameworks = {
+          heart: { name: 'HEART (Google)', dims: ['Happiness', 'Engagement', 'Adoption', 'Retention', 'Task Success'] },
+          aarrr: { name: 'AARRR Pirate', dims: ['Acquisition', 'Activation', 'Retention', 'Revenue', 'Referral'] },
+          northstar: { name: 'North Star', dims: ['North Star Metric', 'Breadth', 'Depth', 'Frequency', 'Efficiency'] },
+          rae: { name: 'RAE (Mixpanel)', dims: ['Reach', 'Activation', 'Engagement'] }
+        };
+
+        const platformFrameworks = {
+          ga4: {
+            name: 'GA4', color: 'bg-orange-500', approach: 'Event-Based Model',
+            desc: 'All interactions as events. Engaged session = >10s, 2+ pages, or conversion.',
+            categories: [
+              { name: 'Users', metrics: ['Total Users', 'New Users', 'Active Users'] },
+              { name: 'Engagement', metrics: ['Engagement Rate', 'Avg Engagement Time', 'Sessions/User'] },
+              { name: 'Events', metrics: ['Event Count', 'Key Events', 'Event Value'] },
+              { name: 'Retention', metrics: ['User Retention', 'Cohort Analysis'] }
+            ]
+          },
+          amplitude: {
+            name: 'Amplitude', color: 'bg-blue-600', approach: 'North Star Framework',
+            desc: 'Single metric capturing customer value. Three games: Attention, Transaction, Productivity.',
+            categories: [
+              { name: 'North Star', metrics: ['North Star Metric', 'Breadth', 'Depth', 'Frequency'] },
+              { name: 'Behavioral', metrics: ['User Paths', 'Retention Curves', 'Stickiness'] },
+              { name: 'Experimentation', metrics: ['A/B Tests', 'Feature Flags', 'Lift %'] }
+            ]
+          },
+          mixpanel: {
+            name: 'Mixpanel', color: 'bg-purple-600', approach: 'RAE Framework',
+            desc: 'Reach -> Activation -> Engagement. Value moment vs value exchange.',
+            categories: [
+              { name: 'RAE', metrics: ['Reach', 'Activation', 'Engagement'] },
+              { name: 'Funnels', metrics: ['Conversion Rate', 'Time to Convert', 'Drop-off'] },
+              { name: 'Retention', metrics: ['Rolling', 'Calendar', 'Frequency', 'Cohorts'] }
+            ]
+          },
+          pendo: {
+            name: 'Pendo', color: 'bg-pink-600', approach: 'Product Experience',
+            desc: 'Analytics + In-app guidance. Analyze -> Guide -> Measure in one platform.',
+            categories: [
+              { name: 'Analytics', metrics: ['Feature Adoption', 'Paths', 'Retention'] },
+              { name: 'Guidance', metrics: ['Guide Completion', 'Walkthrough Success'] },
+              { name: 'Feedback', metrics: ['NPS', 'Surveys', 'Feature Requests'] }
+            ]
+          },
+          posthog: {
+            name: 'PostHog', color: 'bg-blue-500', approach: 'Open Source All-in-One',
+            desc: 'Self-hostable: Analytics + Replay + Flags + A/B + Surveys.',
+            categories: [
+              { name: 'Analytics', metrics: ['Funnels', 'Paths', 'Retention', 'Trends'] },
+              { name: 'Session', metrics: ['Replays', 'Console Logs', 'Errors'] },
+              { name: 'Experiments', metrics: ['Feature Flags', 'A/B Tests', 'Surveys'] }
+            ]
+          }
+        };
+        const currentPlatform = platformFrameworks[activePlatform];
+
+        // --- DATA: LAYER 4 OPERATIONAL ---
+        const operationalMetrics = {
+          funnel: {
+            title: 'Sales Funnel',
+            metrics: ['Visitors', 'Signups/Leads', 'MQLs', 'SQLs/Demos', 'Opportunities', 'Closed-Won'],
+            conversions: ['Visitor->Lead', 'Lead->MQL', 'MQL->SQL', 'SQL->Opp', 'Opp->Close']
+          },
+          salesOps: {
+            title: 'Sales Operations',
+            metrics: ['Lead Velocity Rate', 'Sales Capacity (FTE)', 'Leads per Rep', 'Avg Deal Size', 'Activity Metrics', 'Rep Ramp Time']
+          },
+          customerHealth: {
+            title: 'Customer Health',
+            metrics: ['Engagement Score', 'NPS Score', 'Support Tickets', 'DAU/MAU Stickiness', 'Time in Product', 'Usage Depth']
+          },
+          cohort: {
+            title: 'Cohort Analysis',
+            metrics: ['Retention Curves', 'Revenue by Cohort', 'Churn Timing', 'Expansion by Cohort', 'LTV by Cohort']
+          },
+          leadROI: {
+            title: 'Lead Source ROI',
+            metrics: ['CAC by Channel', 'LTV by Channel', 'Payback by Channel', 'Channel Attribution', 'Blended vs Paid CAC']
+          },
+          efficiency: {
+            title: 'Efficiency',
+            metrics: ['ARR per Employee', 'Revenue per Rep', 'Support Cost/Cust', 'Burn Multiple', 'Months of Runway']
+          }
+        };
 
         // --- COMPONENT HELPERS ---
         const SelectionGroup = ({ title, options, selected, onSelect }) => (
@@ -411,12 +491,140 @@
                 </div>
               )}
 
-              {/* PLACEHOLDER FOR LAYERS 3 & 4 (To keep code short, you can re-enable full content if needed) */}
-              {(activeLayer === 3 || activeLayer === 4) && (
-                  <div className="bg-white rounded-xl p-10 text-center border border-slate-100">
-                      <p className="text-gray-400">Layer {activeLayer} content hidden for brevity in this update.</p>
+              {/* LAYER 3: PRODUCT ANALYSIS (MERGED) */}
+              {activeLayer === 3 && (
+                <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-5 animate-fade-in">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 border-b border-gray-100 pb-4">
+                    <div className="flex items-center gap-2">
+                      <span className="p-1.5 bg-purple-100 text-purple-600 rounded text-lg">🚀</span>
+                      <div>
+                        <h2 className="font-bold text-gray-800 leading-tight">Product Analysis</h2>
+                        <p className="text-xs text-gray-500">Strategy vs Execution</p>
+                      </div>
+                    </div>
+                    {/* SUB-NAVIGATION TOGGLE */}
+                    <div className="flex bg-slate-100 p-1 rounded-lg self-start sm:self-auto">
+                      <button onClick={() => setProductView('frameworks')} 
+                        className={`px-4 py-1.5 text-xs font-bold rounded-md transition-all ${productView === 'frameworks' ? 'bg-white shadow text-purple-700' : 'text-slate-500 hover:text-slate-700'}`}>
+                        🧠 Frameworks
+                      </button>
+                      <button onClick={() => setProductView('platforms')} 
+                        className={`px-4 py-1.5 text-xs font-bold rounded-md transition-all ${productView === 'platforms' ? 'bg-white shadow text-purple-700' : 'text-slate-500 hover:text-slate-700'}`}>
+                        🛠️ Platforms
+                      </button>
+                    </div>
                   </div>
+
+                  {/* VIEW 1: FRAMEWORKS */}
+                  {productView === 'frameworks' && (
+                    <div>
+                      <div className="grid md:grid-cols-2 gap-3 mb-4">
+                        {Object.entries(productFrameworks).map(([key, fw]) => (
+                          <div key={key} className="border border-slate-200 rounded-lg p-3 hover:border-purple-300 transition-colors bg-purple-50/30">
+                            <h3 className="font-bold text-gray-800 text-sm mb-2 flex items-center gap-2">
+                               {fw.name}
+                            </h3>
+                            <div className="flex flex-wrap gap-1.5">
+                              {fw.dims.map((d, i) => (
+                                <span key={i} className="text-xs bg-white text-purple-700 border border-purple-100 px-2 py-0.5 rounded shadow-sm">{d}</span>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div className="bg-indigo-50 rounded-lg p-3 border border-indigo-100">
+                          <h4 className="font-bold text-indigo-900 text-sm mb-2">⚡ Activation</h4>
+                          <div className="text-xs space-y-1 text-indigo-800">
+                            <div>• Time to Value (TTV)</div>
+                            <div>• Activation Rate</div>
+                            <div>• PQL Rate</div>
+                          </div>
+                        </div>
+                        <div className="bg-green-50 rounded-lg p-3 border border-green-100">
+                          <h4 className="font-bold text-green-900 text-sm mb-2">📊 Stickiness</h4>
+                          <div className="text-xs space-y-1 text-green-800">
+                            <div>• DAU/MAU Ratio</div>
+                            <div>• Feature Adoption</div>
+                            <div>• Action Frequency</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* VIEW 2: PLATFORMS */}
+                  {productView === 'platforms' && (
+                    <div>
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {Object.entries(platformFrameworks).map(([key, pf]) => (
+                          <button key={key} onClick={() => setActivePlatform(key)}
+                            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${activePlatform === key ? `${pf.color} text-white shadow-md` : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}>
+                            {pf.name}
+                          </button>
+                        ))}
+                      </div>
+                      
+                      <div className="bg-slate-50 rounded-xl p-4 border border-slate-200 mb-3">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className={`px-2 py-0.5 rounded text-[10px] uppercase font-bold text-white ${currentPlatform.color}`}>
+                            {currentPlatform.approach}
+                          </span>
+                        </div>
+                        <p className="text-sm text-slate-700 mb-3">{currentPlatform.desc}</p>
+                        
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                          {currentPlatform.categories.map((cat, i) => (
+                            <div key={i} className="bg-white p-2 rounded border border-slate-200">
+                              <h4 className="font-bold text-slate-800 text-xs mb-1">{cat.name}</h4>
+                              <div className="flex flex-wrap gap-1">
+                                {cat.metrics.map((m, j) => (
+                                  <span key={j} className="text-[10px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded border border-slate-200">{m}</span>
+                                ))}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
               )}
+
+              {/* LAYER 4: OPERATIONAL */}
+              {activeLayer === 4 && (
+                <div className="bg-white rounded-xl shadow-sm border border-slate-100 p-5 animate-fade-in">
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className="p-1.5 bg-amber-100 text-amber-600 rounded text-lg">⚙️</span>
+                    <h2 className="font-bold text-gray-800">Operational & Funnel Metrics</h2>
+                  </div>
+                  <p className="text-xs text-gray-500 mb-4">Tactical levers to optimize day-to-day performance.</p>
+                  
+                  <div className="grid md:grid-cols-3 gap-3">
+                    {Object.entries(operationalMetrics).map(([key, section]) => (
+                      <div key={key} className="bg-amber-50 rounded-lg p-3 border border-amber-100">
+                        <h3 className="font-bold text-amber-900 text-sm mb-2">{section.title}</h3>
+                        <div className="space-y-1">
+                          {section.metrics.map((m, i) => (
+                            <div key={i} className="text-xs text-amber-800 flex items-start">
+                              <span className="mr-1.5 opacity-60">•</span> {m}
+                            </div>
+                          ))}
+                        </div>
+                        {section.conversions && (
+                          <div className="mt-2 pt-2 border-t border-amber-200">
+                            <div className="text-[10px] font-bold text-amber-900 mb-1 opacity-70">CONVERSION RATES</div>
+                            {section.conversions.map((c, i) => (
+                              <div key={i} className="text-[10px] text-amber-700 font-mono">• {c}</div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
 
               {/* FOOTER */}
               <div className="mt-6 border-t border-slate-200 pt-4 px-2">

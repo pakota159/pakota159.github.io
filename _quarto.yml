@@ -4,7 +4,12 @@ project:
 
 website:
   title: "Cuong Pham"
+  description: "Blog about SaaS metrics, data analysis, and technology"
+  site-url: "https://pakota159.github.io"  # Add this
   favicon: img/favicon.png
+  open-graph: true  # Add this
+  twitter-card:
+    creator: "@pakota159"
   navbar:
     background: light
     foreground: dark

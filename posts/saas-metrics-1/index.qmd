@@ -5,7 +5,7 @@ description: "Phân loại các mô hình kinh doanh SaaS"
 author: "Cuong Pham"
 date: "2026-01-10"
 categories: [SaaS, Business Model, Strategy, Startup]
-image: "/img/saas-metrics/saas-framework.png" 
+image: "https://pakota159.github.io/img/saas-metrics/saas-framework.png" 
 toc: true
 ---
 

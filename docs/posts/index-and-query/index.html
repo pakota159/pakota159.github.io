@@ -109,6 +109,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <style>html{ scroll-behavior: smooth; }</style>
 
 
+<meta property="og:title" content="Understanding Database Indexes – Cuong Pham">
+<meta property="og:description" content="Index makes query fast - a simple explanation">
+<meta property="og:image" content="https://pakota159.github.io/img/sql/bg.jpg">
+<meta property="og:site_name" content="Cuong Pham">
+<meta name="twitter:title" content="Understanding Database Indexes – Cuong Pham">
+<meta name="twitter:description" content="Index makes query fast - a simple explanation">
+<meta name="twitter:image" content="https://pakota159.github.io/img/sql/bg.jpg">
+<meta name="twitter:creator" content="@pakota159">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="floating nav-fixed quarto-light">
@@ -525,7 +534,7 @@ Note
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/pakota159\.github\.io");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }

@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.26">
+<meta name="generator" content="quarto-1.8.27">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -75,10 +75,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-8ebfbabd275cff996c9318031f1d1737.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-353fe7f2fe85e3ca25e3f60a82920eba.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-5034ea2f0b6f7aaf68ffad7b50598023.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-0ca021adaf2ff637eb5fc3b20cc46368.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -236,7 +236,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../..\img/sql/img1.png" class="img-fluid figure-img"></p>
+<p><img src="../../img/sql/img1.png" class="img-fluid figure-img"></p>
 <figcaption>Binary Search Tree</figcaption>
 </figure>
 </div>
@@ -245,7 +245,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The time to search/find an item only depends on the <strong>height</strong> of the tree, which is the longest path from root node to any leaf node (other items) in the tree. The bigger the height, the slower the speed to find the item we want.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../..\img/sql/img2.png" class="img-fluid figure-img"></p>
+<p><img src="../../img/sql/img2.png" class="img-fluid figure-img"></p>
 <figcaption>Tree Height</figcaption>
 </figure>
 </div>
@@ -268,7 +268,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>This kind of tree is used to optimize the speed of searching, because it optimizes the height of the tree (which is the factor that affects the speed of searching).</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../..\img/sql/img1.png" class="img-fluid figure-img"></p>
+<p><img src="../../img/sql/img1.png" class="img-fluid figure-img"></p>
 <figcaption>Balanced Binary Tree</figcaption>
 </figure>
 </div>
@@ -279,7 +279,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>As shown in the structure below, we can see each node can have a bulk of data on the left or right. The left bulk contains values which are smaller than the value of the parent node. The right bulk contains values which are bigger than the parent.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../..\img/sql/img3.png" class="img-fluid figure-img"></p>
+<p><img src="../../img/sql/img3.png" class="img-fluid figure-img"></p>
 <figcaption>B-tree Structure</figcaption>
 </figure>
 </div>
@@ -344,7 +344,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Then for each value, we create a child node which contains other names that satisfy the rule of B-tree: <code>left node contains all values smaller than parent, right node contains bigger values</code>. In this case, <em>smaller</em> means it comes before in the alphabet.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../..\img/sql/img4.png" class="img-fluid figure-img"></p>
+<p><img src="../../img/sql/img4.png" class="img-fluid figure-img"></p>
 <figcaption>Index B-tree Structure</figcaption>
 </figure>
 </div>
@@ -375,7 +375,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Before adding an index to the column <code>Item Type</code>, I try the query below, and it returns <code>125,022 records</code> with a speed of <strong>2.244 seconds</strong>.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../..\img/sql/img5.png" class="img-fluid figure-img"></p>
+<p><img src="../../img/sql/img5.png" class="img-fluid figure-img"></p>
 <figcaption>Query without index</figcaption>
 </figure>
 </div>
@@ -387,7 +387,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>That command will run for a while to create a new table which is an <code>index table</code> containing the data of column <code>Item Type</code> with the principle of B-tree as we mentioned earlier.</p>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../..\img/sql/img6.png" class="img-fluid figure-img"></p>
+<p><img src="../../img/sql/img6.png" class="img-fluid figure-img"></p>
 <figcaption>Query with index</figcaption>
 </figure>
 </div>

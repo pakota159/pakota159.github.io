@@ -3,10 +3,9 @@ title: "SaaS Metrics that actually make sense - Part 2"
 subtitle: "Đầu tư vào SaaS là ngon luôn? Cùng tìm hiểu những mô hình kinh doanh SaaS và cách đo đạc hiệu quả"
 description: "Các chỉ số cho SaaS - Financial Metrics"
 author: "Cuong Pham"
-date: "2026-01-12"
+date: "2026-01-25"
 categories: [SaaS, Business Model, Strategy, Startup]
 image: "/img/saas-metrics/saas-framework.png" 
-draft: true
 toc: true
 ---
 
@@ -157,7 +156,9 @@ Margin giảm từ 80% xuống 40% nghĩa là LTV của bạn **giảm một n�
 #### 4. Tối ưu hóa Gross Margin (Analyst Actionable)
 
 Là DA, bạn có thể giúp cải thiện chỉ số này bằng cách phân tích:  
+
 * **Unit Cost Analysis:** Chi phí AWS trên mỗi khách hàng là bao nhiêu? Có khách hàng nào "bào" server quá mức so với số tiền họ trả không?  
+
 * **Support Efficiency:** Tỷ lệ ticket/khách hàng. Nếu một tính năng gây lỗi liên tục khiến đội Support quá tải, Margin sẽ bị ăn mòn.  
 
 ::: callout-tip
@@ -215,8 +216,11 @@ LTV = \frac{ARPU \times \text{Gross Margin \%}}{\text{Churn Rate}}
 $$
 
 *Trong đó:*  
+
 * **ARPU:** Doanh thu trung bình trên một khách hàng (Average Revenue Per User).  
+
 * **Gross Margin %:** Tỷ lệ lãi gộp (thường là 70-80% với SaaS).  
+
 * **Churn Rate:** Tỷ lệ khách hàng rời bỏ hàng tháng.  
 
 ::: callout-note
@@ -281,7 +285,9 @@ Có hai lăng kính để nhìn vào khả năng giữ chân dòng tiền: **GRR
 **Định nghĩa:** GRR đo lường phần doanh thu bạn giữ lại được từ tập khách hàng cũ trong một kỳ, **không bao gồm** doanh thu bán thêm (Expansion/Upsell).
 
 **Đặc điểm nhận dạng:**   
+
 * GRR **luôn luôn $\le$ 100%**.  
+
 * GRR cho biết thực lực cốt lõi của sản phẩm: Liệu sản phẩm có đủ tốt để khách không rời đi không?   
 
 ##### Công thức tính (The Formula)
@@ -291,8 +297,11 @@ GRR = \frac{\text{MRR Start} - (\text{Churn} + \text{Contraction})}{\text{MRR St
 $$
 
 *Trong đó:*   
+
 * **Churn:** Doanh thu mất đi do khách hủy dịch vụ.   
+
 * **Contraction:** Doanh thu mất đi do khách hạ cấp gói.   
+
 * **MRR Start:** Doanh thu đầu kỳ.   
 
 ::: callout-note
@@ -305,7 +314,9 @@ Nếu GRR thấp (ví dụ < 80%), nghĩa là "cái xô bị thủng đáy" (Lea
 **Định nghĩa:** NRR đo lường tổng doanh thu giữ lại được từ khách cũ, **bao gồm cả** doanh thu mở rộng (Expansion) từ Upsell/Cross-sell.
 
 **Đặc điểm nhận dạng:**  
+
 * NRR có thể **> 100%**.  
+
 * Khi NRR > 100%, doanh nghiệp đạt trạng thái **Negative Churn** (Churn âm). Tức là ngay cả khi không có khách mới, công ty vẫn tăng trưởng doanh thu.  
 
 ##### Công thức tính (The Formula)
@@ -370,7 +381,9 @@ $$
 $$
 
 Nguyên lý này cho phép sự linh hoạt tuyệt vời:  
+
 * Nếu bạn tăng trưởng cực nhanh (100%), bạn có thể chấp nhận lỗ nặng (-60%). (Tổng = 40%).  
+
 * Nếu bạn tăng trưởng chậm (10%), bạn buộc phải có lãi cao (30%). (Tổng = 40%).  
 
 #### 2. Công thức tính & Sắc thái dữ liệu (Nuances)

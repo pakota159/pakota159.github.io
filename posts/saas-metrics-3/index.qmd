@@ -3,10 +3,9 @@ title: "SaaS Metrics that actually make sense - Part 3"
 subtitle: "Đầu tư vào SaaS là ngon luôn? Cùng tìm hiểu những mô hình kinh doanh SaaS và cách đo đạc hiệu quả"
 description: "Các chỉ số cho SaaS - Metrics theo các Business models"
 author: "Cuong Pham"
-date: "2026-01-13"
+date: "2026-02-01"
 categories: [SaaS, Business Model, Strategy, Startup]
 image: "/img/saas-metrics/saas-framework.png" 
-draft: true
 toc: true
 ---
 
@@ -33,7 +32,7 @@ toc: true
 
 Không có một bộ metric "vạn năng" cho tất cả. Cách bạn bán hàng (GTM Strategy) sẽ quyết định bạn cần đo lường cái gì. Một công ty bán phần mềm $10/tháng (Self-service) sẽ có bộ chỉ số hoàn toàn khác với công ty bán hợp đồng $100,000/năm (Enterprise).
 
-Dưới đây là 3 mô hình GTM phổ biến mà Data Analyst cần phân biệt để xây dựng dashboard đúng trọng tâm:
+Dưới đây là 3 mô hình GTM phổ biến mà Data Analyst cần phân biệt để xây dựng dashboard đúng trọng tâm
 
 ### 1. Self-Service (Mô hình Tự phục vụ / PLG)  
 Đây là mô hình **Product-Led Growth** điển hình (như Spotify, Zoom, Canva).    

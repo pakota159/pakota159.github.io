@@ -3,7 +3,7 @@ title: "SaaS Metrics that actually make sense - Part 4"
 subtitle: "Đầu tư vào SaaS là ngon luôn? Cùng tìm hiểu những mô hình kinh doanh SaaS và cách đo đạc hiệu quả"
 description: "Các chỉ số cho SaaS - Product Oriented"
 author: "Cuong Pham"
-date: "2026-01-14"
+date: "2026-02-09"
 categories: [SaaS, Business Model, Strategy, Startup]
 image: "/img/saas-metrics/saas-framework.png" 
 toc: true

@@ -1,0 +1,362 @@
+<!-- posts/modern-data-stack/bi_explorer.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Intelligence</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      body { margin: 0; padding: 0; background: #f8fafc; font-family: 'Inter', system-ui, sans-serif; }
+    </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+var useState = React.useState;
+
+var sections = [
+  {
+    id: "why",
+    label: "Why Metabase",
+    icon: "\u{1F4CA}"
+  },
+  {
+    id: "setup",
+    label: "How to Deploy",
+    icon: "\u{1F680}"
+  },
+  {
+    id: "dashboards",
+    label: "Sample Dashboards",
+    icon: "\u{1F4CB}"
+  },
+  {
+    id: "alternatives",
+    label: "Alternatives",
+    icon: "\u{1F504}"
+  }
+];
+
+var alternatives = [
+  { name: "Metabase (self-hosted)", type: "Our pick", cost: "~$5/mo", fit: "Beautiful UI, easy for non-tech users, SQL + visual builder", best: true },
+  { name: "Apache Superset", type: "OSS", cost: "Free (self-host)", fit: "More powerful charts, but steeper learning curve and heavier to host" },
+  { name: "Evidence", type: "Code-based BI", cost: "Free (OSS)", fit: "Markdown + SQL, generates static reports. Great for data teams, bad for business users" },
+  { name: "Tableau", type: "Enterprise", cost: "$70+/user/mo", fit: "Gold standard for visualization, but expensive and overkill for small teams" },
+  { name: "Power BI", type: "Microsoft", cost: "$10+/user/mo", fit: "Cheap per-seat, great if you are in the Microsoft ecosystem" },
+  { name: "Looker", type: "Google", cost: "$$$", fit: "LookML modeling layer is powerful, but expensive and complex" }
+];
+
+var dashboardCards = [
+  {
+    title: "Marketing Performance",
+    team: "Marketing / Growth",
+    questions: [
+      { q: "Daily spend vs installs by channel", type: "Line + Bar" },
+      { q: "CPI trend (last 30 days)", type: "Line" },
+      { q: "ROAS by campaign", type: "Table" },
+      { q: "Top 5 campaigns by installs", type: "Bar" }
+    ],
+    mart: "mart_marketing__channel_performance",
+    color: "#1d4ed8"
+  },
+  {
+    title: "Product / Engagement",
+    team: "Product / PM",
+    questions: [
+      { q: "DAU / WAU / MAU trend", type: "Line" },
+      { q: "Retention D1 / D7 / D30 by cohort", type: "Heatmap" },
+      { q: "Top screens by session count", type: "Bar" },
+      { q: "Funnel: onboarding completion rate", type: "Funnel" }
+    ],
+    mart: "mart_product__user_engagement",
+    color: "#7c3aed"
+  },
+  {
+    title: "Revenue / Finance",
+    team: "Finance / CEO",
+    questions: [
+      { q: "MRR / ARR growth", type: "Line" },
+      { q: "Revenue by country", type: "Map / Bar" },
+      { q: "ARPU trend", type: "Line" },
+      { q: "Paying users vs free users", type: "Pie" }
+    ],
+    mart: "mart_finance__revenue_summary",
+    color: "#059669"
+  }
+];
+
+var deployOptions = [
+  {
+    id: "docker",
+    name: "Docker on a VPS",
+    cost: "~$5-12/mo",
+    steps: [
+      "Get a small VPS: DigitalOcean $6/mo droplet, or Hetzner $4/mo, or GCP e2-micro (free tier)",
+      "SSH into the server, install Docker",
+      "Run one command: docker run -d -p 3000:3000 metabase/metabase",
+      "Open http://your-server-ip:3000, connect to BigQuery",
+      "Optional: add a reverse proxy (Caddy/Nginx) + free SSL with Let's Encrypt"
+    ],
+    code: "# On your VPS (Ubuntu)\n\n# Install Docker\ncurl -fsSL https://get.docker.com | sh\n\n# Run Metabase\ndocker run -d \\\n  --name metabase \\\n  --restart always \\\n  -p 3000:3000 \\\n  -v metabase-data:/metabase-data \\\n  -e MB_DB_FILE=/metabase-data/metabase.db \\\n  metabase/metabase\n\n# Check it's running\ndocker logs -f metabase\n\n# (Optional) Caddy reverse proxy for HTTPS\n# Install Caddy, then:\n# bi.yourcompany.com {\n#     reverse_proxy localhost:3000\n# }"
+  },
+  {
+    id: "cloudrun",
+    name: "Google Cloud Run",
+    cost: "~$0-10/mo",
+    steps: [
+      "Cloud Run is serverless, you pay only when someone opens the dashboard",
+      "Deploy the Metabase Docker image directly to Cloud Run",
+      "Connect to Cloud SQL (PostgreSQL) for Metabase metadata, or use embedded H2 for small teams",
+      "Set min instances to 0 (saves money) or 1 (faster cold start)",
+      "Custom domain with managed SSL included free"
+    ],
+    code: "# Deploy Metabase to Cloud Run\n\ngcloud run deploy metabase \\\n  --image metabase/metabase:latest \\\n  --platform managed \\\n  --region asia-southeast1 \\\n  --port 3000 \\\n  --memory 1Gi \\\n  --min-instances 0 \\\n  --max-instances 1 \\\n  --allow-unauthenticated\n\n# For persistent config, add Cloud SQL:\n# --set-env-vars MB_DB_TYPE=postgres \\\n# --set-env-vars MB_DB_HOST=/cloudsql/project:region:instance \\\n# --set-env-vars MB_DB_DBNAME=metabase \\\n# --set-env-vars MB_DB_USER=metabase \\\n# --set-env-vars MB_DB_PASS=secret"
+  }
+];
+
+function CodeBlock(props) {
+  return (
+    <div style={{ background: "#1e293b", borderRadius: 10, padding: "14px 18px", overflowX: "auto", margin: "8px 0" }}>
+      <pre style={{ margin: 0, color: "#e2e8f0", fontSize: 11, lineHeight: 1.7, fontFamily: "monospace", whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{props.code}</pre>
+    </div>
+  );
+}
+
+function App() {
+  var ref1 = useState("why");
+  var activeSection = ref1[0];
+  var setActiveSection = ref1[1];
+
+  var ref2 = useState("docker");
+  var activeDeploy = ref2[0];
+  var setActiveDeploy = ref2[1];
+
+  var ref3 = useState(false);
+  var showCode = ref3[0];
+  var setShowCode = ref3[1];
+
+  var deploy = null;
+  for (var i = 0; i < deployOptions.length; i++) {
+    if (deployOptions[i].id === activeDeploy) { deploy = deployOptions[i]; break; }
+  }
+
+  return (
+    <div style={{ padding: "24px 20px", maxWidth: 960, margin: "0 auto" }}>
+      {/* Header */}
+      <div style={{ textAlign: "center", marginBottom: 24 }}>
+        <h1 style={{ fontSize: 24, fontWeight: 800, color: "#0f172a", margin: 0 }}>Business Intelligence</h1>
+        <p style={{ color: "#64748b", fontSize: 13, margin: "6px 0 0" }}>
+          Self-hosted Metabase on BigQuery, beautiful dashboards for ~$5/month
+        </p>
+      </div>
+
+      {/* Section tabs */}
+      <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginBottom: 24 }}>
+        {sections.map(function(s) {
+          var on = s.id === activeSection;
+          return (
+            <button key={s.id} onClick={function() { setActiveSection(s.id); setShowCode(false); }} style={{
+              display: "flex", alignItems: "center", gap: 6,
+              padding: "8px 16px", borderRadius: 10, cursor: "pointer",
+              border: on ? "2px solid #db2777" : "1.5px solid #e2e8f0",
+              background: on ? "#fdf2f8" : "#fff",
+              color: on ? "#db2777" : "#64748b",
+              fontWeight: on ? 700 : 500, fontSize: 13,
+              transition: "all 0.2s",
+            }}>
+              <span style={{ fontSize: 16 }}>{s.icon}</span>
+              {s.label}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* WHY section */}
+      {activeSection === "why" && (
+        <div style={{ background: "#fff", borderRadius: 16, border: "1.5px solid #db277733", boxShadow: "0 4px 20px rgba(0,0,0,0.06)", overflow: "hidden" }}>
+          <div style={{ background: "linear-gradient(135deg, #fdf2f8, #fff)", padding: "20px 24px", borderBottom: "1px solid #db277722" }}>
+            <h2 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: "#db2777" }}>Why Metabase for a small team</h2>
+          </div>
+          <div style={{ padding: "20px 24px" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 24 }}>
+              {[
+                { t: "Non-tech friendly", d: "Business users can click to explore data without writing SQL. Visual query builder + saved questions." },
+                { t: "SQL mode for power users", d: "Data team writes SQL directly, parameterizes with filters, shares as saved questions on dashboards." },
+                { t: "Self-hosted = cheap", d: "Run on a $5-6/mo VPS or Cloud Run. No per-seat pricing, unlimited users for free." },
+                { t: "Native BigQuery support", d: "First-class BigQuery connector. Point it at your mart tables and start building charts." },
+                { t: "Scheduled reports", d: "Email or Slack dashboards on a schedule. Stakeholders get reports without logging in." },
+                { t: "Embeddable", d: "Embed charts in your own app or internal tools with iframe or JWT-based embedding." }
+              ].map(function(item, idx) {
+                return (
+                  <div key={idx} style={{ background: "#fdf2f8", border: "1px solid #db277733", borderRadius: 10, padding: 12 }}>
+                    <div style={{ fontWeight: 700, color: "#db2777", fontSize: 12, marginBottom: 4 }}>{item.t}</div>
+                    <div style={{ color: "#64748b", fontSize: 12, lineHeight: 1.5 }}>{item.d}</div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* How it connects */}
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>How it fits in the stack</div>
+            <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 10, padding: 16 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", justifyContent: "center" }}>
+                {["dbt mart tables", "\u2192", "BigQuery", "\u2192", "Metabase", "\u2192", "Dashboards / Slack / Email"].map(function(item, idx) {
+                  var isArrow = item === "\u2192";
+                  return (
+                    <span key={idx} style={{
+                      fontSize: isArrow ? 16 : 12,
+                      fontWeight: isArrow ? 400 : 600,
+                      color: isArrow ? "#db2777" : "#334155",
+                      background: isArrow ? "none" : "#fff",
+                      border: isArrow ? "none" : "1px solid #e2e8f0",
+                      padding: isArrow ? "0 4px" : "6px 14px",
+                      borderRadius: isArrow ? 0 : 8,
+                    }}>{item}</span>
+                  );
+                })}
+              </div>
+              <div style={{ textAlign: "center", marginTop: 10, fontSize: 11, color: "#94a3b8", fontStyle: "italic" }}>
+                Metabase reads from your mart tables only. Never point it at raw or staging tables.
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* SETUP section */}
+      {activeSection === "setup" && (
+        <div style={{ background: "#fff", borderRadius: 16, border: "1.5px solid #db277733", boxShadow: "0 4px 20px rgba(0,0,0,0.06)", overflow: "hidden" }}>
+          <div style={{ background: "linear-gradient(135deg, #fdf2f8, #fff)", padding: "20px 24px", borderBottom: "1px solid #db277722" }}>
+            <h2 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: "#db2777" }}>Deploy Metabase</h2>
+          </div>
+          <div style={{ padding: "20px 24px" }}>
+            {/* Deploy option tabs */}
+            <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
+              {deployOptions.map(function(d) {
+                var on = d.id === activeDeploy;
+                return (
+                  <button key={d.id} onClick={function() { setActiveDeploy(d.id); setShowCode(false); }} style={{
+                    flex: 1, padding: "12px 16px", borderRadius: 10, cursor: "pointer", textAlign: "left",
+                    border: on ? "2px solid #db2777" : "1.5px solid #e2e8f0",
+                    background: on ? "#fdf2f8" : "#fff",
+                  }}>
+                    <div style={{ fontWeight: 700, fontSize: 13, color: on ? "#db2777" : "#334155" }}>{d.name}</div>
+                    <div style={{ fontSize: 11, color: on ? "#db2777" : "#94a3b8", marginTop: 2 }}>{d.cost}</div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Steps */}
+            {deploy && (
+              <div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 0, marginBottom: 16 }}>
+                  {deploy.steps.map(function(s, si) {
+                    return (
+                      <div key={si} style={{ display: "flex", gap: 12 }}>
+                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: 24, flexShrink: 0 }}>
+                          <div style={{ width: 22, height: 22, borderRadius: "50%", background: "#db2777", color: "#fff", fontSize: 11, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>{si + 1}</div>
+                          {si < deploy.steps.length - 1 && <div style={{ width: 2, flex: 1, background: "#db277744", minHeight: 14 }}></div>}
+                        </div>
+                        <div style={{ paddingBottom: 14, fontSize: 12.5, color: "#334155", lineHeight: 1.6 }}>{s}</div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <button onClick={function() { setShowCode(!showCode); }} style={{
+                  padding: "8px 16px", borderRadius: 8, cursor: "pointer",
+                  border: showCode ? "2px solid #db2777" : "1.5px solid #e2e8f0",
+                  background: showCode ? "#fdf2f8" : "#fff",
+                  color: showCode ? "#db2777" : "#64748b",
+                  fontWeight: 600, fontSize: 12,
+                }}>
+                  {showCode ? "Hide" : "Show"} commands
+                </button>
+                {showCode && <CodeBlock code={deploy.code} />}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* DASHBOARDS section */}
+      {activeSection === "dashboards" && (
+        <div style={{ background: "#fff", borderRadius: 16, border: "1.5px solid #db277733", boxShadow: "0 4px 20px rgba(0,0,0,0.06)", overflow: "hidden" }}>
+          <div style={{ background: "linear-gradient(135deg, #fdf2f8, #fff)", padding: "20px 24px", borderBottom: "1px solid #db277722" }}>
+            <h2 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: "#db2777" }}>What to build first</h2>
+            <p style={{ margin: "4px 0 0", fontSize: 12, color: "#64748b" }}>Three dashboards that cover most e-commerce app needs. Each reads from one dbt mart table.</p>
+          </div>
+          <div style={{ padding: "20px 24px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              {dashboardCards.map(function(d, di) {
+                return (
+                  <div key={di} style={{ border: "1.5px solid " + d.color + "33", borderRadius: 12, overflow: "hidden" }}>
+                    <div style={{ background: d.color + "0a", padding: "12px 16px", borderBottom: "1px solid " + d.color + "22", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                      <div>
+                        <div style={{ fontWeight: 700, fontSize: 14, color: d.color }}>{d.title}</div>
+                        <div style={{ fontSize: 11, color: "#94a3b8" }}>For: {d.team}</div>
+                      </div>
+                      <span style={{ fontSize: 10, fontWeight: 700, fontFamily: "monospace", background: d.color + "11", color: d.color, border: "1px solid " + d.color + "33", padding: "3px 10px", borderRadius: 16 }}>{d.mart}</span>
+                    </div>
+                    <div style={{ padding: "12px 16px" }}>
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                        {d.questions.map(function(question, qi) {
+                          return (
+                            <div key={qi} style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: "8px 12px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                              <span style={{ fontSize: 12, color: "#334155" }}>{question.q}</span>
+                              <span style={{ fontSize: 10, color: "#94a3b8", background: "#f1f5f9", padding: "1px 6px", borderRadius: 4, whiteSpace: "nowrap", marginLeft: 8 }}>{question.type}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ALTERNATIVES section */}
+      {activeSection === "alternatives" && (
+        <div style={{ background: "#fff", borderRadius: 16, border: "1.5px solid #db277733", boxShadow: "0 4px 20px rgba(0,0,0,0.06)", overflow: "hidden" }}>
+          <div style={{ background: "linear-gradient(135deg, #fdf2f8, #fff)", padding: "20px 24px", borderBottom: "1px solid #db277722" }}>
+            <h2 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: "#db2777" }}>BI Tool Comparison</h2>
+          </div>
+          <div style={{ padding: "20px 24px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {alternatives.map(function(a, ai) {
+                return (
+                  <div key={ai} style={{
+                    display: "flex", alignItems: "center", gap: 12,
+                    background: a.best ? "#fdf2f8" : "#f8fafc",
+                    border: a.best ? "2px solid #db2777" : "1px solid #e2e8f0",
+                    borderRadius: 10, padding: "12px 16px",
+                  }}>
+                    {a.best && <span style={{ fontSize: 14 }}>{"\u2B50"}</span>}
+                    <div style={{ minWidth: 140 }}>
+                      <div style={{ fontWeight: 700, color: a.best ? "#db2777" : "#1e293b", fontSize: 13 }}>{a.name}</div>
+                      <div style={{ fontSize: 10, color: "#94a3b8" }}>{a.type}</div>
+                    </div>
+                    <div style={{ flex: 1, fontSize: 12, color: "#64748b", lineHeight: 1.5 }}>{a.fit}</div>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: a.best ? "#db2777" : "#64748b", background: a.best ? "#fdf2f8" : "#f1f5f9", border: "1px solid " + (a.best ? "#db277744" : "#e2e8f0"), padding: "2px 10px", borderRadius: 16, whiteSpace: "nowrap" }}>{a.cost}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+var root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+</script>
+</body>
+</html>

@@ -1,0 +1,343 @@
+<!-- posts/modern-data-stack/ingestion_explorer.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ingestion Methods</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      body { margin: 0; padding: 0; background: #f8fafc; font-family: 'Inter', system-ui, sans-serif; }
+      code { font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 12px; }
+    </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+
+const methods = [
+  {
+    id: "native_bq",
+    name: "Native BigQuery Export",
+    icon: "☁️",
+    color: "#ea580c",
+    bg: "#fff7ed",
+    cost: "Free",
+    effort: "Low",
+    sources: ["Firebase / GA4", "Google Ads"],
+    how: "Toggle a switch in Google's console. Data appears in BigQuery automatically — no code, no pipeline, no maintenance.",
+    steps: [
+      { label: "Firebase / GA4", detail: "Firebase Console → Project Settings → Integrations → BigQuery → Link. Events stream into a daily table like `analytics_<ID>.events_YYYYMMDD`. Takes ~5 minutes to set up." },
+      { label: "Google Ads", detail: "BigQuery Console → Data Transfers → Create Transfer → Google Ads. Enter your Customer ID. Data lands daily in tables like `Campaign`, `AdGroupAd`, `AdGroupCriterion`." },
+    ],
+    schema: {
+      title: "BigQuery — analytics_123456.events_20250224",
+      columns: ["event_date", "event_name", "event_params", "user_pseudo_id", "device", "geo"],
+      rows: [
+        ["20250224", "purchase", "[{key:'value', ...}]", "abc123", "{category:'mobile'}", "{country:'VN'}"],
+        ["20250224", "screen_view", "[{key:'screen', ...}]", "abc123", "{category:'mobile'}", "{country:'VN'}"],
+        ["20250224", "first_open", "[{key:'source', ...}]", "def456", "{category:'mobile'}", "{country:'US'}"],
+      ]
+    },
+    pros: ["Zero cost, zero code", "Real-time streaming (Firebase) or daily batch (Ads)", "Maintained by Google — schema changes are handled"],
+    cons: ["Only works for Google products", "Firebase event_params is deeply nested JSON — needs unnesting in dbt", "No control over export schedule or filtering"],
+  },
+  {
+    id: "dlt",
+    name: "dlt (Data Load Tool)",
+    icon: "🐍",
+    color: "#e11d48",
+    bg: "#fff1f2",
+    cost: "Free",
+    effort: "Medium",
+    sources: ["Facebook Ads", "OneSignal", "AppsFlyer", "Branch.io", "Any REST API"],
+    how: "Write a short Python script that calls an API and loads data into BigQuery. dlt handles schema inference, incremental loading, and retries.",
+    steps: [
+      { label: "Install", detail: "pip install dlt[bigquery] — that's it. One package, includes the BigQuery destination." },
+      { label: "Write pipeline", detail: "Define a @dlt.source with one or more @dlt.resource functions. Each resource yields rows from an API. dlt auto-creates tables in BigQuery." },
+      { label: "Run", detail: "python my_pipeline.py — or trigger via GitHub Actions on a cron schedule. dlt tracks state for incremental loads (last cursor, page token, etc)." },
+    ],
+    schema: {
+      title: "Example: Facebook Ads → BigQuery",
+      columns: ["date", "campaign_id", "campaign_name", "impressions", "clicks", "spend", "installs"],
+      rows: [
+        ["2025-02-24", "120345", "VN_Retarget_Feb", "45200", "1230", "152.40", "87"],
+        ["2025-02-24", "120346", "US_Install_Feb", "128500", "3420", "890.00", "210"],
+        ["2025-02-23", "120345", "VN_Retarget_Feb", "41800", "1105", "142.10", "79"],
+      ]
+    },
+    code: `import dlt
+from dlt.sources.rest_api import rest_api_source
+
+source = rest_api_source({
+    "client": {
+        "base_url": "https://graph.facebook.com/v19.0/",
+        "auth": { "token": dlt.secrets["fb_token"] },
+    },
+    "resources": [{
+        "name": "ad_insights",
+        "endpoint": {
+            "path": "act_{account_id}/insights",
+            "params": {
+                "fields": "campaign_name,impressions,clicks,spend",
+                "time_range": {"since": "{start_date}", "until": "{end_date}"},
+                "level": "campaign",
+            },
+        },
+    }],
+})
+
+pipeline = dlt.pipeline(
+    pipeline_name="facebook_ads",
+    destination="bigquery",
+    dataset_name="raw_facebook",
+)
+
+pipeline.run(source)`,
+    pros: ["Free & open-source", "Python-native — use any API, any logic", "Incremental loading built-in", "Schema auto-detection, handles nested JSON"],
+    cons: ["Requires writing Python", "No monitoring UI (check logs or build your own)", "You maintain the code when APIs change"],
+  },
+  {
+    id: "webhooks",
+    name: "Webhooks / Push API",
+    icon: "📡",
+    color: "#7c3aed",
+    bg: "#f5f3ff",
+    cost: "Free",
+    effort: "Medium-High",
+    sources: ["Branch.io", "AppsFlyer (Push API)", "OneSignal"],
+    how: "The source pushes data to your endpoint in real-time. You set up a lightweight receiver (Cloud Function or Cloud Run) that writes to BigQuery.",
+    steps: [
+      { label: "Create endpoint", detail: "Deploy a small Cloud Function (GCP) or Lambda (AWS) that accepts POST requests and parses the JSON payload." },
+      { label: "Configure webhook", detail: "In the source's dashboard (Branch, AppsFlyer, etc), set your endpoint URL and select which events to forward (installs, opens, purchases)." },
+      { label: "Write to BigQuery", detail: "The function inserts rows into BigQuery via the streaming insert API or batches them into Cloud Storage first." },
+    ],
+    schema: {
+      title: "Example: Branch.io webhook payload → BigQuery",
+      columns: ["timestamp", "event", "branch_id", "channel", "campaign", "user_data.os"],
+      rows: [
+        ["2025-02-24T08:12:03Z", "install", "br_001", "Facebook", "VN_Feb_Sale", "ANDROID"],
+        ["2025-02-24T08:13:45Z", "purchase", "br_001", "Facebook", "VN_Feb_Sale", "ANDROID"],
+        ["2025-02-24T09:01:22Z", "install", "br_002", "Organic", "(none)", "IOS"],
+      ]
+    },
+    code: `# Cloud Function — receives Branch webhook
+import json
+from google.cloud import bigquery
+
+client = bigquery.Client()
+TABLE = "project.raw_branch.events"
+
+def handle_webhook(request):
+    events = request.get_json()
+    if not isinstance(events, list):
+        events = [events]
+
+    rows = [{
+        "timestamp": e.get("timestamp"),
+        "event": e.get("name"),
+        "branch_id": e.get("id"),
+        "channel": e.get("last_attributed_touch_data", {}).get("~channel"),
+        "campaign": e.get("last_attributed_touch_data", {}).get("~campaign"),
+        "os": e.get("user_data", {}).get("os"),
+    } for e in events]
+
+    client.insert_rows_json(TABLE, rows)
+    return "OK", 200`,
+    pros: ["Real-time — data arrives in seconds, not daily batches", "No polling / no API rate limit concerns", "Source handles the delivery"],
+    cons: ["You build & maintain the receiver endpoint", "Need to handle failures, retries, deduplication yourself", "Harder to backfill historical data"],
+  },
+  {
+    id: "fivetran",
+    name: "Fivetran / Airbyte (Managed)",
+    icon: "🔌",
+    color: "#0284c7",
+    bg: "#f0f9ff",
+    cost: "$$$",
+    effort: "Low",
+    sources: ["Everything — 300+ connectors"],
+    how: "Managed EL service. Pick a source, enter credentials, choose a destination. Data syncs automatically. You pay per row or connector.",
+    steps: [
+      { label: "Connect source", detail: "Click 'Add Connector' → select Facebook Ads → paste API token → choose sync frequency (e.g. every 6 hours)." },
+      { label: "Choose destination", detail: "Select BigQuery → enter project ID and credentials. Fivetran creates the dataset and tables automatically." },
+      { label: "Done", detail: "Data syncs on schedule. Fivetran handles schema changes, retries, and incremental loads. You monitor via their dashboard." },
+    ],
+    schema: {
+      title: "Fivetran auto-creates normalized tables",
+      columns: ["_fivetran_synced", "campaign_id", "campaign_name", "date", "impressions", "clicks", "spend"],
+      rows: [
+        ["2025-02-24T06:00:12Z", "120345", "VN_Retarget_Feb", "2025-02-24", "45200", "1230", "152.40"],
+        ["2025-02-24T06:00:12Z", "120346", "US_Install_Feb", "2025-02-24", "128500", "3420", "890.00"],
+        ["2025-02-24T06:00:12Z", "120345", "VN_Retarget_Feb", "2025-02-23", "41800", "1105", "142.10"],
+      ]
+    },
+    pros: ["Zero code, zero maintenance", "300+ pre-built connectors", "Handles schema drift, retries, backfills automatically", "Great monitoring UI and alerting"],
+    cons: ["Fivetran: $1–2K+/month at scale (per-row pricing)", "Airbyte Cloud: cheaper but less reliable", "Airbyte self-hosted: free but you run the infra", "Vendor lock-in on connector logic"],
+  },
+];
+
+const CodeBlock = ({ code }) => (
+  <div style={{ background: "#1e293b", borderRadius: 10, padding: "16px 20px", overflowX: "auto", margin: "12px 0" }}>
+    <pre style={{ margin: 0, color: "#e2e8f0", fontSize: 11.5, lineHeight: 1.7, fontFamily: "'JetBrains Mono', 'Fira Code', monospace", whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{code}</pre>
+  </div>
+);
+
+function App() {
+  const [active, setActive] = useState("native_bq");
+  const m = methods.find(x => x.id === active);
+
+  return (
+    <div style={{ padding: "24px 20px", maxWidth: 960, margin: "0 auto" }}>
+      {/* Header */}
+      <div style={{ textAlign: "center", marginBottom: 24 }}>
+        <h1 style={{ fontSize: 24, fontWeight: 800, color: "#0f172a", margin: 0 }}>Ingestion Methods</h1>
+        <p style={{ color: "#64748b", fontSize: 13, margin: "6px 0 0" }}>
+          How data gets from sources into BigQuery — from zero-code to full control
+        </p>
+      </div>
+
+      {/* Method tabs */}
+      <div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center", marginBottom: 24 }}>
+        {methods.map(x => {
+          const on = x.id === active;
+          return (
+            <button key={x.id} onClick={() => setActive(x.id)} style={{
+              display: "flex", alignItems: "center", gap: 6,
+              padding: "8px 16px", borderRadius: 10, cursor: "pointer",
+              border: on ? `2px solid ${x.color}` : "1.5px solid #e2e8f0",
+              background: on ? x.bg : "#fff",
+              color: on ? x.color : "#64748b",
+              fontWeight: on ? 700 : 500, fontSize: 13,
+              transition: "all 0.2s",
+              boxShadow: on ? `0 2px 8px ${x.color}22` : "none",
+            }}>
+              <span style={{ fontSize: 16 }}>{x.icon}</span>
+              {x.name}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Detail card */}
+      {m && (
+        <div key={m.id} style={{
+          background: "#fff", borderRadius: 16, border: `1.5px solid ${m.color}33`,
+          boxShadow: "0 4px 20px rgba(0,0,0,0.06)", overflow: "hidden",
+          animation: "fadeIn 0.25s ease",
+        }}>
+          <style>{`@keyframes fadeIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }`}</style>
+
+          {/* Header */}
+          <div style={{
+            background: `linear-gradient(135deg, ${m.bg}, #fff)`,
+            padding: "20px 24px", borderBottom: `1px solid ${m.color}22`,
+            display: "flex", alignItems: "flex-start", gap: 14,
+          }}>
+            <span style={{ fontSize: 32 }}>{m.icon}</span>
+            <div style={{ flex: 1 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+                <h2 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: m.color }}>{m.name}</h2>
+                <span style={{ fontSize: 10, fontWeight: 700, background: m.bg, color: m.color, border: `1px solid ${m.color}44`, padding: "2px 10px", borderRadius: 20 }}>Cost: {m.cost}</span>
+                <span style={{ fontSize: 10, fontWeight: 700, background: "#f8fafc", color: "#64748b", border: "1px solid #e2e8f0", padding: "2px 10px", borderRadius: 20 }}>Effort: {m.effort}</span>
+              </div>
+              <p style={{ margin: "6px 0 0", color: "#64748b", fontSize: 13, lineHeight: 1.5 }}>{m.how}</p>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 10 }}>
+                {m.sources.map((s, i) => (
+                  <span key={i} style={{ fontSize: 11, fontWeight: 600, color: m.color, background: `${m.bg}`, border: `1px solid ${m.color}33`, padding: "2px 10px", borderRadius: 16 }}>{s}</span>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div style={{ padding: "20px 24px" }}>
+            {/* Steps */}
+            <div style={{ marginBottom: 20 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>How it works</div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+                {m.steps.map((s, i) => (
+                  <div key={i} style={{ display: "flex", gap: 14, position: "relative" }}>
+                    {/* timeline */}
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: 24, flexShrink: 0 }}>
+                      <div style={{ width: 24, height: 24, borderRadius: "50%", background: m.color, color: "#fff", fontSize: 11, fontWeight: 800, display: "flex", alignItems: "center", justifyContent: "center" }}>{i + 1}</div>
+                      {i < m.steps.length - 1 && <div style={{ width: 2, flex: 1, background: `${m.color}33`, minHeight: 20 }} />}
+                    </div>
+                    <div style={{ paddingBottom: 16, flex: 1 }}>
+                      <div style={{ fontWeight: 700, color: "#1e293b", fontSize: 13, marginBottom: 2 }}>{s.label}</div>
+                      <div style={{ color: "#64748b", fontSize: 12.5, lineHeight: 1.6 }}>{s.detail}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Code snippet */}
+            {m.code && (
+              <div style={{ marginBottom: 20 }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: 1, marginBottom: 6 }}>Code example</div>
+                <CodeBlock code={m.code} />
+              </div>
+            )}
+
+            {/* Sample output table */}
+            <div style={{ marginBottom: 20 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: 1, marginBottom: 6 }}>
+                {m.schema.title}
+              </div>
+              <div style={{ overflowX: "auto", borderRadius: 10, border: "1px solid #e2e8f0" }}>
+                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 11.5, fontFamily: "'JetBrains Mono', 'Fira Code', monospace" }}>
+                  <thead>
+                    <tr>
+                      {m.schema.columns.map((col, i) => (
+                        <th key={i} style={{ padding: "9px 12px", textAlign: "left", background: "#f8fafc", color: m.color, fontWeight: 700, fontSize: 10, textTransform: "uppercase", letterSpacing: 0.5, borderBottom: "2px solid #e2e8f0", whiteSpace: "nowrap" }}>{col}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {m.schema.rows.map((row, ri) => (
+                      <tr key={ri} style={{ background: ri % 2 === 0 ? "#fff" : "#fafbfc" }}>
+                        {row.map((cell, ci) => (
+                          <td key={ci} style={{ padding: "7px 12px", color: "#334155", borderBottom: "1px solid #f1f5f9", whiteSpace: "nowrap" }}>{cell}</td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Pros / Cons */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: 10, padding: 12 }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: "#059669", textTransform: "uppercase", letterSpacing: 1, marginBottom: 8 }}>✓ Pros</div>
+                {m.pros.map((p, i) => (
+                  <div key={i} style={{ display: "flex", gap: 6, marginBottom: 6, alignItems: "flex-start" }}>
+                    <span style={{ color: "#059669", fontWeight: 700, fontSize: 13, lineHeight: "18px" }}>+</span>
+                    <span style={{ color: "#1e293b", fontSize: 12, lineHeight: "18px" }}>{p}</span>
+                  </div>
+                ))}
+              </div>
+              <div style={{ background: "#fff1f2", border: "1px solid #fecdd3", borderRadius: 10, padding: 12 }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: "#e11d48", textTransform: "uppercase", letterSpacing: 1, marginBottom: 8 }}>✗ Cons</div>
+                {m.cons.map((c, i) => (
+                  <div key={i} style={{ display: "flex", gap: 6, marginBottom: 6, alignItems: "flex-start" }}>
+                    <span style={{ color: "#e11d48", fontWeight: 700, fontSize: 13, lineHeight: "18px" }}>−</span>
+                    <span style={{ color: "#1e293b", fontSize: 12, lineHeight: "18px" }}>{c}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+</script>
+</body>
+</html>

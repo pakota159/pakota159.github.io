@@ -1,0 +1,294 @@
+<!-- posts/modern-data-stack/orchestration_explorer.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orchestration</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      body { margin: 0; padding: 0; background: #f8fafc; font-family: 'Inter', system-ui, sans-serif; }
+    </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+var useState = React.useState;
+
+var options = [
+  {
+    id: "github",
+    name: "GitHub Actions",
+    icon: "\u{1F4E6}",
+    color: "#0284c7",
+    bg: "#f0f9ff",
+    tagline: "Free, zero-infra, good enough to start",
+    cost: "Free",
+    effort: "Low",
+    bestFor: "Small teams, simple daily/hourly pipelines, already using GitHub",
+    howItWorks: "A YAML file in your repo defines a cron schedule. GitHub spins up a runner, installs Python + dbt, runs your pipeline, then shuts down. No servers to manage.",
+    dagSteps: [
+      { name: "dlt: ingest Facebook Ads", dur: "~2 min", color: "#1d4ed8" },
+      { name: "dlt: ingest AppsFlyer", dur: "~1 min", color: "#7c3aed" },
+      { name: "dbt build (staging)", dur: "~3 min", color: "#0284c7" },
+      { name: "dbt build (marts)", dur: "~2 min", color: "#059669" },
+      { name: "dbt test", dur: "~1 min", color: "#0d9488" }
+    ],
+    code: "# .github/workflows/data_pipeline.yml\n\nname: Daily Data Pipeline\n\non:\n  schedule:\n    - cron: '0 6 * * *'    # Every day at 6:00 UTC\n  workflow_dispatch:         # Manual trigger button\n\njobs:\n  run-pipeline:\n    runs-on: ubuntu-latest\n    env:\n      BQ_PROJECT: my-project-123\n      DBT_PROFILES_DIR: ./dbt\n\n    steps:\n      - uses: actions/checkout@v4\n\n      - name: Set up Python\n        uses: actions/setup-python@v5\n        with:\n          python-version: '3.11'\n\n      - name: Install dependencies\n        run: |\n          pip install dlt[bigquery] dbt-bigquery\n\n      - name: Run ingestion (dlt)\n        run: |\n          python pipelines/facebook_ads.py\n          python pipelines/appsflyer.py\n        env:\n          FB_TOKEN: ${{ secrets.FB_TOKEN }}\n          AF_TOKEN: ${{ secrets.AF_TOKEN }}\n\n      - name: Run dbt\n        run: |\n          cd dbt\n          dbt deps\n          dbt build\n          dbt test\n\n      - name: Notify on failure\n        if: failure()\n        run: |\n          curl -X POST ${{ secrets.SLACK_WEBHOOK }} \\\n            -d '{\"text\":\"Pipeline failed! Check: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}'",
+    limits: [
+      { item: "Max runtime", value: "6 hours per job", note: "Enough for most small pipelines" },
+      { item: "Free minutes", value: "2,000 min/mo (public) or 500 min/mo (private)", note: "~16 runs/day at 2 min each" },
+      { item: "Concurrency", value: "20 parallel jobs", note: "Rarely a bottleneck" },
+      { item: "Secrets", value: "Encrypted env vars", note: "For API tokens, BQ keys" },
+      { item: "Retry logic", value: "Basic (re-run whole job)", note: "No per-step retry" },
+      { item: "DAG visibility", value: "None", note: "Just a linear log" }
+    ],
+    pros: [
+      "Completely free for public repos, generous free tier for private",
+      "Zero infrastructure, no servers, no Docker, no Kubernetes",
+      "YAML is simple to write and lives in the same repo as your code",
+      "Built-in secrets management for API tokens and credentials",
+      "Manual trigger button for ad-hoc runs"
+    ],
+    cons: [
+      "No dependency graph UI, you cannot visualize what depends on what",
+      "No per-step retry, if step 3 fails you re-run everything from step 1",
+      "No built-in alerting beyond basic if: failure() hacks",
+      "Hard to manage complex dependencies between pipelines",
+      "Logs disappear after 90 days"
+    ]
+  },
+  {
+    id: "airflow",
+    name: "Apache Airflow",
+    icon: "\u{1F32C}",
+    color: "#059669",
+    bg: "#ecfdf5",
+    tagline: "Industry standard, powerful, but heavy",
+    cost: "$50-200+/mo (self-hosted) or $300+/mo (managed)",
+    effort: "High",
+    bestFor: "Growing teams, complex DAGs, dozens of pipelines, need observability",
+    howItWorks: "Python DAG files define tasks and their dependencies. Airflow scheduler triggers tasks at the right time, tracks state, retries failures, and provides a full web UI for monitoring.",
+    dagSteps: [
+      { name: "sensor: check source freshness", dur: "~30s", color: "#94a3b8" },
+      { name: "dlt: ingest Facebook Ads", dur: "~2 min", color: "#1d4ed8" },
+      { name: "dlt: ingest AppsFlyer", dur: "~1 min", color: "#7c3aed" },
+      { name: "dbt build (staging)", dur: "~3 min", color: "#0284c7" },
+      { name: "dbt build (marts)", dur: "~2 min", color: "#059669" },
+      { name: "dbt test", dur: "~1 min", color: "#0d9488" },
+      { name: "notify: Slack success", dur: "~5s", color: "#e11d48" }
+    ],
+    code: "# dags/daily_pipeline.py\n\nfrom airflow import DAG\nfrom airflow.operators.bash import BashOperator\nfrom airflow.operators.python import PythonOperator\nfrom airflow.sensors.external_task import ExternalTaskSensor\nfrom datetime import datetime, timedelta\n\ndefault_args = {\n    'owner': 'data-team',\n    'retries': 2,\n    'retry_delay': timedelta(minutes=5),\n    'email_on_failure': True,\n    'email': ['data-team@company.com'],\n}\n\nwith DAG(\n    dag_id='daily_data_pipeline',\n    default_args=default_args,\n    schedule_interval='0 6 * * *',\n    start_date=datetime(2025, 1, 1),\n    catchup=False,\n    tags=['production', 'daily'],\n) as dag:\n\n    ingest_fb = BashOperator(\n        task_id='ingest_facebook_ads',\n        bash_command='python /pipelines/facebook_ads.py',\n    )\n\n    ingest_af = BashOperator(\n        task_id='ingest_appsflyer',\n        bash_command='python /pipelines/appsflyer.py',\n    )\n\n    dbt_staging = BashOperator(\n        task_id='dbt_build_staging',\n        bash_command='cd /dbt && dbt build --select staging',\n    )\n\n    dbt_marts = BashOperator(\n        task_id='dbt_build_marts',\n        bash_command='cd /dbt && dbt build --select marts',\n    )\n\n    dbt_test = BashOperator(\n        task_id='dbt_test',\n        bash_command='cd /dbt && dbt test',\n    )\n\n    # Dependencies: ingestion runs in parallel,\n    # then staging, then marts, then tests\n    [ingest_fb, ingest_af] >> dbt_staging >> dbt_marts >> dbt_test",
+    limits: [
+      { item: "Self-hosted", value: "$50-200/mo (VM + DB)", note: "Need PostgreSQL for metadata" },
+      { item: "Managed (Astronomer)", value: "$300+/mo", note: "Hosted Airflow, less ops" },
+      { item: "Managed (GCP Composer)", value: "$300+/mo", note: "Google-managed Airflow" },
+      { item: "Retry logic", value: "Per-task, configurable", note: "retries=2, retry_delay=5m" },
+      { item: "DAG visibility", value: "Full web UI", note: "Graph view, Gantt chart, logs" },
+      { item: "Concurrency", value: "Configurable", note: "Parallel tasks, pools, queues" }
+    ],
+    pros: [
+      "Full DAG visualization, see exactly what depends on what",
+      "Per-task retry with configurable delay and backoff",
+      "Rich scheduling: cron, sensors, triggers, cross-DAG dependencies",
+      "Massive community, thousands of pre-built operators and hooks",
+      "Built-in alerting via email, Slack, PagerDuty integrations"
+    ],
+    cons: [
+      "Heavy to self-host: need a VM, PostgreSQL, Redis (for CeleryExecutor)",
+      "Managed options start at $300+/mo, expensive for small teams",
+      "Python DAG files can get complex and hard to debug",
+      "Overkill if you only have 2-3 simple pipelines",
+      "Upgrades can be painful, especially self-hosted"
+    ]
+  }
+];
+
+function CodeBlock(props) {
+  return (
+    <div style={{ background: "#1e293b", borderRadius: 10, padding: "14px 18px", overflowX: "auto", margin: "8px 0" }}>
+      <pre style={{ margin: 0, color: "#e2e8f0", fontSize: 11, lineHeight: 1.7, fontFamily: "monospace", whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{props.code}</pre>
+    </div>
+  );
+}
+
+function App() {
+  var ref1 = useState("github");
+  var active = ref1[0];
+  var setActive = ref1[1];
+
+  var ref2 = useState(false);
+  var showCode = ref2[0];
+  var setShowCode = ref2[1];
+
+  var opt = null;
+  for (var i = 0; i < options.length; i++) {
+    if (options[i].id === active) { opt = options[i]; break; }
+  }
+  if (!opt) return null;
+
+  return (
+    <div style={{ padding: "24px 20px", maxWidth: 960, margin: "0 auto" }}>
+      {/* Header */}
+      <div style={{ textAlign: "center", marginBottom: 24 }}>
+        <h1 style={{ fontSize: 24, fontWeight: 800, color: "#0f172a", margin: 0 }}>Orchestration</h1>
+        <p style={{ color: "#64748b", fontSize: 13, margin: "6px 0 0" }}>
+          Who triggers your pipeline, when, and what happens if it fails
+        </p>
+      </div>
+
+      {/* Toggle */}
+      <div style={{ display: "flex", gap: 12, justifyContent: "center", marginBottom: 24 }}>
+        {options.map(function(o) {
+          var on = o.id === active;
+          return (
+            <button key={o.id} onClick={function() { setActive(o.id); setShowCode(false); }} style={{
+              flex: 1, maxWidth: 360, padding: "16px 20px", cursor: "pointer",
+              border: on ? "2px solid " + o.color : "1.5px solid #e2e8f0",
+              borderRadius: 12,
+              background: on ? o.bg : "#fff",
+              transition: "all 0.2s",
+              boxShadow: on ? "0 2px 12px " + o.color + "22" : "none",
+              textAlign: "left",
+            }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 6 }}>
+                <span style={{ fontSize: 24 }}>{o.icon}</span>
+                <span style={{ fontSize: 16, fontWeight: 800, color: on ? o.color : "#334155" }}>{o.name}</span>
+              </div>
+              <div style={{ fontSize: 12, color: on ? o.color : "#94a3b8", fontWeight: 600 }}>{o.tagline}</div>
+              <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
+                <span style={{ fontSize: 10, fontWeight: 700, background: on ? "#fff" : "#f8fafc", color: o.color, border: "1px solid " + o.color + "44", padding: "2px 8px", borderRadius: 12 }}>{o.cost}</span>
+                <span style={{ fontSize: 10, fontWeight: 700, background: on ? "#fff" : "#f8fafc", color: "#64748b", border: "1px solid #e2e8f0", padding: "2px 8px", borderRadius: 12 }}>Effort: {o.effort}</span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Detail card */}
+      <div key={opt.id} style={{
+        background: "#fff", borderRadius: 16, border: "1.5px solid " + opt.color + "33",
+        boxShadow: "0 4px 20px rgba(0,0,0,0.06)", overflow: "hidden",
+      }}>
+
+        {/* Header */}
+        <div style={{ background: "linear-gradient(135deg, " + opt.bg + ", #fff)", padding: "16px 24px", borderBottom: "1px solid " + opt.color + "22" }}>
+          <div style={{ fontSize: 12, color: "#64748b", lineHeight: 1.6 }}>{opt.howItWorks}</div>
+          <div style={{ marginTop: 8, fontSize: 11, color: "#94a3b8" }}>Best for: <strong style={{ color: opt.color }}>{opt.bestFor}</strong></div>
+        </div>
+
+        <div style={{ padding: "20px 24px" }}>
+
+          {/* Pipeline visualization */}
+          <div style={{ marginBottom: 24 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: 1, marginBottom: 12 }}>Pipeline run</div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+              {opt.dagSteps.map(function(s, si) {
+                return (
+                  <div key={si} style={{ display: "flex", gap: 12, position: "relative" }}>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: 24, flexShrink: 0 }}>
+                      <div style={{ width: 20, height: 20, borderRadius: "50%", background: s.color, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#fff" }}></div>
+                      </div>
+                      {si < opt.dagSteps.length - 1 && <div style={{ width: 2, flex: 1, background: s.color + "44", minHeight: 16 }}></div>}
+                    </div>
+                    <div style={{ paddingBottom: 12, flex: 1, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                      <span style={{ fontSize: 12.5, color: "#1e293b", fontWeight: 500 }}>{s.name}</span>
+                      <span style={{ fontSize: 11, color: "#94a3b8", fontFamily: "monospace" }}>{s.dur}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Code toggle */}
+          <div style={{ marginBottom: 24 }}>
+            <button onClick={function() { setShowCode(!showCode); }} style={{
+              padding: "8px 16px", borderRadius: 8, cursor: "pointer",
+              border: showCode ? "2px solid " + opt.color : "1.5px solid #e2e8f0",
+              background: showCode ? opt.bg : "#fff",
+              color: showCode ? opt.color : "#64748b",
+              fontWeight: 600, fontSize: 12,
+            }}>
+              {showCode ? "Hide" : "Show"} config file
+            </button>
+            {showCode && <CodeBlock code={opt.code} />}
+          </div>
+
+          {/* Limits table */}
+          <div style={{ marginBottom: 24 }}>
+            <div style={{ fontSize: 11, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>Specs and limits</div>
+            <div style={{ overflowX: "auto", borderRadius: 10, border: "1px solid #e2e8f0" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 12, fontFamily: "monospace" }}>
+                <thead>
+                  <tr>
+                    <th style={{ padding: "9px 12px", textAlign: "left", background: "#f8fafc", color: opt.color, fontWeight: 700, fontSize: 10, textTransform: "uppercase", borderBottom: "2px solid #e2e8f0" }}>Item</th>
+                    <th style={{ padding: "9px 12px", textAlign: "left", background: "#f8fafc", color: opt.color, fontWeight: 700, fontSize: 10, textTransform: "uppercase", borderBottom: "2px solid #e2e8f0" }}>Value</th>
+                    <th style={{ padding: "9px 12px", textAlign: "left", background: "#f8fafc", color: opt.color, fontWeight: 700, fontSize: 10, textTransform: "uppercase", borderBottom: "2px solid #e2e8f0" }}>Note</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {opt.limits.map(function(r, ri) {
+                    return (
+                      <tr key={ri} style={{ background: ri % 2 === 0 ? "#fff" : "#fafbfc" }}>
+                        <td style={{ padding: "8px 12px", fontWeight: 600, color: "#1e293b", borderBottom: "1px solid #f1f5f9" }}>{r.item}</td>
+                        <td style={{ padding: "8px 12px", color: "#334155", borderBottom: "1px solid #f1f5f9" }}>{r.value}</td>
+                        <td style={{ padding: "8px 12px", color: "#94a3b8", fontSize: 11, borderBottom: "1px solid #f1f5f9", fontStyle: "italic" }}>{r.note}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Pros / Cons */}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: 10, padding: 12 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: "#059669", textTransform: "uppercase", letterSpacing: 1, marginBottom: 8 }}>Pros</div>
+              {opt.pros.map(function(p, pi) {
+                return (
+                  <div key={pi} style={{ display: "flex", gap: 6, marginBottom: 6, alignItems: "flex-start" }}>
+                    <span style={{ color: "#059669", fontWeight: 700, fontSize: 13, lineHeight: "18px" }}>+</span>
+                    <span style={{ color: "#1e293b", fontSize: 12, lineHeight: "18px" }}>{p}</span>
+                  </div>
+                );
+              })}
+            </div>
+            <div style={{ background: "#fff1f2", border: "1px solid #fecdd3", borderRadius: 10, padding: 12 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: "#e11d48", textTransform: "uppercase", letterSpacing: 1, marginBottom: 8 }}>Cons</div>
+              {opt.cons.map(function(c, ci) {
+                return (
+                  <div key={ci} style={{ display: "flex", gap: 6, marginBottom: 6, alignItems: "flex-start" }}>
+                    <span style={{ color: "#e11d48", fontWeight: 700, fontSize: 13, lineHeight: "18px" }}>{"\u2212"}</span>
+                    <span style={{ color: "#1e293b", fontSize: 12, lineHeight: "18px" }}>{c}</span>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      {/* Recommendation */}
+      <div style={{ marginTop: 20, background: "#fffbeb", border: "1px solid #fde68a", borderRadius: 12, padding: "16px 20px" }}>
+        <div style={{ display: "flex", gap: 8, alignItems: "flex-start" }}>
+          <span style={{ fontSize: 16 }}>{"\u{1F4A1}"}</span>
+          <div style={{ fontSize: 12.5, color: "#92400e", lineHeight: 1.6 }}>
+            <strong>Recommendation:</strong> Start with GitHub Actions. It costs nothing and covers daily batch pipelines well. Move to Airflow (or Dagster/Prefect) when you hit these signals: more than 10 pipelines, need per-task retry, need a DAG UI for debugging, or multiple team members editing different pipelines.
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+var root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+</script>
+</body>
+</html>

@@ -1,0 +1,298 @@
+<!-- posts/modern-data-stack/transformation_explorer.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transformation Layer</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+      body { margin: 0; padding: 0; background: #f8fafc; font-family: 'Inter', system-ui, sans-serif; }
+    </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+var useState = React.useState;
+
+var layers = [
+  {
+    id: "raw",
+    label: "Raw",
+    icon: "\u{1F4E6}",
+    color: "#94a3b8",
+    bg: "#f8fafc",
+    desc: "Exactly as it landed from sources. Never modify these tables.",
+    prefix: "raw_",
+    example: "raw_firebase.events_20250224",
+    columns: ["event_date", "event_name", "event_params", "user_pseudo_id", "device", "geo"],
+    rows: [
+      ["20250224", "purchase", '[{key:"value"...}]', "abc123", '{category:"mobile"}', '{country:"VN"}'],
+      ["20250224", "screen_view", '[{key:"screen"...}]', "abc123", '{category:"mobile"}', '{country:"VN"}'],
+      ["20250224", "first_open", '[{key:"source"...}]', "def456", '{category:"mobile"}', '{country:"US"}']
+    ],
+    notes: "Nested JSON, raw timestamps, no cleaning. This is your safety net if anything breaks downstream."
+  },
+  {
+    id: "staging",
+    label: "Staging",
+    icon: "\u{1F9F9}",
+    color: "#0284c7",
+    bg: "#f0f9ff",
+    desc: "1:1 with raw, but cleaned: renamed columns, cast types, unnested JSON, deduplicated.",
+    prefix: "stg_",
+    example: "stg_firebase__events",
+    columns: ["event_at", "event_name", "user_id", "platform", "country", "device_model", "screen_name"],
+    rows: [
+      ["2025-02-24 08:12:03", "purchase", "abc123", "android", "VN", "Samsung S24", "checkout"],
+      ["2025-02-24 08:12:18", "screen_view", "abc123", "android", "VN", "Samsung S24", "home"],
+      ["2025-02-24 09:01:22", "first_open", "def456", "ios", "US", "iPhone 15", "onboarding"]
+    ],
+    notes: "Flat columns, clean types, human-readable names. One staging model per source table."
+  },
+  {
+    id: "intermediate",
+    label: "Intermediate",
+    icon: "\u{1F527}",
+    color: "#7c3aed",
+    bg: "#f5f3ff",
+    desc: "Business logic joins and aggregations. Combine multiple staging models here.",
+    prefix: "int_",
+    example: "int_user_sessions",
+    columns: ["user_id", "session_date", "session_id", "channel", "events_count", "has_purchase", "session_duration_min"],
+    rows: [
+      ["abc123", "2025-02-24", "sess_001", "facebook_ads", "12", "true", "8.5"],
+      ["def456", "2025-02-24", "sess_002", "organic", "5", "false", "3.2"],
+      ["ghi789", "2025-02-24", "sess_003", "google_ads", "8", "true", "6.1"]
+    ],
+    notes: "Joins attribution data with in-app events. Not exposed to BI tools directly."
+  },
+  {
+    id: "mart",
+    label: "Mart",
+    icon: "\u{1F4CA}",
+    color: "#059669",
+    bg: "#ecfdf5",
+    desc: "Final tables for dashboards and reports. One mart per business domain or team.",
+    prefix: "mart_",
+    example: "mart_marketing__channel_performance",
+    columns: ["date", "channel", "spend_usd", "installs", "cpi", "d1_retention", "revenue_usd", "roas"],
+    rows: [
+      ["2025-02-24", "facebook_ads", "250.90", "139", "1.81", "42%", "1,240.00", "4.94"],
+      ["2025-02-24", "google_ads", "1,635.30", "454", "3.60", "38%", "4,820.00", "2.95"],
+      ["2025-02-24", "organic", "0.00", "210", "0.00", "51%", "2,100.00", "n/a"]
+    ],
+    notes: "This is what Metabase queries. Materialized for fast dashboard loads."
+  }
+];
+
+var dbtModels = [
+  {
+    id: "stg_model",
+    label: "Staging model",
+    file: "models/staging/firebase/stg_firebase__events.sql",
+    code: "-- models/staging/firebase/stg_firebase__events.sql\n\nwith source as (\n    select * from {{ source('firebase', 'events') }}\n),\n\nrenamed as (\n    select\n        timestamp_micros(event_timestamp)  as event_at,\n        event_name,\n        user_pseudo_id                     as user_id,\n        platform,\n        geo.country                        as country,\n        device.mobile_model_name           as device_model,\n        (select value.string_value\n         from unnest(event_params)\n         where key = 'firebase_screen')    as screen_name\n    from source\n)\n\nselect * from renamed"
+  },
+  {
+    id: "int_model",
+    label: "Intermediate model",
+    file: "models/intermediate/int_user_sessions.sql",
+    code: "-- models/intermediate/int_user_sessions.sql\n\nwith events as (\n    select * from {{ ref('stg_firebase__events') }}\n),\n\nattribution as (\n    select * from {{ ref('stg_appsflyer__installs') }}\n),\n\nsessions as (\n    select\n        e.user_id,\n        date(e.event_at)                          as session_date,\n        {{ dbt_utils.generate_surrogate_key(\n            ['e.user_id', 'date(e.event_at)']) }}  as session_id,\n        coalesce(a.media_source, 'organic')        as channel,\n        count(*)                                   as events_count,\n        max(e.event_name = 'purchase')             as has_purchase,\n        timestamp_diff(\n            max(e.event_at),\n            min(e.event_at),\n            minute)                                as session_duration_min\n    from events e\n    left join attribution a on e.user_id = a.user_id\n    group by 1, 2, 3, 4\n)\n\nselect * from sessions"
+  },
+  {
+    id: "mart_model",
+    label: "Mart model",
+    file: "models/marts/marketing/mart_marketing__channel_performance.sql",
+    code: "-- models/marts/marketing/mart_marketing__channel_performance.sql\n\nwith sessions as (\n    select * from {{ ref('int_user_sessions') }}\n),\n\nspend as (\n    select * from {{ ref('stg_facebook__ad_insights') }}\n    union all\n    select * from {{ ref('stg_google_ads__campaign_stats') }}\n),\n\nfinal as (\n    select\n        s.session_date                             as date,\n        s.channel,\n        coalesce(sp.spend_usd, 0)                  as spend_usd,\n        count(distinct s.user_id)                   as installs,\n        safe_divide(sp.spend_usd,\n            count(distinct s.user_id))              as cpi,\n        sum(case when s.has_purchase\n            then 1 else 0 end)                     as purchasers,\n        sum(s.revenue_usd)                          as revenue_usd,\n        safe_divide(sum(s.revenue_usd),\n            coalesce(sp.spend_usd, 1))              as roas\n    from sessions s\n    left join spend sp\n        on s.session_date = sp.date\n        and s.channel = sp.channel\n    group by 1, 2, 3\n)\n\nselect * from final"
+  }
+];
+
+function CodeBlock(props) {
+  return (
+    <div style={{ background: "#1e293b", borderRadius: 10, padding: "14px 18px", overflowX: "auto", margin: "8px 0" }}>
+      <div style={{ fontSize: 10, color: "#94a3b8", marginBottom: 8, fontFamily: "monospace" }}>{props.file}</div>
+      <pre style={{ margin: 0, color: "#e2e8f0", fontSize: 11, lineHeight: 1.7, fontFamily: "monospace", whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{props.code}</pre>
+    </div>
+  );
+}
+
+function App() {
+  var ref1 = useState("raw");
+  var activeLayer = ref1[0];
+  var setActiveLayer = ref1[1];
+
+  var ref2 = useState(null);
+  var activeModel = ref2[0];
+  var setActiveModel = ref2[1];
+
+  var layer = null;
+  for (var i = 0; i < layers.length; i++) {
+    if (layers[i].id === activeLayer) { layer = layers[i]; break; }
+  }
+
+  var model = null;
+  if (activeModel) {
+    for (var j = 0; j < dbtModels.length; j++) {
+      if (dbtModels[j].id === activeModel) { model = dbtModels[j]; break; }
+    }
+  }
+
+  return (
+    <div style={{ padding: "24px 20px", maxWidth: 960, margin: "0 auto" }}>
+      {/* Header */}
+      <div style={{ textAlign: "center", marginBottom: 20 }}>
+        <h1 style={{ fontSize: 24, fontWeight: 800, color: "#0f172a", margin: 0 }}>Transformation with dbt</h1>
+        <p style={{ color: "#64748b", fontSize: 13, margin: "6px 0 0" }}>
+          Raw data goes in, clean business-ready tables come out. Four layers, all in SQL.
+        </p>
+      </div>
+
+      {/* Flow arrow bar */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 0, marginBottom: 24 }}>
+        {layers.map(function(l, idx) {
+          var on = l.id === activeLayer;
+          return (
+            <div key={l.id} style={{ display: "flex", alignItems: "center" }}>
+              <button onClick={function() { setActiveLayer(l.id); setActiveModel(null); }} style={{
+                display: "flex", alignItems: "center", gap: 6,
+                padding: "10px 18px", cursor: "pointer",
+                border: on ? "2px solid " + l.color : "1.5px solid #e2e8f0",
+                borderRadius: 10,
+                background: on ? l.bg : "#fff",
+                color: on ? l.color : "#64748b",
+                fontWeight: on ? 700 : 500, fontSize: 13,
+                transition: "all 0.2s",
+                boxShadow: on ? "0 2px 8px " + l.color + "22" : "none",
+              }}>
+                <span style={{ fontSize: 16 }}>{l.icon}</span>
+                <div style={{ textAlign: "left" }}>
+                  <div>{l.label}</div>
+                  <div style={{ fontSize: 10, opacity: 0.7 }}>{l.prefix}*</div>
+                </div>
+              </button>
+              {idx < layers.length - 1 && (
+                <svg width="32" height="16" viewBox="0 0 32 16" style={{ margin: "0 4px" }}>
+                  <path d="M2 8 L24 8 M20 3 L26 8 L20 13" fill="none" stroke="#cbd5e1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Layer detail card */}
+      {layer && (
+        <div key={layer.id} style={{
+          background: "#fff", borderRadius: 16, border: "1.5px solid " + layer.color + "33",
+          boxShadow: "0 4px 20px rgba(0,0,0,0.06)", overflow: "hidden",
+        }}>
+
+          {/* Card header */}
+          <div style={{ background: "linear-gradient(135deg, " + layer.bg + ", #fff)", padding: "20px 24px", borderBottom: "1px solid " + layer.color + "22", display: "flex", alignItems: "center", gap: 14 }}>
+            <span style={{ fontSize: 32 }}>{layer.icon}</span>
+            <div style={{ flex: 1 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                <h2 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: layer.color }}>{layer.label} Layer</h2>
+                <span style={{ fontSize: 10, fontWeight: 700, background: layer.bg, color: layer.color, border: "1px solid " + layer.color + "44", padding: "2px 10px", borderRadius: 20, fontFamily: "monospace" }}>{layer.prefix}*</span>
+              </div>
+              <p style={{ margin: "4px 0 0", color: "#64748b", fontSize: 13, lineHeight: 1.5 }}>{layer.desc}</p>
+            </div>
+          </div>
+
+          <div style={{ padding: "20px 24px" }}>
+
+            {/* Sample table */}
+            <div style={{ marginBottom: 20 }}>
+              <div style={{ fontSize: 11, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: 1, marginBottom: 6, fontFamily: "monospace" }}>{layer.example}</div>
+              <div style={{ overflowX: "auto", borderRadius: 10, border: "1px solid #e2e8f0" }}>
+                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 11, fontFamily: "monospace" }}>
+                  <thead>
+                    <tr>
+                      {layer.columns.map(function(col, ci) {
+                        return (
+                          <th key={ci} style={{ padding: "9px 12px", textAlign: "left", background: "#f8fafc", color: layer.color, fontWeight: 700, fontSize: 10, textTransform: "uppercase", letterSpacing: 0.5, borderBottom: "2px solid #e2e8f0", whiteSpace: "nowrap" }}>{col}</th>
+                        );
+                      })}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {layer.rows.map(function(row, ri) {
+                      return (
+                        <tr key={ri} style={{ background: ri % 2 === 0 ? "#fff" : "#fafbfc" }}>
+                          {row.map(function(cell, ci) {
+                            return (
+                              <td key={ci} style={{ padding: "7px 12px", color: "#334155", borderBottom: "1px solid #f1f5f9", whiteSpace: "nowrap" }}>{cell}</td>
+                            );
+                          })}
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              <div style={{ marginTop: 8, fontSize: 12, color: "#94a3b8", fontStyle: "italic" }}>{layer.notes}</div>
+            </div>
+
+            {/* dbt model buttons (not for raw) */}
+            {layer.id !== "raw" && (
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>dbt model example</div>
+                <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 8 }}>
+                  {dbtModels.map(function(m) {
+                    var show = false;
+                    if (layer.id === "staging" && m.id === "stg_model") show = true;
+                    if (layer.id === "intermediate" && m.id === "int_model") show = true;
+                    if (layer.id === "mart" && m.id === "mart_model") show = true;
+                    if (!show) return null;
+                    var on = activeModel === m.id;
+                    return (
+                      <button key={m.id} onClick={function() { setActiveModel(on ? null : m.id); }} style={{
+                        padding: "8px 16px", borderRadius: 8, cursor: "pointer",
+                        border: on ? "2px solid " + layer.color : "1.5px solid #e2e8f0",
+                        background: on ? layer.bg : "#fff",
+                        color: on ? layer.color : "#64748b",
+                        fontWeight: on ? 700 : 500, fontSize: 12,
+                      }}>
+                        {on ? "Hide" : "Show"} {m.label}
+                      </button>
+                    );
+                  })}
+                </div>
+                {model && <CodeBlock file={model.file} code={model.code} />}
+              </div>
+            )}
+
+          </div>
+        </div>
+      )}
+
+      {/* dbt key concepts footer */}
+      <div style={{ marginTop: 20, background: "#fff", borderRadius: 12, border: "1px solid #e2e8f0", padding: "16px 20px" }}>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: 1, marginBottom: 10 }}>Why dbt Core</div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          {[
+            { t: "ref() function", d: "Models reference each other with ref(). dbt builds the DAG automatically, runs in correct order." },
+            { t: "Built-in tests", d: "Add not_null, unique, accepted_values tests in YAML. Runs with every dbt build." },
+            { t: "Version control", d: "All SQL lives in Git. Review changes in PRs, rollback if something breaks." },
+            { t: "Free forever", d: "dbt Core is open-source. Only dbt Cloud (the UI/scheduler) costs money." }
+          ].map(function(item, idx) {
+            return (
+              <div key={idx} style={{ background: "#f5f3ff", border: "1px solid #7c3aed33", borderRadius: 10, padding: 12 }}>
+                <div style={{ fontWeight: 700, color: "#7c3aed", fontSize: 12, marginBottom: 4 }}>{item.t}</div>
+                <div style={{ color: "#64748b", fontSize: 12, lineHeight: 1.5 }}>{item.d}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+var root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+</script>
+</body>
+</html>

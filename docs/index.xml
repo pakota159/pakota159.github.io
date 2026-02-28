@@ -10,7 +10,80 @@
 <atom:link href="https://pakota159.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description>Blog about SaaS metrics, data analysis, and technology</description>
 <generator>quarto-1.8.27</generator>
-<lastBuildDate>Sun, 08 Feb 2026 17:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 27 Feb 2026 17:00:00 GMT</lastBuildDate>
+<item>
+  <title>Building a Modern Data Stack for ~$50/month</title>
+  <dc:creator>Cuong Pham</dc:creator>
+  <link>https://pakota159.github.io/posts/modern-data-stack/</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>Most “modern data stack” guides assume you have enterprise budgets — Fivetran at $1K/month, Snowflake at $2K, Looker at $3K. The reality is that startups and small data teams can run a fully functional, production-grade stack for <strong>~$5–50/month</strong>. This post walks through how.</p>
+<p>Explore the interactive diagram below — click any component to see alternatives, pros, cons, and when to upgrade.</p>
+<iframe src="data_stack_chart.html" width="100%" height="750" style="border:none;">
+</iframe>
+<section id="sources" class="level2">
+<h2 class="anchored" data-anchor-id="sources">Sources</h2>
+<p>Our primary data sources are <strong>Firebase</strong>, <strong>GA4</strong>, <strong>OneSignal</strong>, <strong>Facebook Ads</strong>, and <strong>Google Ads</strong> — a typical mix for a mobile-first product with paid acquisition. Firebase and GA4 both support native BigQuery export at no extra cost, which eliminates the need for a separate connector for your two largest data sources. Ad platform data comes through their respective APIs.</p>
+<iframe src="sources_explorer.html" width="100%" height="580" style="border:none;">
+</iframe>
+</section>
+<section id="ingestion" class="level2">
+<h2 class="anchored" data-anchor-id="ingestion">Ingestion</h2>
+<p>For pulling data into the warehouse, we use <strong>dlt (Data Load Tool)</strong> alongside native BigQuery exports. dlt is a free, Python-native library that lets you write lightweight ingestion scripts for any API. It won’t give you the polished UI of Fivetran or Airbyte, but at this stage you don’t need one. The tradeoff is worth it: zero cost, full flexibility, and no vendor lock-in.</p>
+<iframe src="ingestion_explorer.html" width="100%" height="700" style="border:none;">
+</iframe>
+</section>
+<section id="cloud-data-warehouse" class="level2">
+<h2 class="anchored" data-anchor-id="cloud-data-warehouse">Cloud Data Warehouse</h2>
+<p>The center of the stack is <strong>BigQuery</strong> as the landing zone, paired with <strong>MotherDuck</strong> for fast interactive queries. BigQuery’s free tier gives you 1TB of query processing per month — more than enough for most early-stage workloads. MotherDuck provides a DuckDB-powered experience that feels local but connects to your cloud data. Total cost sits around ~$50/month depending on query volume.</p>
+<iframe src="warehouse_explorer.html" width="100%" height="700" style="border:none;">
+</iframe>
+</section>
+<section id="transformation" class="level2">
+<h2 class="anchored" data-anchor-id="transformation">Transformation</h2>
+<p><strong>dbt Core</strong> handles all transformation logic. It’s the industry standard for a reason: version-controlled SQL models, built-in testing, auto-generated documentation, and a massive community. We run dbt Core (free) rather than dbt Cloud (paid). All models live in Git, and the <code>ref()</code> function manages dependencies between models automatically.</p>
+<iframe src="transformation_explorer.html" width="100%" height="700" style="border:none;">
+</iframe>
+</section>
+<section id="orchestration" class="level2">
+<h2 class="anchored" data-anchor-id="orchestration">Orchestration</h2>
+<p><strong>GitHub Actions</strong> serves as our zero-cost orchestrator. A simple cron-triggered workflow runs dlt ingestion and <code>dbt build</code> on a schedule. It’s not as sophisticated as Dagster or Airflow — there’s no dependency graph UI or advanced retry logic — but it’s free, requires no infrastructure, and gets the job done for a small team.</p>
+<iframe src="orchestration_explorer.html" width="100%" height="750" style="border:none;">
+</iframe>
+</section>
+<section id="data-quality" class="level2">
+<h2 class="anchored" data-anchor-id="data-quality">Data Quality</h2>
+<p>We rely on <strong>dbt’s built-in tests</strong> for data quality: <code>not_null</code>, <code>unique</code>, <code>accepted_values</code>, and <code>relationships</code> tests run automatically with every <code>dbt build</code>. This catches the most common issues — null keys, duplicate records, schema drift — at zero extra cost. When you outgrow this, Elementary (dbt-native) is the natural next step before investing in Monte Carlo or Soda.</p>
+</section>
+<section id="business-intelligence" class="level2">
+<h2 class="anchored" data-anchor-id="business-intelligence">Business Intelligence</h2>
+<p><strong>Metabase</strong> self-hosted on a small cloud instance (~$5/month) is our BI layer. It has a clean UI that non-technical stakeholders can use, supports both SQL and a visual query builder, and handles dashboards and scheduled reports well. For a team under 10 people, this is more than sufficient before considering Tableau or Power BI.</p>
+<iframe src="bi_explorer.html" width="100%" height="700" style="border:none;">
+</iframe>
+</section>
+<section id="reverse-etl-dev-tools" class="level2">
+<h2 class="anchored" data-anchor-id="reverse-etl-dev-tools">Reverse ETL &amp; Dev Tools</h2>
+<p><strong>Reverse ETL</strong> (Census, Hightouch) is deliberately deferred — it’s not needed until you’re syncing warehouse segments back to ad platforms or CRMs at scale. Don’t add complexity prematurely.</p>
+<p>For <strong>dev tools</strong>, VS Code with the dbt extension plus Git/GitHub covers everything: code editing, SQL development, version control, and CI/CD (via GitHub Actions). No additional tooling required.</p>
+</section>
+<section id="when-to-graduate" class="level2">
+<h2 class="anchored" data-anchor-id="when-to-graduate">When to Graduate</h2>
+<p>This stack works well until certain signals appear: BigQuery costs exceeding $100/month consistently, the team growing beyond 5–8 people who need data access, pipelines requiring complex dependency management, or the need for real-time data. At that point, consider upgrading individual layers — Airbyte for ingestion, Dagster for orchestration, Tableau for BI — rather than replacing everything at once.</p>
+
+
+</section>
+
+ ]]></description>
+  <category>data</category>
+  <category>data-engineering</category>
+  <category>modern-data-stack</category>
+  <guid>https://pakota159.github.io/posts/modern-data-stack/</guid>
+  <pubDate>Fri, 27 Feb 2026 17:00:00 GMT</pubDate>
+  <media:content url="https://pakota159.github.io/img/data-stack/bg.png" medium="image" type="image/png" height="99" width="144"/>
+</item>
 <item>
   <title>SaaS Metrics that actually make sense - Part 4</title>
   <dc:creator>Cuong Pham</dc:creator>

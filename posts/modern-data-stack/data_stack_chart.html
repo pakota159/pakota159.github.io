@@ -1,0 +1,407 @@
+<!-- posts/modern-data-stack/data_stack_chart.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Low-Cost Modern Data Stack</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        body { margin: 0; padding: 0; background-color: #f8fafc; }
+        #root { padding: 0; }
+    </style>
+</head>
+<body>
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const { useState } = React;
+
+      const stackData = [
+        {
+          id: "sources", label: "SOURCES", color: "#059669", bgColor: "#ecfdf5",
+          x: 60, y: 80,
+          tools: ["Firebase", "GA4", "OneSignal", "Facebook Ads", "Google Ads"],
+          alternatives: [
+            { name: "PostgreSQL", type: "Database" },
+            { name: "Amazon S3", type: "Object Storage" },
+            { name: "Salesforce", type: "CRM" },
+            { name: "Stripe", type: "Payments" },
+            { name: "HubSpot", type: "Marketing" },
+          ],
+          pros: ["Native BigQuery export for Firebase/GA4", "Well-documented APIs", "Real-time event streaming available"],
+          cons: ["Each source has different API patterns", "Rate limits on ad platform APIs", "Schema changes can break pipelines"],
+          icon: "📡"
+        },
+        {
+          id: "ingestion", label: "INGESTION", color: "#e11d48", bgColor: "#fff1f2",
+          x: 60, y: 280,
+          tools: ["dlt (Data Load Tool)", "Native BQ Export"],
+          alternatives: [
+            { name: "Fivetran", type: "Managed · $$$" },
+            { name: "Airbyte", type: "Open-source / Cloud" },
+            { name: "Estuary", type: "Real-time CDC" },
+            { name: "Meltano", type: "Open-source EL" },
+          ],
+          pros: ["dlt is free & Python-native", "Zero infrastructure needed", "Highly customizable for any API"],
+          cons: ["Requires Python knowledge", "No UI for monitoring", "Community connectors less mature than Fivetran"],
+          icon: "🔄"
+        },
+        {
+          id: "warehouse", label: "CLOUD DATA WAREHOUSE", color: "#ea580c", bgColor: "#fff7ed",
+          x: 400, y: 180,
+          tools: ["BigQuery (landing)", "MotherDuck (compute)"],
+          alternatives: [
+            { name: "Snowflake", type: "Enterprise · $$$" },
+            { name: "Databricks", type: "Lakehouse" },
+            { name: "ClickHouse", type: "OLAP / Real-time" },
+            { name: "DuckDB (local)", type: "Embedded" },
+          ],
+          pros: ["BQ free tier: 1TB query/mo", "MotherDuck: fast local-feel queries", "Serverless — no cluster management"],
+          cons: ["BQ can get expensive at scale", "Hybrid BQ+MotherDuck adds complexity", "Vendor lock-in with BQ SQL dialect"],
+          icon: "🏗️",
+          isCenter: true
+        },
+        {
+          id: "transformation", label: "TRANSFORMATION", color: "#7c3aed", bgColor: "#f5f3ff",
+          x: 400, y: 400,
+          tools: ["dbt Core"],
+          alternatives: [
+            { name: "SQLMesh", type: "Open-source + incremental" },
+            { name: "Tobiko", type: "SQLMesh Cloud" },
+            { name: "Dataform", type: "Google-native (free)" },
+            { name: "Plain SQL scripts", type: "Zero tooling" },
+          ],
+          pros: ["Industry standard, huge community", "Built-in testing & docs", "Version-controlled SQL models"],
+          cons: ["SQL-only (no Python transforms)", "dbt Cloud is expensive", "Learning curve for ref() and Jinja"],
+          icon: "⚙️"
+        },
+        {
+          id: "orchestration", label: "ORCHESTRATION", color: "#0284c7", bgColor: "#f0f9ff",
+          x: 160, y: 500,
+          tools: ["GitHub Actions"],
+          alternatives: [
+            { name: "Dagster", type: "Asset-based · Free tier" },
+            { name: "Prefect", type: "Pythonic · Free tier" },
+            { name: "Apache Airflow", type: "Classic · Self-hosted" },
+            { name: "Kestra", type: "Event-driven · OSS" },
+          ],
+          pros: ["Completely free for public repos", "No extra infrastructure", "Simple YAML-based scheduling"],
+          cons: ["No dependency graph UI", "Limited retry/backoff logic", "Poor observability into runs"],
+          icon: "⏰"
+        },
+        {
+          id: "quality", label: "DATA QUALITY", color: "#0d9488", bgColor: "#f0fdfa",
+          x: 420, y: 560,
+          tools: ["dbt Tests (built-in)"],
+          alternatives: [
+            { name: "Great Expectations", type: "OSS · Python" },
+            { name: "Soda", type: "OSS + Cloud" },
+            { name: "Monte Carlo", type: "Observability · $$$" },
+            { name: "Elementary", type: "dbt-native · OSS" },
+          ],
+          pros: ["dbt tests are zero extra cost", "Catches nulls, duplicates, schema drift", "Runs as part of your dbt build"],
+          cons: ["Basic compared to dedicated tools", "No anomaly detection", "No data lineage visualization"],
+          icon: "✅"
+        },
+        {
+          id: "bi", label: "BUSINESS INTELLIGENCE", color: "#db2777", bgColor: "#fdf2f8",
+          x: 700, y: 80,
+          tools: ["Metabase (self-hosted)"],
+          alternatives: [
+            { name: "Tableau", type: "Enterprise · $$$" },
+            { name: "Power BI", type: "Microsoft · $$" },
+            { name: "Apache Superset", type: "OSS · Free" },
+            { name: "Evidence", type: "Code-based BI · OSS" },
+          ],
+          pros: ["Beautiful UI, easy for non-tech users", "Self-hosted = ~$5/mo", "SQL + visual query builder"],
+          cons: ["$5 droplet gets slow with many users", "Embedded analytics limited in OSS", "No built-in version control"],
+          icon: "📊"
+        },
+        {
+          id: "reverse_etl", label: "REVERSE ETL", color: "#9333ea", bgColor: "#faf5ff",
+          x: 700, y: 300,
+          tools: ["Census (future)"],
+          alternatives: [
+            { name: "Hightouch", type: "Managed · Free tier" },
+            { name: "Rudderstack", type: "OSS warehouse-native" },
+            { name: "Grouparoo", type: "OSS (archived)" },
+            { name: "Custom scripts", type: "DIY" },
+          ],
+          pros: ["Syncs warehouse data to SaaS tools", "Activates analytics for marketing", "No-code audience builder"],
+          cons: ["Not needed on day one", "Can be expensive at scale", "Adds another moving part"],
+          icon: "↩️"
+        },
+        {
+          id: "devtools", label: "DEV TOOLS", color: "#475569", bgColor: "#f1f5f9",
+          x: 700, y: 480,
+          tools: ["VS Code", "Git / GitHub"],
+          alternatives: [
+            { name: "DataGrip", type: "SQL IDE · JetBrains" },
+            { name: "DBeaver", type: "Free SQL client" },
+            { name: "SQLPad", type: "Web-based · OSS" },
+            { name: "Jupyter / Colab", type: "Notebooks" },
+          ],
+          pros: ["Free and universal", "dbt extension for VS Code", "GitHub = orchestration + version control"],
+          cons: ["No visual data lineage", "Manual environment setup", "Not purpose-built for data work"],
+          icon: "🛠️"
+        },
+      ];
+
+      const connections = [
+        { from: "sources", to: "ingestion", color: "#059669" },
+        { from: "ingestion", to: "warehouse", color: "#e11d48" },
+        { from: "warehouse", to: "transformation", color: "#ea580c" },
+        { from: "transformation", to: "warehouse", color: "#7c3aed" },
+        { from: "orchestration", to: "ingestion", color: "#0284c7" },
+        { from: "orchestration", to: "transformation", color: "#0284c7" },
+        { from: "warehouse", to: "bi", color: "#db2777" },
+        { from: "warehouse", to: "reverse_etl", color: "#9333ea" },
+        { from: "quality", to: "transformation", color: "#0d9488" },
+        { from: "warehouse", to: "quality", color: "#ea580c" },
+      ];
+
+      const Particle = ({ path, color, delay, dur }) => (
+        <circle r="3.5" fill={color}>
+          <animateMotion dur={`${dur}s`} repeatCount="indefinite" begin={`${delay}s`} path={path} />
+          <animate attributeName="r" values="2.5;4.5;2.5" dur="1.2s" repeatCount="indefinite" />
+          <animate attributeName="opacity" values="0.4;1;0.4" dur={`${dur}s`} repeatCount="indefinite" begin={`${delay}s`} />
+        </circle>
+      );
+
+      const getCenter = (node) => ({ cx: node.x + (node.isCenter ? 90 : 100), cy: node.y + 45 });
+
+      function DataStackViz() {
+        const [selected, setSelected] = useState(null);
+        const [hoveredId, setHoveredId] = useState(null);
+
+        const sel = stackData.find(s => s.id === selected);
+
+        const getPath = (fromId, toId) => {
+          const f = stackData.find(s => s.id === fromId);
+          const t = stackData.find(s => s.id === toId);
+          const fc = getCenter(f), tc = getCenter(t);
+          const mx = (fc.cx + tc.cx) / 2, my = (fc.cy + tc.cy) / 2;
+          const dx = tc.cx - fc.cx, dy = tc.cy - fc.cy;
+          const off = Math.min(Math.abs(dx), Math.abs(dy)) * 0.3;
+          const cx1 = mx + (dy > 0 ? off : -off), cy1 = my + (dx > 0 ? -off : off);
+          return `M${fc.cx},${fc.cy} Q${cx1},${cy1} ${tc.cx},${tc.cy}`;
+        };
+
+        return (
+          <div style={{ background: "linear-gradient(145deg, #f8fafc 0%, #f1f5f9 40%, #e2e8f0 100%)", minHeight: "100vh", fontFamily: "'Inter', system-ui, sans-serif", position: "relative", overflow: "hidden" }}>
+            {/* Background dot grid */}
+            <svg style={{ position: "absolute", inset: 0, width: "100%", height: "100%", opacity: 0.3 }}>
+              <defs>
+                <pattern id="dots" width="24" height="24" patternUnits="userSpaceOnUse">
+                  <circle cx="2" cy="2" r="0.8" fill="#94a3b8"/>
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#dots)"/>
+            </svg>
+
+            <div style={{ position: "relative", zIndex: 1, padding: "20px 24px" }}>
+              {/* Header */}
+              <div style={{ textAlign: "center", marginBottom: 12 }}>
+                <h1 style={{ fontSize: 28, fontWeight: 800, color: "#0f172a", margin: 0, letterSpacing: -0.5 }}>
+                  Low-Cost Data Stack
+                </h1>
+                <p style={{ color: "#64748b", fontSize: 13, margin: "6px 0 0" }}>Click any component to explore alternatives, pros & cons</p>
+                <div style={{ display: "inline-flex", alignItems: "center", gap: 6, background: "#ecfdf5", border: "1px solid #a7f3d0", borderRadius: 20, padding: "5px 16px", marginTop: 10 }}>
+                  <span style={{ fontSize: 13 }}>💰</span>
+                  <span style={{ color: "#059669", fontWeight: 700, fontSize: 14 }}>Total: ~$5–50/month</span>
+                </div>
+              </div>
+
+              {/* SVG Canvas */}
+              <svg viewBox="0 0 940 650" style={{ width: "100%", maxWidth: 940, display: "block", margin: "0 auto" }}>
+                <defs>
+                  <filter id="shadow">
+                    <feDropShadow dx="0" dy="2" stdDeviation="4" floodColor="#000" floodOpacity="0.08"/>
+                  </filter>
+                  <filter id="glow">
+                    <feGaussianBlur stdDeviation="4" result="b"/>
+                    <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+                  </filter>
+                </defs>
+
+                {/* Connection lines */}
+                {connections.map((c, i) => {
+                  const p = getPath(c.from, c.to);
+                  const active = hoveredId === c.from || hoveredId === c.to;
+                  return (
+                    <g key={`conn-${i}`}>
+                      <path d={p} fill="none" stroke={c.color} strokeWidth={active ? 2.5 : 1.5} strokeDasharray={active ? "none" : "6,4"} opacity={active ? 0.7 : 0.2} style={{ transition: "all 0.3s" }} />
+                      {[0, 0.8, 1.5].map((delay, j) => (
+                        <Particle key={`p${i}-${j}`} path={p} color={c.color} delay={delay} dur={2.2 + i * 0.15} />
+                      ))}
+                    </g>
+                  );
+                })}
+
+                {/* Nodes */}
+                {stackData.map((node) => {
+                  const isHov = hoveredId === node.id;
+                  const isSel = selected === node.id;
+                  const w = node.isCenter ? 180 : 200;
+                  const h = node.isCenter ? 100 : 90;
+                  return (
+                    <g key={node.id}
+                      onMouseEnter={() => setHoveredId(node.id)}
+                      onMouseLeave={() => setHoveredId(null)}
+                      onClick={() => setSelected(selected === node.id ? null : node.id)}
+                      style={{ cursor: "pointer" }}>
+                      {/* Glow ring on hover/select */}
+                      {(isHov || isSel) && (
+                        <rect x={node.x - 4} y={node.y - 4} width={w + 8} height={h + 8} rx={18}
+                          fill="none" stroke={node.color} strokeWidth="2" opacity="0.3" filter="url(#glow)"/>
+                      )}
+                      {/* Card background */}
+                      <rect x={node.x} y={node.y} width={w} height={h} rx={14}
+                        fill={isHov || isSel ? node.bgColor : "#ffffff"}
+                        stroke={node.color}
+                        strokeWidth={isSel ? 2.5 : isHov ? 2 : 1.2}
+                        filter="url(#shadow)"
+                        style={{ transition: "all 0.2s" }}/>
+                      {/* Icon */}
+                      <text x={node.x + w/2} y={node.y + 22} textAnchor="middle" fontSize="16">{node.icon}</text>
+                      {/* Label */}
+                      <text x={node.x + w/2} y={node.y + 40} textAnchor="middle" fontSize="9.5" fontWeight="800" fill={node.color} letterSpacing="0.8">{node.label}</text>
+                      {/* Tools list */}
+                      {node.tools.map((tool, ti) => (
+                        <text key={ti} x={node.x + w/2} y={node.y + 54 + ti * 12} textAnchor="middle" fontSize="9" fill="#475569" fontWeight="500">
+                          {ti < 2 ? tool : (ti === 2 && node.tools.length > 2 ? `+${node.tools.length - 2} more` : "")}
+                        </text>
+                      ))}
+                      {/* Cost badge */}
+                      <rect x={node.x + w - 44} y={node.y + 5} width={38} height={17} rx={8.5} fill={node.bgColor} stroke={node.color} strokeWidth="0.8"/>
+                      <text x={node.x + w - 25} y={node.y + 16.5} textAnchor="middle" fontSize="8" fill={node.color} fontWeight="700">
+                        {node.id === "sources" ? "N/A" : node.id === "warehouse" ? "~$50" : "$0"}
+                      </text>
+                    </g>
+                  );
+                })}
+
+                {/* Flow labels */}
+                {[
+                  { x: 100, y: 200, t: "Events & APIs", c: "#059669" },
+                  { x: 250, y: 215, t: "Raw Data", c: "#e11d48" },
+                  { x: 460, y: 335, t: "Transform", c: "#7c3aed" },
+                  { x: 580, y: 145, t: "Dashboards", c: "#db2777" },
+                ].map((l, i) => (
+                  <text key={`fl${i}`} x={l.x} y={l.y} fontSize="8.5" fill={l.c} opacity="0.5" fontWeight="600" fontStyle="italic">{l.t}</text>
+                ))}
+              </svg>
+
+              {/* Detail Panel */}
+              {sel && (
+                <div style={{
+                  position: "fixed", top: 0, right: 0, width: "min(420px, 90vw)", height: "100vh",
+                  background: "#ffffff",
+                  borderLeft: `3px solid ${sel.color}`,
+                  boxShadow: "-12px 0 40px rgba(0,0,0,0.1)",
+                  zIndex: 100, overflowY: "auto", padding: "24px",
+                  animation: "slideIn 0.3s ease"
+                }}>
+                  <style>{`@keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }`}</style>
+                  <button onClick={() => setSelected(null)} style={{ position: "absolute", top: 12, right: 12, background: "#f1f5f9", border: "1px solid #e2e8f0", color: "#64748b", fontSize: 16, width: 32, height: 32, borderRadius: 8, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}>✕</button>
+
+                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
+                    <span style={{ fontSize: 28 }}>{sel.icon}</span>
+                    <div>
+                      <h2 style={{ margin: 0, color: sel.color, fontSize: 18, fontWeight: 800, letterSpacing: 0.5 }}>{sel.label}</h2>
+                      <p style={{ margin: "2px 0 0", color: "#94a3b8", fontSize: 12 }}>Your stack uses:</p>
+                    </div>
+                  </div>
+
+                  {/* Current tools */}
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 20 }}>
+                    {sel.tools.map((t, i) => (
+                      <span key={i} style={{ background: sel.bgColor, color: sel.color, border: `1px solid ${sel.color}44`, padding: "4px 12px", borderRadius: 20, fontSize: 12, fontWeight: 600 }}>✓ {t}</span>
+                    ))}
+                  </div>
+
+                  {/* Alternatives */}
+                  <h3 style={{ color: "#0f172a", fontSize: 12, fontWeight: 700, marginBottom: 8, textTransform: "uppercase", letterSpacing: 1 }}>Alternatives</h3>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 20 }}>
+                    {sel.alternatives.map((a, i) => (
+                      <div key={i} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 10, padding: "8px 14px" }}>
+                        <span style={{ color: "#1e293b", fontSize: 13, fontWeight: 600 }}>{a.name}</span>
+                        <span style={{ color: "#64748b", fontSize: 11, background: "#f1f5f9", padding: "2px 8px", borderRadius: 6, border: "1px solid #e2e8f0" }}>{a.type}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Pros */}
+                  <h3 style={{ color: "#059669", fontSize: 12, fontWeight: 700, marginBottom: 8, letterSpacing: 1 }}>✓ PROS</h3>
+                  <div style={{ background: "#f0fdf4", border: "1px solid #bbf7d0", borderRadius: 10, padding: 12, marginBottom: 16 }}>
+                    {sel.pros.map((p, i) => (
+                      <div key={i} style={{ display: "flex", gap: 8, marginBottom: i < sel.pros.length - 1 ? 8 : 0, alignItems: "flex-start" }}>
+                        <span style={{ color: "#059669", fontSize: 14, lineHeight: "20px", fontWeight: 700 }}>+</span>
+                        <span style={{ color: "#1e293b", fontSize: 13, lineHeight: "20px" }}>{p}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Cons */}
+                  <h3 style={{ color: "#e11d48", fontSize: 12, fontWeight: 700, marginBottom: 8, letterSpacing: 1 }}>✗ CONS</h3>
+                  <div style={{ background: "#fff1f2", border: "1px solid #fecdd3", borderRadius: 10, padding: 12, marginBottom: 20 }}>
+                    {sel.cons.map((c, i) => (
+                      <div key={i} style={{ display: "flex", gap: 8, marginBottom: i < sel.cons.length - 1 ? 8 : 0, alignItems: "flex-start" }}>
+                        <span style={{ color: "#e11d48", fontSize: 14, lineHeight: "20px", fontWeight: 700 }}>−</span>
+                        <span style={{ color: "#1e293b", fontSize: 13, lineHeight: "20px" }}>{c}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Verdict */}
+                  <div style={{ background: sel.bgColor, border: `1px solid ${sel.color}33`, borderRadius: 12, padding: 14 }}>
+                    <p style={{ margin: 0, color: "#334155", fontSize: 12.5, lineHeight: 1.6 }}>
+                      💡 <strong style={{ color: sel.color }}>Verdict:</strong>{" "}
+                      {sel.id === "sources" && "Your source mix is typical for a mobile-first product with marketing spend. Well-covered by free native exports + lightweight API pulls."}
+                      {sel.id === "ingestion" && "dlt is the best choice at this budget. Graduate to Airbyte only when you need 50+ connectors or a UI for non-engineers."}
+                      {sel.id === "warehouse" && "Consider simplifying to BigQuery-only unless BQ costs exceed $50/mo. The hybrid approach adds operational overhead."}
+                      {sel.id === "transformation" && "dbt Core is the clear winner. SQLMesh is worth watching as an alternative with better incremental model support."}
+                      {sel.id === "orchestration" && "GitHub Actions works for now. Plan to migrate to Dagster or Prefect when you need observability and complex DAGs."}
+                      {sel.id === "quality" && "Start with dbt tests — they're free and built-in. Add Elementary for dbt-native dashboards before jumping to Monte Carlo."}
+                      {sel.id === "bi" && "Metabase is perfect for small teams. Upgrade the server ($12–24/mo) before considering Tableau or paid alternatives."}
+                      {sel.id === "reverse_etl" && "Skip this layer until you need to sync warehouse segments to ad platforms or CRMs. Don't add complexity prematurely."}
+                      {sel.id === "devtools" && "VS Code + GitHub is all you need. DataGrip is nice-to-have for heavy SQL work but not essential."}
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {/* Overlay */}
+              {sel && <div onClick={() => setSelected(null)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.15)", zIndex: 99 }} />}
+
+              {/* Legend */}
+              <div style={{ display: "flex", justifyContent: "center", gap: 16, flexWrap: "wrap", marginTop: 10 }}>
+                {[
+                  { c: "#059669", l: "Free" },
+                  { c: "#ea580c", l: "~$0-50/mo" },
+                  { c: "#db2777", l: "~$5/mo" },
+                ].map((item, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <div style={{ width: 10, height: 10, borderRadius: "50%", background: item.c }} />
+                    <span style={{ color: "#64748b", fontSize: 11 }}>{item.l}</span>
+                  </div>
+                ))}
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <div style={{ width: 20, height: 2, background: "linear-gradient(90deg, #ea580c, #7c3aed)", borderRadius: 2 }} />
+                  <span style={{ color: "#64748b", fontSize: 11 }}>Data flow</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      const root = ReactDOM.createRoot(document.getElementById('root'));
+      root.render(<DataStackViz />);
+    </script>
+</body>
+</html>
